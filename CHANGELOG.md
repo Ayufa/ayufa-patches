@@ -1,3 +1,9 @@
+## [1.0.0-dev.5](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.4...v1.0.0-dev.5) (2026-11-03)
+
+### 🐛 Bug Fixes
+
+* Remove temporary hook diagnostics ([9a25688](https://github.com/Ayufa/youtube-custom-patches/commit/9a256880a0b8e2692776c732e91309e3be45a744))
+
 ## [1.0.0-dev.4](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.3...v1.0.0-dev.4) (2026-11-03)
 
 ### 🐛 Bug Fixes
