@@ -1,14 +1,13 @@
-group = "app.template"
+group = "app.ayufa"
 
 patches {
-    // TODO: Update this section with your project details.
     about {
-        name = "UserXYZ Patches"
-        description = "Patches for apps I like"
-        source = "git@github.com:UserXYZ/morphe-patches.git"
-        author = "Awesome dev"
-        contact = "na"
-        website = "na"
+        name = "Ayufa YouTube Patches"
+        description = "Custom YouTube patches: live stream latency keeper (Android 8.0 target) and live chat clutter hider (current Android target)"
+        source = "git@github.com:Ayufa/youtube-custom-patches.git"
+        author = "Ayufa"
+        contact = "https://github.com/Ayufa/youtube-custom-patches/issues"
+        website = "https://github.com/Ayufa/youtube-custom-patches"
         license = "GPLv3"
     }
 }

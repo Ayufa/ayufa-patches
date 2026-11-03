@@ -20,7 +20,7 @@ Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集�
 |---|---|
 | 対象 | YouTube **21.30.216**（本家が推奨している最新の安定版。最新の Android 向け） |
 | 何をするか | ライブチャットに出てくる固定コメント（ピン留めされたメッセージ）やアンケート（投票カード）など、チャットを読むときに邪魔な表示を隠します |
-| 調整 | パッチ適用時に、隠す項目を個別に選べます |
+| 調整 | パッチ適用時に、隠す項目を個別に選べます。さらに、適用後は Morphe 設定に専用の「Ayufaパッチ設定」画面ができ、その中の「固定メッセージ（バナー）を隠す」「アンケートを隠す」で、再パッチなしに切り替えられます（次にチャットを開いたときから反映） |
 
 ## 使い方
 
@@ -46,6 +46,24 @@ Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集�
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
+> **[v1.0.0-dev.10](https://github.com/Ayufa/youtube-custom-patches/releases/tag/v1.0.0-dev.10)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;1 patches total
+<details open>
+<summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<br>
+
+**Package name:** `com.google.android.youtube`
+
+**🎯 Supported versions:**
+
+| 21.30.216 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Hide live chat clutter](#hide-live-chat-clutter) | Hides the pinned message banner and poll cards in live chat. Each can be toggled in Morphe settings (Ayufa patch settings) without re-patching. For YouTube 21.30.216. | • Hide pinned message banner<br>• Hide live chat polls |
+
+</details>
+
 <!-- PATCHES_END -->
 
 ## 自分でビルドする場合
