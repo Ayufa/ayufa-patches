@@ -5,8 +5,7 @@
  * The hooking design follows the approach proven by Morphe's
  * "Remember live stream playback position" patch
  * (MorpheApp/morphe-patches, GPL-3.0): a once-per-second playback
- * time callback, live detection by a growing video length, and
- * seeking through VideoInformation.
+ * time callback and seeking through VideoInformation.
  */
 
 package app.ayufa.extension.youtube;
@@ -25,11 +24,20 @@ import java.lang.reflect.Method;
  * <p>While a live stream plays, the playback position slowly falls behind
  * the live edge (the end of the seek bar). This class is called about once
  * per second with the current playback time by the "Live latency keeper"
- * patch. When the video is confirmed to be an ongoing live stream and the
- * position is behind the edge by more than the configured threshold, it
- * seeks forward to (almost) the live edge.
+ * patch. When the lag behind the live edge exceeds the configured
+ * threshold, it seeks forward by the lag (minus a safety margin).
  *
- * <p>Playback state (video length, live flag, seeking) is read from the
+ * <p>How far behind playback is cannot be derived from the video length
+ * reported by the official Morphe extension: for long-running streams
+ * that length is the (constant) DVR window duration, while the playback
+ * position counts up from the start of the stream, so the two values are
+ * not comparable. Instead, the lag is estimated from wall-clock time:
+ * while playback advances normally, the position grows in real time;
+ * while it is paused or stalled, the live edge keeps moving but the
+ * position does not, and the difference accumulates as lag. The estimate
+ * starts at zero when a video is opened (playback opens at the edge).
+ *
+ * <p>Playback state (live flag, video id, seeking) is read from the
  * official Morphe extension class
  * {@code app.morphe.extension.youtube.patches.VideoInformation} through
  * reflection, so this class has no compile-time dependency on the official
@@ -73,22 +81,38 @@ public final class LiveLatencyKeeper {
     // endregion
 
     /**
-     * Minimum video length growth that confirms an ongoing live stream,
-     * same value as Morphe's remember-live-stream-position patch.
-     */
-    private static final long LIVE_GROWTH_CONFIRM_MS = 3000;
-
-    /**
      * How long catch-up is suppressed after the user manually rewinds.
      */
     private static final long MANUAL_REWIND_SUPPRESS_MS = 5 * 60 * 1000L;
 
     /**
-     * If the video length does not grow for this long, the stream is
-     * treated as ended (or the DVR window stopped moving) and catch-up
-     * stops for this video.
+     * Position/wall-clock differences smaller than this are treated as
+     * tick jitter, not as lag accumulating or draining.
      */
-    private static final long LENGTH_PLATEAU_MS = 120 * 1000L;
+    private static final long JITTER_TOLERANCE_MS = 250;
+
+    /**
+     * A single-tick forward jump larger than this is a discontinuity
+     * (user seek forward, ad transition, ...), not fast playback.
+     */
+    private static final long FORWARD_JUMP_MS = 10 * 1000L;
+
+    /**
+     * A single-tick position change (in either direction, relative to
+     * wall-clock time) larger than this cannot come from playback or an
+     * ordinary seek: it is a timeline discontinuity such as an ad break
+     * starting or ending. The tick is then ignored for lag accounting,
+     * so ad positions never corrupt the estimate. (A manual seek larger
+     * than this is ignored too, which is safe: the lag estimate simply
+     * keeps its pre-seek value and re-accumulates from the new position,
+     * so the keeper still does not fight the user.)
+     */
+    private static final long DISCONTINUITY_MS = 60 * 1000L;
+
+    /**
+     * A single-tick backward jump larger than this is a manual rewind.
+     */
+    private static final long REWIND_JUMP_MS = 3 * 1000L;
 
     /**
      * Small delay before seeking, so the seek does not run inside the
@@ -100,27 +124,18 @@ public final class LiveLatencyKeeper {
     // Reflection handles to Morphe's VideoInformation (official patches).
     private static boolean apiResolutionAttempted;
     private static Method videoInformationIsLiveStream;
-    private static Method videoInformationGetVideoLength;
     private static Method videoInformationGetVideoId;
-    private static Method videoInformationSeekTo;
+    private static Method videoInformationSeekToRelative;
 
     // Per-video state.
     private static String currentVideoId = "";
-    private static long baselineVideoLength;
-    private static boolean liveConfirmed;
-    private static boolean streamEnded;
-    private static long lastLength;
-    private static long lastLengthGrowthAtMs;
-    private static long lastTickTimeMs = -1;
-    private static int stalledTicks;
+    private static long lastPositionMs = -1;
+    private static long lastWallMs;
+    private static long lastPositionDeltaMs;
+    private static long behindMs;
     private static long lastCheckAtMs;
     private static long suppressUntilMs;
     private static boolean seekPending;
-
-    // Temporary diagnostics (to be removed once the keeper is verified
-    // in the full official-patch configuration).
-    private static long diagTicks;
-    private static boolean diagSettingsLogged;
 
     private LiveLatencyKeeper() {
     }
@@ -150,73 +165,59 @@ public final class LiveLatencyKeeper {
             if (!videoId.equals(currentVideoId)) {
                 resetForVideo(videoId);
             }
-            if (streamEnded) {
-                return;
-            }
 
-            long videoLength = (Long) videoInformationGetVideoLength.invoke(null);
-            if (videoLength <= 0) {
-                // Player is not fully loaded yet.
-                return;
-            }
-
+            boolean isLive = (Boolean) videoInformationIsLiveStream.invoke(null);
             long now = System.currentTimeMillis();
-
-            diagTicks++;
-            if (diagTicks % 10 == 1) {
-                boolean live = (Boolean) videoInformationIsLiveStream.invoke(null);
-                Log.d(TAG, "diag tick pos=" + playbackTimeMs + " len=" + videoLength
-                        + " isLive=" + live + " confirmed=" + liveConfirmed
-                        + " ended=" + streamEnded + " stalled=" + stalledTicks
-                        + " behind=" + (videoLength - playbackTimeMs)
-                        + " growthAge=" + (lastLengthGrowthAtMs == 0
-                                ? -1 : now - lastLengthGrowthAtMs)
-                        + " suppressLeft=" + Math.max(0, suppressUntilMs - now));
+            if (!isLive) {
+                // Not a live stream (or it just ended): keep the position
+                // reference fresh and do nothing.
+                lastPositionMs = playbackTimeMs;
+                lastWallMs = now;
+                lastPositionDeltaMs = 0;
+                return;
             }
 
-            // Track length growth (live edge movement) and playback stalls.
-            if (videoLength > lastLength) {
-                lastLength = videoLength;
-                lastLengthGrowthAtMs = now;
+            if (lastPositionMs < 0) {
+                // First tick of this video. Playback opens at the live
+                // edge, so the lag estimate starts at zero here.
+                lastPositionMs = playbackTimeMs;
+                lastWallMs = now;
+                lastPositionDeltaMs = 0;
+                return;
             }
-            if (playbackTimeMs == lastTickTimeMs) {
-                stalledTicks++;
-            } else {
-                stalledTicks = 0;
+
+            long wallDeltaMs = now - lastWallMs;
+            if (wallDeltaMs < 0) {
+                wallDeltaMs = 0;
             }
-            // Manual rewind: the position jumped backwards between ticks.
-            if (lastTickTimeMs > 0 && playbackTimeMs < lastTickTimeMs - LIVE_GROWTH_CONFIRM_MS) {
+            long positionDeltaMs = playbackTimeMs - lastPositionMs;
+            lastPositionMs = playbackTimeMs;
+            lastWallMs = now;
+            lastPositionDeltaMs = positionDeltaMs;
+
+            if (Math.abs(positionDeltaMs - wallDeltaMs) > DISCONTINUITY_MS) {
+                // Timeline discontinuity (ad break, very large seek):
+                // ignore this tick for lag accounting.
+            } else if (positionDeltaMs < -REWIND_JUMP_MS) {
+                // Manual rewind: the lag grows by the rewind amount, and
+                // catch-up is suppressed for a while so the keeper does
+                // not fight the user.
+                behindMs += wallDeltaMs - positionDeltaMs;
                 suppressUntilMs = now + MANUAL_REWIND_SUPPRESS_MS;
-            }
-            lastTickTimeMs = playbackTimeMs;
-
-            if (baselineVideoLength == 0) {
-                baselineVideoLength = videoLength;
-                return;
-            }
-
-            if (!liveConfirmed) {
-                boolean isLive = (Boolean) videoInformationIsLiveStream.invoke(null);
-                // The duration of an ongoing live stream grows in real time,
-                // while the duration of a regular video (or a premiere with a
-                // fixed duration) never changes.
-                if (isLive && videoLength - baselineVideoLength >= LIVE_GROWTH_CONFIRM_MS) {
-                    liveConfirmed = true;
-                    Log.d(TAG, "diag: live confirmed, len=" + videoLength);
-                } else {
-                    if (!isLive) {
-                        baselineVideoLength = videoLength;
-                    }
-                    return;
+            } else if (positionDeltaMs - wallDeltaMs > FORWARD_JUMP_MS) {
+                // Forward discontinuity (e.g. the user tapped the live
+                // badge): the lag shrinks by the jumped amount.
+                behindMs = Math.max(0, behindMs - (positionDeltaMs - wallDeltaMs));
+            } else {
+                long deficitMs = wallDeltaMs - positionDeltaMs;
+                if (deficitMs > JITTER_TOLERANCE_MS) {
+                    // Paused, stalled or buffering: the edge moved on
+                    // without the position following.
+                    behindMs += deficitMs;
+                } else if (deficitMs < -JITTER_TOLERANCE_MS) {
+                    // Playing faster than real time: the lag drains.
+                    behindMs = Math.max(0, behindMs + deficitMs);
                 }
-            }
-
-            // The live edge stopped moving: stream ended or DVR window
-            // plateaued. Stop catching up for this video.
-            if (lastLengthGrowthAtMs > 0 && now - lastLengthGrowthAtMs > LENGTH_PLATEAU_MS) {
-                streamEnded = true;
-                Log.d(TAG, "diag: stream ended latched, len=" + videoLength);
-                return;
             }
 
             // Throttle the actual check to the configured interval.
@@ -224,31 +225,32 @@ public final class LiveLatencyKeeper {
                 return;
             }
             lastCheckAtMs = now;
-            Log.d(TAG, "diag: check behind=" + (videoLength - playbackTimeMs)
-                    + " threshold=" + (thresholdSeconds * 1000L)
-                    + " stalled=" + stalledTicks
-                    + " suppressLeft=" + Math.max(0, suppressUntilMs - now));
 
             if (now < suppressUntilMs || seekPending) {
                 return;
             }
-            if (stalledTicks >= 2) {
-                // Paused or buffering: do not yank a stalled player.
+            if (lastPositionDeltaMs <= 0) {
+                // Paused or stalled right now: do not yank the player.
                 return;
             }
-
-            long behindMs = videoLength - playbackTimeMs;
             if (behindMs <= thresholdSeconds * 1000L) {
                 return;
             }
 
-            final long targetMs = videoLength - safetySeconds * 1000L;
+            final long seekForwardMs = behindMs - safetySeconds * 1000L;
+            if (seekForwardMs <= 0) {
+                return;
+            }
+            final long behindBeforeSeekMs = behindMs;
             seekPending = true;
             new Handler(Looper.getMainLooper()).postDelayed(() -> {
                 try {
-                    Object result = videoInformationSeekTo.invoke(null, targetMs);
-                    Log.d(TAG, "Catch-up seek to " + targetMs + " result: " + result
-                            + " (was behind " + behindMs + " ms)");
+                    videoInformationSeekToRelative.invoke(null, seekForwardMs);
+                    Log.d(TAG, "Catch-up seek forward by " + seekForwardMs
+                            + " ms (was behind " + behindBeforeSeekMs + " ms)");
+                    // Assume the seek landed as requested: only the
+                    // safety margin of lag remains.
+                    behindMs = safetySeconds * 1000L;
                 } catch (Throwable ex) {
                     Log.e(TAG, "Catch-up seek failed", ex);
                 } finally {
@@ -276,12 +278,7 @@ public final class LiveLatencyKeeper {
                 morphePrefs = context.getSharedPreferences(
                         MORPHE_PREFS_NAME, Context.MODE_PRIVATE);
             }
-            boolean enabled = morphePrefs.getBoolean(KEY_KEEP_LIVE_AT_EDGE, true);
-            if (!diagSettingsLogged) {
-                diagSettingsLogged = true;
-                Log.d(TAG, "diag: settings enabled=" + enabled);
-            }
-            return enabled;
+            return morphePrefs.getBoolean(KEY_KEEP_LIVE_AT_EDGE, true);
         } catch (Throwable ignored) {
             return true;
         }
@@ -313,13 +310,10 @@ public final class LiveLatencyKeeper {
 
     private static void resetForVideo(String videoId) {
         currentVideoId = videoId;
-        baselineVideoLength = 0;
-        liveConfirmed = false;
-        streamEnded = false;
-        lastLength = 0;
-        lastLengthGrowthAtMs = 0;
-        lastTickTimeMs = -1;
-        stalledTicks = 0;
+        lastPositionMs = -1;
+        lastWallMs = 0;
+        lastPositionDeltaMs = 0;
+        behindMs = 0;
         lastCheckAtMs = 0;
         suppressUntilMs = 0;
         seekPending = false;
@@ -332,25 +326,23 @@ public final class LiveLatencyKeeper {
      */
     private static boolean resolveVideoInformationApi() {
         if (apiResolutionAttempted) {
-            return videoInformationSeekTo != null;
+            return videoInformationSeekToRelative != null;
         }
         apiResolutionAttempted = true;
         try {
             Class<?> videoInformation =
                     Class.forName("app.morphe.extension.youtube.patches.VideoInformation");
             videoInformationIsLiveStream = videoInformation.getMethod("isLiveStream");
-            videoInformationGetVideoLength = videoInformation.getMethod("getVideoLength");
             videoInformationGetVideoId = videoInformation.getMethod("getVideoId");
-            videoInformationSeekTo = videoInformation.getMethod("seekTo", long.class);
-            Log.d(TAG, "diag: VideoInformation API resolved");
+            videoInformationSeekToRelative =
+                    videoInformation.getMethod("seekToRelative", long.class);
             return true;
         } catch (Throwable ex) {
             // Official Morphe patches are not applied (or changed).
             // Silently disable: this patch is an add-on to them.
             videoInformationIsLiveStream = null;
-            videoInformationGetVideoLength = null;
             videoInformationGetVideoId = null;
-            videoInformationSeekTo = null;
+            videoInformationSeekToRelative = null;
             Log.d(TAG, "Morphe VideoInformation not available; latency keeper disabled");
             return false;
         }
