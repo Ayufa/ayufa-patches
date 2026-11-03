@@ -1,10 +1,10 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.0.0-dev.9",
+  "version": "1.0.0-dev.10",
   "patches": [
     {
       "name": "Hide live chat clutter",
-      "description": "Hides the pinned message banner and poll cards in live chat. Each can be toggled in Morphe settings (General) without re-patching. For YouTube 21.30.216.",
+      "description": "Hides the pinned message banner and poll cards in live chat. Each can be toggled in Morphe settings (Ayufa patch settings) without re-patching. For YouTube 21.30.216.",
       "default": false,
       "category": null,
       "compatiblePackages": [

@@ -1,3 +1,9 @@
+## [1.0.0-dev.10](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.9...v1.0.0-dev.10) (2026-11-03)
+
+### ✨ New Features
+
+* Move the clutter switches to a dedicated Ayufa settings screen ([7735511](https://github.com/Ayufa/youtube-custom-patches/commit/7735511327f199c07e35e30c9496fd47d01c9af4))
+
 ## [1.0.0-dev.9](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.8...v1.0.0-dev.9) (2026-11-03)
 
 ### ✨ New Features
