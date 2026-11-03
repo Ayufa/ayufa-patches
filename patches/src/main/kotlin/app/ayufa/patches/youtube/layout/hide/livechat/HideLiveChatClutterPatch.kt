@@ -75,14 +75,15 @@ val hideLiveChatClutterPatch = bytecodePatch(
  *
  * @return The number of inflation sites hooked.
  */
-private fun app.morphe.patcher.patch.BytecodePatchContext.hookInflatedViews(
+context(patchContext: app.morphe.patcher.patch.BytecodePatchContext)
+private fun hookInflatedViews(
     layouts: List<String>,
     extensionMethod: String
 ): Int {
     var count = 0
     val hookedMethods = mutableSetOf<String>()
     for (layout in layouts) {
-        val matches = inflateLayoutFingerprint(layout).matchAll(this@hookInflatedViews)
+        val matches = inflateLayoutFingerprint(layout).matchAll()
         for (match in matches) {
             val method = match.method
             val descriptor = "${method.definingClass}->${method.name}"

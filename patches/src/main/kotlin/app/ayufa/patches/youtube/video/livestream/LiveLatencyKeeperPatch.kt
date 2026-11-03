@@ -85,9 +85,9 @@ val liveLatencyKeeperPatch = bytecodePatch(
                     it.name == "<clinit>"
                 }
                 if (clinit != null) {
-                    replaceClinitLiteral(clinit, DEFAULT_CHECK_INTERVAL_SECONDS, checkIntervalSeconds)
-                    replaceClinitLiteral(clinit, DEFAULT_THRESHOLD_SECONDS, thresholdSeconds)
-                    replaceClinitLiteral(clinit, DEFAULT_SAFETY_SECONDS, safetySeconds)
+                    clinit.replaceClinitLiteral(DEFAULT_CHECK_INTERVAL_SECONDS, checkIntervalSeconds)
+                    clinit.replaceClinitLiteral(DEFAULT_THRESHOLD_SECONDS, thresholdSeconds)
+                    clinit.replaceClinitLiteral(DEFAULT_SAFETY_SECONDS, safetySeconds)
                 }
             }
         } catch (ex: Exception) {
