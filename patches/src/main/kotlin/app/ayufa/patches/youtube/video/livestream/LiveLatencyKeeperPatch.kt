@@ -1,13 +1,10 @@
 package app.ayufa.patches.youtube.video.livestream
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.intOption
 import app.ayufa.patches.youtube.shared.Constants.COMPATIBILITY_YOUTUBE_ANDROID_8
-import com.android.tools.smali.dexlib2.iface.instruction.NarrowLiteralInstruction
-import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
+import com.android.tools.smali.dexlib2.immutable.value.ImmutableIntEncodedValue
 
 private const val EXTENSION_CLASS = "Lapp/ayufa/extension/youtube/LiveLatencyKeeper;"
 
@@ -76,19 +73,17 @@ val liveLatencyKeeperPatch = bytecodePatch(
         val thresholdSeconds by thresholdOption
         val safetySeconds by safetyOption
 
-        // Write the option values into the extension class by rewriting the
-        // default literals of its <clinit>. If the extension class cannot be
+        // Write the option values into the extension class by replacing the
+        // static initial values of its config fields. (The extension is
+        // compiled so the defaults live in the fields' encoded initial
+        // values, not in <clinit> code.) If the extension class cannot be
         // found or edited, the defaults stay in effect and nothing fails.
         try {
             if (classDefByOrNull(EXTENSION_CLASS) != null) {
-                val clinit = mutableClassDefBy(EXTENSION_CLASS).methods.firstOrNull {
-                    it.name == "<clinit>"
-                }
-                if (clinit != null) {
-                    clinit.replaceClinitLiteral(DEFAULT_CHECK_INTERVAL_SECONDS, checkIntervalSeconds)
-                    clinit.replaceClinitLiteral(DEFAULT_THRESHOLD_SECONDS, thresholdSeconds)
-                    clinit.replaceClinitLiteral(DEFAULT_SAFETY_SECONDS, safetySeconds)
-                }
+                val extensionClass = mutableClassDefBy(EXTENSION_CLASS)
+                setFieldInitialValue(extensionClass, "checkIntervalSeconds", checkIntervalSeconds)
+                setFieldInitialValue(extensionClass, "thresholdSeconds", thresholdSeconds)
+                setFieldInitialValue(extensionClass, "safetySeconds", safetySeconds)
             }
         } catch (ex: Exception) {
             // Keep the extension defaults.
@@ -106,23 +101,17 @@ val liveLatencyKeeperPatch = bytecodePatch(
 }
 
 /**
- * Replaces a `const` literal in a method (used for the extension <clinit>
- * defaults) with a new value, keeping the original destination register.
- * Does nothing if the literal is not found or already equals the new value.
+ * Sets the static initial value of an int field of the extension class.
+ * Does nothing if the field is missing or the value is null.
  */
-private fun app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.replaceClinitLiteral(
-    defaultValue: Int,
+private fun setFieldInitialValue(
+    extensionClass: app.morphe.patcher.util.proxy.mutableTypes.MutableClass,
+    fieldName: String,
     newValue: Int?
 ) {
-    if (newValue == null || newValue == defaultValue) {
+    if (newValue == null) {
         return
     }
-    val implementation = implementation ?: return
-    implementation.instructions.forEachIndexed { index, instruction ->
-        if (instruction is NarrowLiteralInstruction && instruction.narrowLiteral == defaultValue) {
-            val register = getInstruction<OneRegisterInstruction>(index).registerA
-            replaceInstruction(index, "const/16 v$register, $newValue")
-            return
-        }
-    }
+    val field = extensionClass.fields.firstOrNull { it.name == fieldName } ?: return
+    field.initialValue = ImmutableIntEncodedValue(newValue)
 }

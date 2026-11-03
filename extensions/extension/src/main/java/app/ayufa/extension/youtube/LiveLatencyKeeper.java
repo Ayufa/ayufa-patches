@@ -41,10 +41,10 @@ public final class LiveLatencyKeeper {
 
     // region Configuration.
     //
-    // The literal values in the static initializer are the defaults.
-    // The patch can rewrite these three literals at patch time from the
-    // patch options (check interval / threshold / safety margin).
-    // Do not make these fields final: the values must stay in <clinit>.
+    // The values in the static initializer are the defaults. At patch time
+    // the patch replaces the static initial values of these three fields
+    // with the values of the patch options (check interval / threshold /
+    // safety margin). Do not make these fields final.
 
     private static int checkIntervalSeconds;
     private static int thresholdSeconds;
