@@ -57,6 +57,25 @@ Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集�
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
+> **[v1.0.0-dev.1](https://github.com/Ayufa/youtube-custom-patches/releases/tag/v1.0.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
+<details open>
+<summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**Package name:** `com.google.android.youtube`
+
+**🎯 Supported versions:**
+
+| 21.30.216 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Hide live chat clutter](#hide-live-chat-clutter) | Hides the pinned message banner and poll cards in live chat. For YouTube 21.30.216. |  |
+| [Live latency keeper](#live-latency-keeper) | Periodically checks live stream playback and automatically seeks to the live edge when playback has fallen behind. For YouTube 20.26.46 (Android 8.0). Requires the official Morphe patches to be applied as well. |  |
+
+</details>
+
 <!-- PATCHES_END -->
 
 ## 自分でビルドする場合
