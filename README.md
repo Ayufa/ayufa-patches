@@ -1,103 +1,70 @@
-# 👋🧩 Morphe Patches template
+<p align="center">
+  <a href="https://morphe.software/add-source?github=Ayufa/youtube-custom-patches">
+    <img src=".github/assets/add-to-morphe.svg" alt="Morphe に追加" height="48">
+  </a>
+</p>
 
-Template repository for Morphe Patches.
+# Ayufa の YouTube 独自パッチ
 
-## ❓ About
+Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集です。
+公式の Morphe パッチではありません。Ayufa 個人のリポジトリで開発しています。
 
-Patches for apps I like.
+本家のパッチ（[MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches)）と一緒に使う想定です。
+本家のパッチで満足できなかったところ、自分が欲しい機能だけを少し足す、という位置づけです。
 
-<!-- TODO: Update this about section with a brief introduction/summary about this repo and what it offers. -->
+## 入っているパッチ
 
-### How to use these patches
+### ライブ遅延キーパー
 
-Click the button below, or manually add this repo url to Morphe Manager: https://github.com/xyz-user/xyz-patches
+| 項目 | 内容 |
+|---|---|
+| 対象 | YouTube **20.26.46**（Android 8.0 で動く最後の YouTube） |
+| 何をするか | ライブ配信を長時間つけっぱなしにしていると、再生位置が配信の先端から少しずつ遅れていきます。このパッチは再生中に定期的に遅れ具合を確認し、設定した秒数以上遅れていたら自動で先端（最新状態）まで進めます |
+| 調整 | パッチ適用時に、確認間隔と「何秒遅れたら進めるか」を変更できます |
 
-<a href="https://morphe.software/add-source?github=xyz-user/xyz-patches">
-  <img src=".github/assets/add-to-morphe.svg" alt="Add to Morphe" height="48">
-</a>
+使う場面の例：Android 8.0 の古い端末（SOV34 など）をライブ配信のつけっぱなし用にしていて、気づいたら数分遅れている、という場合の対策です。
 
-## 🩹 Patches list
+### ライブチャットの余計な表示を隠す
+
+| 項目 | 内容 |
+|---|---|
+| 対象 | YouTube **21.30.216**（本家が推奨している最新の安定版。最新の Android 向け） |
+| 何をするか | ライブチャットに出てくる固定コメント（ピン留めされたメッセージ）やアンケート（投票カード）など、チャットを読むときに邪魔な表示を隠します |
+| 調整 | パッチ適用時に、隠す項目を個別に選べます |
+
+## 使い方
+
+1. 上のボタンから、このリポジトリを Morphe のパッチソースに追加します
+2. いつもどおり本家のパッチと一緒に、使いたいパッチを選んで適用します
+
+- Android 8.0 の端末では、YouTube **20.26.46** の APK に当ててください
+- 最新の Android の端末では、YouTube **21.30.216** の APK に当ててください
+- 対象以外のバージョンには当てられません（バージョンごとに動作を確認しているためです）
+
+## 本家との関係
+
+- 本家のリポジトリには、プルリクエスト・Issue・コメントなどを一切しません。見るだけ（読み取り専用）で使わせてもらっています
+- 本家のパッチ自体の不具合は、ここでは直せません。このリポジトリの Issue は、この独自パッチについてのものだけにしてください
+- ライセンスやクレジットは本家に従います（GPL-3.0）
+
+## 本家の更新についていく仕組み
+
+- 本家のパッチャーなどの依存更新は、Dependabot が定期的に知らせてくれます
+- 本家の対応 YouTube バージョンが変わったら、GitHub Actions（upstream-watch）が検知して、このリポジトリの中にだけ Issue を立てます。本家側には何も書き込みません
+- 詳しくは [本家への追従方法](docs/UPSTREAM.md) に書いてあります
+- リリースの署名はしていません（署名鍵は未設定です）
+
+## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
-
-<!-- Do not modify this section by hand. The patch list is generated when release.yml creates a new release.
-     
-     If you wish for the patches list to be collapsed, then remove the word 'EXPANDED' from the comment tag above.
-
-     If you wish to manually keep this list updated then remove the PATCHES_START and PATCHES_END 
-     comment blocks entirely. -->
-
-#### A list of your patches will automatically be shown here after your first patches release is created.
-
-&nbsp;
-
-## 🚀 Getting development started
-
-To start using this template, follow these steps:
-
-1. [Setup](https://github.com/MorpheApp/morphe-documentation/blob/main/docs/morphe-development/README.md) your development environment including adding a GitHub PAT as described [here](https://github.com/MorpheApp/morphe-patcher/blob/main/docs/2_1_setup.md#-prepare-the-environment).
-2. [Create a new repository using this template](https://github.com/new?template_name=morphe-patches-template&template_owner=MorpheApp). Select create a new repository, and **enable 'Include all branches'** 
-3. Enable "Allow GitHub Actions to create and approve pull requests" in your repo Settings > Actions > General > Workflow permissions
-4. Update the [build.gradle.kts](patches/build.gradle.kts) file (Specifically, the 
-   [group of the project](patches/build.gradle.kts#L1), and the [About](patches/build.gradle.kts#L6-L11))
-5. Update the [README.md](README.md) file to be specific of your repo, and update the links in the [issue templates](.github/ISSUE_TEMPLATE).
-6. Choose a name for your patches project. Keep in mind you must use a name that does not 
-   imply authorship by the Morphe open source project. If unsure, then simply name these
-   patches after yourself ("UserXYZ Morphe patches"). See the [NOTICE](NOTICE) for details. 
-7. (Optional): Add `patches-bundle.png` to the project if you want a custom icon to show in
-   Morphe Manager instead of your GitHub profile avatar.
-8. (Optional): Sign your releases, so Morphe Manager refuses a release that was changed or swapped after you published it:
-   1. Run `./gradlew generateSigningKey`. It creates `morphe-signing.pub` and `morphe-signing.key`.
-   2. Commit `morphe-signing.pub`. Never commit `morphe-signing.key`, it is already ignored by git.
-   3. Add the content of `morphe-signing.key` as the `MORPHE_SIGNING_KEY` secret in your repo
-      Settings > Secrets and variables > Actions, then keep a backup of it somewhere safe and delete the file.
-
-   Every release is signed from then on. If you lose the key or it leaks, create a new one the same way;
-   users then have to confirm the new key in Morphe Manager before they get your next release.
-
-🎉 You are now ready to start creating patches!
-
-## 🧑‍💻 Dev usage
-
-To develop and release your Patches using this template:
-
-- **Make all changes to the `dev` branch.**
-- For local development work build your patches using the gradle task `./gradlew buildAndroid` to generate the mpp file found in `patches/build/libs/patches-*.mpp`. Apply your patches locally using Morphe Desktop tool like any other patch bundle.
-- Always use [Semantic commit](https://kapeli.com/cheat_sheets/Semantic_Commits.docset/Contents/Resources/Documents/index) messages for commits. To keep it simple use only 3 commit message types: 
-  - `feat: Added a new feature`
-  - `fix: Some problem now fixed`
-  - `chore: Random change you do not want in the user facing changelog`
-- Commits of `fix:` and `feat:` will automatically generate new pre-releases and `chore:` will not create a new release.
-- Users can apply your dev branch releases by enabling `pre-release` in Morphe Manager patch sources.
-- When your dev branch is ready, and you want a stable release, merge dev branch to main (do not squash, and only merge).
-- **Always use semantic release (release.yml)**. Do not manually upload or create releases by hand
-  because many files must be updated and release.yml handles everything.
-
-## 🤓 Tips
-- See the [patcher documentation](https://github.com/MorpheApp/morphe-patcher/blob/main/docs/1_patcher_intro.md) for more examples of creating patches and fingerprints.
-- Do not use AI to create new release scripts. The `release.yml` here already handles everything.
-  If you need something custom with your releases then modify the existing `release.yml`
-  and `.releaserc` instead of writing everything new from scratch.
-- Do not manually edit or manually commit any generated files such as: `patches-list.json`,
-  `patches-bundle.json`, `CHANGELOG.md`.  These files will be automatically updated by `release.yml`.
-- Do not force push any semantic release commits as that will break all future releases.
-  If you need to fix a broken release, it's always easiest to create a new release instead of 
-  fixing an existing release.
-
-
-<!-- The patches end tag is intentionally placed here so the first release will clean up 
-     this readme of all developer instructions above. -->
 <!-- PATCHES_END -->
 
-### 🛠️ Building locally
+## 自分でビルドする場合
 
-- Run `./gradlew buildAndroid`
-- The built patches .mpp file is found in `patches/build/libs/patches-*.mpp`
-- Patch the mpp file using [Morphe-Desktop](https://github.com/MorpheApp/morphe-desktop)
-  like any other patch bundle.
+- `./gradlew buildAndroid` を実行すると、`patches/build/libs/` に `.mpp` ファイルができます
+- できたファイルは Morphe Desktop などから、他のパッチバンドルと同じように使えます
+- 開発は `dev` ブランチで行い、`main` にマージすると安定版のリリースが作られます
 
-See the [Morphe documentation](https://github.com/MorpheApp/morphe-documentation) for more information.
+## ライセンス
 
-## 📜 License
-
-UserXYZ Patches are licensed under the [GNU General Public License v3.0](LICENSE)
+GPL-3.0（[LICENSE](LICENSE)）。土台は本家の [Morphe Patches テンプレート](https://github.com/MorpheApp/morphe-patches-template)です。[NOTICE](NOTICE) もあわせてご覧ください。
