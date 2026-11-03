@@ -117,6 +117,11 @@ public final class LiveLatencyKeeper {
     private static long suppressUntilMs;
     private static boolean seekPending;
 
+    // Temporary diagnostics (to be removed once the keeper is verified
+    // in the full official-patch configuration).
+    private static long diagTicks;
+    private static boolean diagSettingsLogged;
+
     private LiveLatencyKeeper() {
     }
 
@@ -157,6 +162,18 @@ public final class LiveLatencyKeeper {
 
             long now = System.currentTimeMillis();
 
+            diagTicks++;
+            if (diagTicks % 10 == 1) {
+                boolean live = (Boolean) videoInformationIsLiveStream.invoke(null);
+                Log.d(TAG, "diag tick pos=" + playbackTimeMs + " len=" + videoLength
+                        + " isLive=" + live + " confirmed=" + liveConfirmed
+                        + " ended=" + streamEnded + " stalled=" + stalledTicks
+                        + " behind=" + (videoLength - playbackTimeMs)
+                        + " growthAge=" + (lastLengthGrowthAtMs == 0
+                                ? -1 : now - lastLengthGrowthAtMs)
+                        + " suppressLeft=" + Math.max(0, suppressUntilMs - now));
+            }
+
             // Track length growth (live edge movement) and playback stalls.
             if (videoLength > lastLength) {
                 lastLength = videoLength;
@@ -185,6 +202,7 @@ public final class LiveLatencyKeeper {
                 // fixed duration) never changes.
                 if (isLive && videoLength - baselineVideoLength >= LIVE_GROWTH_CONFIRM_MS) {
                     liveConfirmed = true;
+                    Log.d(TAG, "diag: live confirmed, len=" + videoLength);
                 } else {
                     if (!isLive) {
                         baselineVideoLength = videoLength;
@@ -197,6 +215,7 @@ public final class LiveLatencyKeeper {
             // plateaued. Stop catching up for this video.
             if (lastLengthGrowthAtMs > 0 && now - lastLengthGrowthAtMs > LENGTH_PLATEAU_MS) {
                 streamEnded = true;
+                Log.d(TAG, "diag: stream ended latched, len=" + videoLength);
                 return;
             }
 
@@ -205,6 +224,10 @@ public final class LiveLatencyKeeper {
                 return;
             }
             lastCheckAtMs = now;
+            Log.d(TAG, "diag: check behind=" + (videoLength - playbackTimeMs)
+                    + " threshold=" + (thresholdSeconds * 1000L)
+                    + " stalled=" + stalledTicks
+                    + " suppressLeft=" + Math.max(0, suppressUntilMs - now));
 
             if (now < suppressUntilMs || seekPending) {
                 return;
@@ -253,7 +276,12 @@ public final class LiveLatencyKeeper {
                 morphePrefs = context.getSharedPreferences(
                         MORPHE_PREFS_NAME, Context.MODE_PRIVATE);
             }
-            return morphePrefs.getBoolean(KEY_KEEP_LIVE_AT_EDGE, true);
+            boolean enabled = morphePrefs.getBoolean(KEY_KEEP_LIVE_AT_EDGE, true);
+            if (!diagSettingsLogged) {
+                diagSettingsLogged = true;
+                Log.d(TAG, "diag: settings enabled=" + enabled);
+            }
+            return enabled;
         } catch (Throwable ignored) {
             return true;
         }
@@ -314,6 +342,7 @@ public final class LiveLatencyKeeper {
             videoInformationGetVideoLength = videoInformation.getMethod("getVideoLength");
             videoInformationGetVideoId = videoInformation.getMethod("getVideoId");
             videoInformationSeekTo = videoInformation.getMethod("seekTo", long.class);
+            Log.d(TAG, "diag: VideoInformation API resolved");
             return true;
         } catch (Throwable ex) {
             // Official Morphe patches are not applied (or changed).
