@@ -57,7 +57,7 @@ Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集�
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.0.0-dev.1](https://github.com/Ayufa/youtube-custom-patches/releases/tag/v1.0.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
+> **[v1.0.0-dev.2](https://github.com/Ayufa/youtube-custom-patches/releases/tag/v1.0.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
 <details open>
 <summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>

@@ -1,3 +1,9 @@
+## [1.0.0-dev.2](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.1...v1.0.0-dev.2) (2026-11-03)
+
+### 🐛 Bug Fixes
+
+* Hook live chat presenters instead of layout inflation ([cbc5ede](https://github.com/Ayufa/youtube-custom-patches/commit/cbc5ede5389173db20275bbfbc2099c7d97f06cd))
+
 ## 1.0.0-dev.1 (2026-11-03)
 
 ### ✨ New Features
