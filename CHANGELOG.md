@@ -1,3 +1,9 @@
+## [1.1.0-dev.2](https://github.com/Ayufa/youtube-custom-patches/compare/v1.1.0-dev.1...v1.1.0-dev.2) (2026-11-03)
+
+### ✨ New Features
+
+* Support the Live latency keeper on YouTube 21.30.216 as well ([9b1f35b](https://github.com/Ayufa/youtube-custom-patches/commit/9b1f35b04aa0f69a69e28398d43206d1b98e0c10))
+
 ## [1.1.0-dev.1](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0...v1.1.0-dev.1) (2026-11-03)
 
 ### ✨ New Features
