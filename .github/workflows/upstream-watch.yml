@@ -39,9 +39,13 @@ jobs:
           upstream = open('/tmp/upstream-constants.kt').read()
           ours = open('patches/src/main/kotlin/app/ayufa/patches/youtube/shared/Constants.kt').read()
 
-          # Upstream anchor this repo cares about:
+          # Upstream anchors this repo cares about:
+          #  - the version commented "Last version for Android 8.0"
           #  - the newest non-experimental target (first AppTarget block
           #    without isExperimental, targets are listed newest first)
+          m = re.search(r'version\s*=\s*"([0-9.]+)"[^\n]*Last version for Android 8\.0', upstream)
+          upstream_android8 = m.group(1) if m else "unknown"
+
           upstream_stable = "unknown"
           for block in re.findall(r'AppTarget\((.*?)\)', upstream, re.S):
               v = re.search(r'version\s*=\s*"([0-9.]+)"', block)
@@ -53,6 +57,7 @@ jobs:
               m = re.search(const_name + r'.*?AppTarget\(\s*version\s*=\s*"([0-9.]+)"', ours, re.S)
               return m.group(1) if m else "unknown"
 
+          our_android8 = our_target('COMPATIBILITY_YOUTUBE_ANDROID_8')
           our_modern = our_target('COMPATIBILITY_YOUTUBE_MODERN')
 
           try:
@@ -65,14 +70,16 @@ jobs:
           our_patcher = m.group(1) if m else "unknown"
 
           drift = 0
+          if upstream_android8 != "unknown" and upstream_android8 != our_android8:
+              drift = 1
           if upstream_stable != "unknown" and upstream_stable != our_modern:
               drift = 1
           # Note: morphe-patches' own patcher version is informational only.
           # This repo follows the patches-template patcher version, which
           # Dependabot keeps updated; a difference is not drift.
 
-          print(f"upstream_versions=newest stable: {upstream_stable}")
-          print(f"our_versions=modern target: {our_modern}")
+          print(f"upstream_versions=Android 8.0 last: {upstream_android8} / newest stable: {upstream_stable}")
+          print(f"our_versions=Android 8.0 target: {our_android8} / modern target: {our_modern}")
           print(f"upstream_patcher={upstream_patcher}")
           print(f"our_patcher={our_patcher}")
           print(f"drift={drift}")
@@ -100,9 +107,9 @@ jobs:
 
           morphe-patcher: upstream \`${{ steps.compare.outputs.upstream_patcher }}\` / this repo \`${{ steps.compare.outputs.our_patcher }}\`
 
-          Action: check docs/UPSTREAM.md, re-verify fingerprints against the
-          new newest stable target, and update \`Constants.kt\` accordingly.
-          Do not interact with upstream.
+          Action: check docs/UPSTREAM.md, re-verify fingerprints against any
+          new "last version for Android 8.0" / newest stable target, and
+          update \`Constants.kt\` accordingly. Do not interact with upstream.
           EOF
           )
           # Skip if an identical open issue already exists.
