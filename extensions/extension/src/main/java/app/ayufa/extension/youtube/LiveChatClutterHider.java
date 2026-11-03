@@ -5,19 +5,24 @@
 
 package app.ayufa.extension.youtube;
 
-import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 
 /**
- * Hides clutter shown above / inside the live chat: the pinned message
- * banner and poll cards.
+ * Hides clutter shown above the live chat: the pinned message banner and
+ * poll cards.
  *
- * <p>The methods here are called by the "Hide live chat clutter" patch
- * right after the corresponding views are inflated. Because the app can
- * re-show these containers later (for example when a new message is
- * pinned), a global layout listener keeps re-hiding them.
+ * <p>The "Hide live chat clutter" patch calls the two entry points here at
+ * the end of the banner / poll presenter constructors (YouTube 21.30.216),
+ * passing the root view each presenter was created with. The banner entry
+ * point locates the banner container inside the chat root view; the poll
+ * entry point hides the poll root view itself.
+ *
+ * <p>Presenters re-show their containers when new content arrives (a
+ * message gets pinned, a poll starts), so a global layout listener
+ * re-applies GONE after every layout pass in which a hidden container
+ * became visible again.
  */
 @SuppressWarnings("unused")
 public final class LiveChatClutterHider {
@@ -26,42 +31,53 @@ public final class LiveChatClutterHider {
     }
 
     /**
-     * Injection point. Called with the inflated pinned banner content view.
-     * Hides the whole banner container when it can be found, so no empty
-     * banner strip is left above the chat.
+     * Injection point. Called with the live chat root view that the banner
+     * presenter was created with.
      */
-    public static void hidePinnedBannerView(final View view) {
-        if (view == null) {
-            return;
-        }
-        View banner = findBannerContainer(view);
-        if (banner != null) {
+    public static void onBannerRootView(View chatRoot) {
+        try {
+            if (chatRoot == null) {
+                return;
+            }
+            int bannerId = chatRoot.getResources().getIdentifier(
+                    "live_chat_banner", "id", chatRoot.getContext().getPackageName());
+            if (bannerId == 0) {
+                return;
+            }
+            View banner = chatRoot.findViewById(bannerId);
+            if (banner == null) {
+                return;
+            }
             keepHidden(banner);
+            // Also hide the dedicated wrapper container so no empty strip
+            // is left above the chat.
+            ViewParent parent = banner.getParent();
+            if (parent instanceof View) {
+                View parentView = (View) parent;
+                int containerId = chatRoot.getResources().getIdentifier(
+                        "live_chat_banner_container", "id",
+                        chatRoot.getContext().getPackageName());
+                if (containerId != 0 && parentView.getId() == containerId) {
+                    keepHidden(parentView);
+                }
+            }
+        } catch (Throwable ignored) {
+            // Never break the chat because of this feature.
         }
-        keepHidden(view);
-        // The content view may not be attached to its container yet at
-        // inflation time. Retry finding the container on every layout pass,
-        // otherwise an empty banner strip could remain above the chat.
-        view.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        View container = findBannerContainer(view);
-                        if (container != null && container.getVisibility() != View.GONE) {
-                            container.setVisibility(View.GONE);
-                        }
-                    }
-                });
     }
 
     /**
-     * Injection point. Called with the inflated poll card view.
+     * Injection point. Called with the root view the poll presenter was
+     * created with (the poll card container).
      */
-    public static void hidePollView(View view) {
-        if (view == null) {
-            return;
+    public static void onPollRootView(View pollRoot) {
+        try {
+            if (pollRoot != null) {
+                keepHidden(pollRoot);
+            }
+        } catch (Throwable ignored) {
+            // Never break the chat because of this feature.
         }
-        keepHidden(view);
     }
 
     /**
@@ -79,38 +95,5 @@ public final class LiveChatClutterHider {
                         }
                     }
                 });
-    }
-
-    /**
-     * Walks up from the banner content view to the banner container:
-     * the view with id {@code live_chat_banner_container}, or an instance
-     * of {@code LiveChatBannerContainerLayout}.
-     *
-     * @return The container view, or null if it cannot be identified yet
-     * (the content view may not be attached to the container at inflation
-     * time; in that case only the content itself is hidden).
-     */
-    private static View findBannerContainer(View view) {
-        try {
-            Resources resources = view.getResources();
-            String packageName = view.getContext().getPackageName();
-            int containerId = resources.getIdentifier(
-                    "live_chat_banner_container", "id", packageName);
-
-            View current = view;
-            for (int depth = 0; depth < 8 && current != null; depth++) {
-                if (containerId != 0 && current.getId() == containerId) {
-                    return current;
-                }
-                if (current.getClass().getName().endsWith("LiveChatBannerContainerLayout")) {
-                    return current;
-                }
-                ViewParent parent = current.getParent();
-                current = parent instanceof View ? (View) parent : null;
-            }
-        } catch (Throwable ignored) {
-            // Fall through: hide the content view itself.
-        }
-        return null;
     }
 }

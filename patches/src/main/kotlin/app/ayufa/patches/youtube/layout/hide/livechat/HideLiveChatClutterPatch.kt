@@ -1,13 +1,11 @@
 package app.ayufa.patches.youtube.layout.hide.livechat
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.booleanOption
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.ayufa.patches.youtube.shared.Constants.COMPATIBILITY_YOUTUBE_MODERN
-import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 
 private const val EXTENSION_CLASS = "Lapp/ayufa/extension/youtube/LiveChatClutterHider;"
 
@@ -23,17 +21,6 @@ private val hidePollsOption = booleanOption(
     default = true,
     title = "Hide live chat polls",
     description = "Hides poll (questionnaire) cards shown in the live chat."
-)
-
-/** Layouts inflated for the pinned message banner (dark/light variants). */
-private val bannerLayouts = listOf(
-    "live_chat_banner_with_solid_background",
-    "live_chat_banner_with_solid_background_inverse"
-)
-
-/** Layouts inflated for poll cards in the chat. */
-private val pollLayouts = listOf(
-    "live_chat_modern_poll"
 )
 
 @Suppress("unused")
@@ -54,15 +41,49 @@ val hideLiveChatClutterPatch = bytecodePatch(
         var hookCount = 0
 
         if (hidePinnedBanner == true) {
-            hookCount += hookInflatedViews(bannerLayouts, "hidePinnedBannerView")
+            // Hook the end of the banner presenter constructor. The extension
+            // receives the presenter instance and keeps its banner container
+            // hidden for the whole chat session.
+            // matchAll throws when nothing matches; treat that as zero hooks.
+            val matches = runCatching { LiveChatBannerPresenterFingerprint.matchAll() }
+                .getOrDefault(emptyList())
+            for (match in matches) {
+                val register = match.method.viewParameterRegister() ?: continue
+                match.method.insertBeforeReturn(
+                    "invoke-static { p$register }, " +
+                        "$EXTENSION_CLASS->onBannerRootView(Landroid/view/View;)V"
+                )
+                hookCount++
+            }
         }
+
         if (hidePolls == true) {
-            hookCount += hookInflatedViews(pollLayouts, "hidePollView")
+            // The fingerprint matches a poll presenter getter. Hook the
+            // constructors of every matched presenter's class.
+            val hookedClasses = mutableSetOf<String>()
+            val matches = runCatching { LiveChatPollPresenterFingerprint.matchAll() }
+                .getOrDefault(emptyList())
+            for (match in matches) {
+                val classDef = match.classDef
+                if (!hookedClasses.add(classDef.type)) {
+                    continue
+                }
+                for (method in classDef.methods) {
+                    if (method.name == "<init>") {
+                        val register = method.viewParameterRegister() ?: continue
+                        method.insertBeforeReturn(
+                            "invoke-static { p$register }, " +
+                                "$EXTENSION_CLASS->onPollRootView(Landroid/view/View;)V"
+                        )
+                        hookCount++
+                    }
+                }
+            }
         }
 
         if (hookCount == 0) {
             throw PatchException(
-                "Hide live chat clutter: no target layout inflation was found. " +
+                "Hide live chat clutter: no target presenter was found. " +
                     "This patch was verified only for YouTube 21.30.216."
             )
         }
@@ -70,49 +91,27 @@ val hideLiveChatClutterPatch = bytecodePatch(
 }
 
 /**
- * Hooks every method that inflates one of the given layouts, inserting a
- * call to the extension hide method with the inflated view.
- *
- * @return The number of inflation sites hooked.
+ * Inserts the given instruction right before the method's final return
+ * instruction.
  */
-context(patchContext: app.morphe.patcher.patch.BytecodePatchContext)
-private fun hookInflatedViews(
-    layouts: List<String>,
-    extensionMethod: String
-): Int {
-    var count = 0
-    val hookedMethods = mutableSetOf<String>()
-    for (layout in layouts) {
-        val matches = inflateLayoutFingerprint(layout).matchAll()
-        for (match in matches) {
-            val method = match.method
-            val descriptor = "${method.definingClass}->${method.name}"
-            if (!hookedMethods.add(descriptor)) {
-                continue
-            }
-            val moveResultIndex = match.instructionMatches.last().index
-            method.injectHideViewCall(moveResultIndex, EXTENSION_CLASS, extensionMethod)
-            count++
-        }
-    }
-    return count
+private fun MutableMethod.insertBeforeReturn(instruction: String) {
+    val index = implementation?.instructions?.size?.minus(1)
+        ?: throw PatchException("Method has no instructions: $this")
+    addInstruction(index, instruction)
 }
 
 /**
- * Injects a call to a static extension method that hides a view.
- * Same helper as MorpheApp/morphe-patches injectHideViewCall, GPL-3.0.
- *
- * @param moveResultIndex Index of the MOVE_RESULT_OBJECT instruction that
- * holds the inflated view.
+ * Returns the parameter register (pN) of this method's
+ * `android.view.View` parameter, or null if it has none.
+ * Register p0 is `this`; long/double parameters take two registers.
  */
-private fun MutableMethod.injectHideViewCall(
-    moveResultIndex: Int,
-    classDescriptor: String,
-    targetMethod: String
-) {
-    val viewRegister = getInstruction<OneRegisterInstruction>(moveResultIndex).registerA
-    addInstruction(
-        moveResultIndex + 1,
-        "invoke-static { v$viewRegister }, $classDescriptor->$targetMethod(Landroid/view/View;)V"
-    )
+private fun MutableMethod.viewParameterRegister(): Int? {
+    var register = 1
+    for (type in parameterTypes) {
+        if (type == "Landroid/view/View;") {
+            return register
+        }
+        register += if (type == "J" || type == "D") 2 else 1
+    }
+    return null
 }
