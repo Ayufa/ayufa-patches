@@ -1,3 +1,9 @@
+## [1.1.0-dev.4](https://github.com/Ayufa/youtube-custom-patches/compare/v1.1.0-dev.3...v1.1.0-dev.4) (2026-11-03)
+
+### 🐛 Bug Fixes
+
+* Estimate live lag from wall-clock time instead of the video length ([bfbca52](https://github.com/Ayufa/youtube-custom-patches/commit/bfbca522833b417f166a0db98ec162870165e6f6))
+
 ## [1.1.0-dev.3](https://github.com/Ayufa/youtube-custom-patches/compare/v1.1.0-dev.2...v1.1.0-dev.3) (2026-11-03)
 
 ### 🐛 Bug Fixes
