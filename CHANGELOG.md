@@ -1,3 +1,9 @@
+## [1.1.0-dev.3](https://github.com/Ayufa/youtube-custom-patches/compare/v1.1.0-dev.2...v1.1.0-dev.3) (2026-11-03)
+
+### 🐛 Bug Fixes
+
+* Add temporary diagnostic logging to find why the keeper does not seek ([69edf67](https://github.com/Ayufa/youtube-custom-patches/commit/69edf677a4b07ef1b2479b8ea2daf5dc01b3b379))
+
 ## [1.1.0-dev.2](https://github.com/Ayufa/youtube-custom-patches/compare/v1.1.0-dev.1...v1.1.0-dev.2) (2026-11-03)
 
 ### ✨ New Features
