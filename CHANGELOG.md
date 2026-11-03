@@ -1,3 +1,10 @@
+## [1.0.0-dev.6](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.5...v1.0.0-dev.6) (2026-11-03)
+
+### 🐛 Bug Fixes
+
+* Mutate the extension fields' encoded initial values in place ([16a2d75](https://github.com/Ayufa/youtube-custom-patches/commit/16a2d759ae07e94e7673bb47a65dfe7507fde9e6))
+* Write patch options into extension field initial values ([c3eee99](https://github.com/Ayufa/youtube-custom-patches/commit/c3eee992de76c692c80824aa3fd86d77e616319a))
+
 ## [1.0.0-dev.5](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.4...v1.0.0-dev.5) (2026-11-03)
 
 ### 🐛 Bug Fixes
