@@ -1,3 +1,9 @@
+## [1.1.0-dev.1](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0...v1.1.0-dev.1) (2026-11-03)
+
+### ✨ New Features
+
+* Restore the Live latency keeper with a Morphe settings toggle ([812189e](https://github.com/Ayufa/youtube-custom-patches/commit/812189eb8b6d38b0a6e0fb51386ea63340aee267))
+
 ## 1.0.0 (2026-11-03)
 
 ### ⚠ BREAKING CHANGES
