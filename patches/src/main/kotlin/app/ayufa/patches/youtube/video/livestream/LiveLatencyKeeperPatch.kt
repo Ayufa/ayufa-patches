@@ -4,7 +4,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.intOption
 import app.ayufa.patches.youtube.shared.Constants.COMPATIBILITY_YOUTUBE_ANDROID_8
-import com.android.tools.smali.dexlib2.immutable.value.ImmutableIntEncodedValue
+import app.morphe.patcher.util.proxy.mutableTypes.encodedValue.MutableIntEncodedValue
 
 private const val EXTENSION_CLASS = "Lapp/ayufa/extension/youtube/LiveLatencyKeeper;"
 
@@ -113,5 +113,5 @@ private fun setFieldInitialValue(
         return
     }
     val field = extensionClass.fields.firstOrNull { it.name == fieldName } ?: return
-    field.initialValue = ImmutableIntEncodedValue(newValue)
+    (field.initialValue as? MutableIntEncodedValue)?.value = newValue
 }
