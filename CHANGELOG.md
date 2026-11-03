@@ -1,3 +1,9 @@
+## [1.0.0-dev.7](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.6...v1.0.0-dev.7) (2026-11-03)
+
+### 🐛 Bug Fixes
+
+* Register patch options in the patch builders ([8e55e15](https://github.com/Ayufa/youtube-custom-patches/commit/8e55e15ec9eb12240301f9488f287a826ee3c4a9))
+
 ## [1.0.0-dev.6](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.5...v1.0.0-dev.6) (2026-11-03)
 
 ### 🐛 Bug Fixes
