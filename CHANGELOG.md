@@ -1,3 +1,9 @@
+## [1.0.0-dev.9](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.8...v1.0.0-dev.9) (2026-11-03)
+
+### ✨ New Features
+
+* Fix live chat disappearing and add Morphe settings toggles ([4d7f108](https://github.com/Ayufa/youtube-custom-patches/commit/4d7f10853372e0188bbb397cdda93d3479892dfc))
+
 ## [1.0.0-dev.8](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.7...v1.0.0-dev.8) (2026-11-03)
 
 ### ⚠ BREAKING CHANGES
