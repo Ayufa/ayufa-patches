@@ -1,3 +1,9 @@
+## [1.0.0-dev.3](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.2...v1.0.0-dev.3) (2026-11-03)
+
+### 🐛 Bug Fixes
+
+* Use invoke-static/range for high registers; add temporary hook diagnostics ([f9675bd](https://github.com/Ayufa/youtube-custom-patches/commit/f9675bd096306fd71c42aa12e0664712776c82e0))
+
 ## [1.0.0-dev.2](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.1...v1.0.0-dev.2) (2026-11-03)
 
 ### 🐛 Bug Fixes
