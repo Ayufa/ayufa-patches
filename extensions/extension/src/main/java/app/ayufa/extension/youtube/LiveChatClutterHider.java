@@ -22,7 +22,8 @@ import android.view.ViewTreeObserver;
  * container. Hiding the root itself would hide the whole chat, so the
  * root is never touched.
  *
- * <p>Each feature can be toggled in Morphe settings (General screen).
+ * <p>Each feature can be toggled in Morphe settings, on the dedicated
+ * "Ayufa patch settings" screen.
  * The toggles are declared by the patch as add-on preferences and stored
  * by the Morphe settings UI in the "morphe_prefs" shared preferences,
  * which is read here on every call. If the settings were never opened,

@@ -30,12 +30,13 @@ private val hidePollsOption = booleanOption(
 )
 
 /**
- * Declares the two features as switches on the Morphe settings General
- * screen, using the official add-on preference mechanism: the settings
- * patch of the Morphe bundle merges `morphe_addon_prefs.xml` into its
- * preference files and removes the declaration afterwards. If the Morphe
- * settings patch is not applied, the declaration file is left behind in
- * the APK root, which is harmless, and the features simply stay on.
+ * Declares the two features as switches on a dedicated "Ayufa patch
+ * settings" screen in Morphe settings, using the official add-on
+ * preference mechanism: the settings patch of the Morphe bundle merges
+ * `morphe_addon_prefs.xml` into its preference files and removes the
+ * declaration afterwards. If the Morphe settings patch is not applied,
+ * the declaration file is left behind in the APK root, which is
+ * harmless, and the features simply stay on.
  *
  * The switches write to the "morphe_prefs" shared preferences, which the
  * extension reads at runtime, so toggling takes effect without
@@ -56,28 +57,32 @@ private val hideLiveChatClutterSettingsPatch = resourcePatch {
         addStrings(
             "res/values/strings.xml",
             mapOf(
+                "ayufa_settings_screen_title" to "Ayufa patch settings",
+                "ayufa_settings_screen_summary" to "Settings for Ayufa YouTube Patches.",
                 "${KEY_HIDE_PINNED_BANNER}_title" to "Hide pinned message banner",
                 "${KEY_HIDE_PINNED_BANNER}_summary" to
                     "Hides the pinned comment shown above the live chat. " +
-                    "Ayufa patch; takes effect the next time a chat is opened.",
+                    "Takes effect the next time a chat is opened.",
                 "${KEY_HIDE_POLL}_title" to "Hide live chat polls",
                 "${KEY_HIDE_POLL}_summary" to
                     "Hides poll cards shown in the live chat. " +
-                    "Ayufa patch; takes effect the next time a chat is opened."
+                    "Takes effect the next time a chat is opened."
             )
         )
         if (get("res/values-ja/strings.xml").exists()) {
             addStrings(
                 "res/values-ja/strings.xml",
                 mapOf(
+                    "ayufa_settings_screen_title" to "Ayufaパッチ設定",
+                    "ayufa_settings_screen_summary" to "Ayufa YouTube Patches の設定です。",
                     "${KEY_HIDE_PINNED_BANNER}_title" to "固定メッセージ（バナー）を隠す",
                     "${KEY_HIDE_PINNED_BANNER}_summary" to
                         "ライブチャットの上に表示される固定コメントを非表示にします。" +
-                        "Ayufaのパッチです。次にチャットを開いたときから反映されます。",
+                        "次にチャットを開いたときから反映されます。",
                     "${KEY_HIDE_POLL}_title" to "アンケートを隠す",
                     "${KEY_HIDE_POLL}_summary" to
                         "ライブチャットに表示されるアンケートカードを非表示にします。" +
-                        "Ayufaのパッチです。次にチャットを開いたときから反映されます。"
+                        "次にチャットを開いたときから反映されます。"
                 )
             )
         }
@@ -87,18 +92,27 @@ private val hideLiveChatClutterSettingsPatch = resourcePatch {
 private fun addClutterSwitches(document: Document) {
     val root = document.documentElement
 
-    val existingScreens = root.getElementsByTagName("screen")
-    for (i in 0 until existingScreens.length) {
-        val screen = existingScreens.item(i) as? Element ?: continue
-        if (screen.getAttribute("key") == "morphe_settings_screen_04_general") {
-            return // Already declared.
+    // Already declared?
+    val existing = root.getElementsByTagName("PreferenceScreen")
+    for (i in 0 until existing.length) {
+        val element = existing.item(i) as? Element ?: continue
+        if (element.getAttribute("android:key") == "ayufa_settings_screen") {
+            return
         }
     }
 
+    // A screen declaration without a key or position is added to the
+    // Morphe settings root screen, so this creates a dedicated
+    // "Ayufa patch settings" entry holding the two switches.
+    val ayufaScreen = document.createElement("PreferenceScreen")
+    ayufaScreen.setAttribute("android:key", "ayufa_settings_screen")
+    ayufaScreen.setAttribute("android:title", "@string/ayufa_settings_screen_title")
+    ayufaScreen.setAttribute("android:summary", "@string/ayufa_settings_screen_summary")
+    ayufaScreen.appendChild(switchPreference(document, KEY_HIDE_PINNED_BANNER))
+    ayufaScreen.appendChild(switchPreference(document, KEY_HIDE_POLL))
+
     val screen = document.createElement("screen")
-    screen.setAttribute("key", "morphe_settings_screen_04_general")
-    screen.appendChild(switchPreference(document, KEY_HIDE_PINNED_BANNER))
-    screen.appendChild(switchPreference(document, KEY_HIDE_POLL))
+    screen.appendChild(ayufaScreen)
     root.appendChild(screen)
 }
 
@@ -143,7 +157,7 @@ private fun app.morphe.patcher.patch.ResourcePatchContext.addStrings(
 val hideLiveChatClutterPatch = bytecodePatch(
     name = "Hide live chat clutter",
     description = "Hides the pinned message banner and poll cards in live chat. " +
-        "Each can be toggled in Morphe settings (General) without re-patching. " +
+        "Each can be toggled in Morphe settings (Ayufa patch settings) without re-patching. " +
         "For YouTube 21.30.216.",
     default = false
 ) {
