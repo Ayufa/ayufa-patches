@@ -5,6 +5,7 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.intOption
 import app.morphe.patcher.patch.resourcePatch
 import app.ayufa.patches.youtube.shared.Constants.COMPATIBILITY_YOUTUBE_ANDROID_8
+import app.ayufa.patches.youtube.shared.Constants.COMPATIBILITY_YOUTUBE_MODERN
 import app.ayufa.patches.youtube.shared.declareAyufaSettingsSwitches
 import app.morphe.patcher.util.proxy.mutableTypes.encodedValue.MutableIntEncodedValue
 
@@ -91,11 +92,11 @@ val liveLatencyKeeperPatch = bytecodePatch(
     name = "Live latency keeper",
     description = "Periodically checks live stream playback and automatically seeks to the " +
         "live edge when playback has fallen behind. Can be toggled in Morphe settings " +
-        "(Ayufa patch settings) without re-patching. For YouTube 20.26.46 (Android 8.0). " +
-        "Requires the official Morphe patches to be applied as well.",
+        "(Ayufa patch settings) without re-patching. For YouTube 20.26.46 (Android 8.0) " +
+        "and 21.30.216. Requires the official Morphe patches to be applied as well.",
     default = false
 ) {
-    compatibleWith(COMPATIBILITY_YOUTUBE_ANDROID_8)
+    compatibleWith(COMPATIBILITY_YOUTUBE_ANDROID_8, COMPATIBILITY_YOUTUBE_MODERN)
 
     dependsOn(liveLatencyKeeperSettingsPatch)
 
