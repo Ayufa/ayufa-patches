@@ -1,3 +1,13 @@
+## [1.0.0-dev.8](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.7...v1.0.0-dev.8) (2026-11-03)
+
+### ⚠ BREAKING CHANGES
+
+* The Live latency keeper patch has been removed.
+
+### ✨ New Features
+
+* Remove the Live latency keeper patch ([53eecf4](https://github.com/Ayufa/youtube-custom-patches/commit/53eecf4e49c1640e4c16ea8ae4fb974e00ebf5a4))
+
 ## [1.0.0-dev.7](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.6...v1.0.0-dev.7) (2026-11-03)
 
 ### 🐛 Bug Fixes
