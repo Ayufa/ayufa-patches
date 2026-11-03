@@ -68,6 +68,10 @@ val liveLatencyKeeperPatch = bytecodePatch(
 
     extendWith("extensions/youtube.mpe")
 
+    checkIntervalOption()
+    thresholdOption()
+    safetyOption()
+
     execute {
         val checkIntervalSeconds by checkIntervalOption
         val thresholdSeconds by thresholdOption

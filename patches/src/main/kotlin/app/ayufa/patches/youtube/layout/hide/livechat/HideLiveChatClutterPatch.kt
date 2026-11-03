@@ -34,6 +34,9 @@ val hideLiveChatClutterPatch = bytecodePatch(
 
     extendWith("extensions/youtube.mpe")
 
+    hidePinnedBannerOption()
+    hidePollsOption()
+
     execute {
         val hidePinnedBanner by hidePinnedBannerOption
         val hidePolls by hidePollsOption
