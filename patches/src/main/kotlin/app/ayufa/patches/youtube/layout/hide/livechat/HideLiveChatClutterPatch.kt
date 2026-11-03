@@ -107,14 +107,12 @@ private fun MutableMethod.insertBeforeReturn(instruction: String) {
 
 /**
  * Builds an invoke-static instruction passing a single parameter register.
- * Registers above v15 need the /range form.
+ * Always uses the /range form: in methods with many local registers, even
+ * a low p-register maps to a v-register above v15, which the plain form
+ * cannot encode.
  */
 private fun invokeStaticCall(register: Int, methodDescriptor: String): String =
-    if (register <= 15) {
-        "invoke-static { p$register }, $methodDescriptor"
-    } else {
-        "invoke-static/range { p$register .. p$register }, $methodDescriptor"
-    }
+    "invoke-static/range { p$register .. p$register }, $methodDescriptor"
 
 /**
  * Returns the parameter register (pN) of this method's
