@@ -1,3 +1,9 @@
+## [1.0.0-dev.4](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.3...v1.0.0-dev.4) (2026-11-03)
+
+### 🐛 Bug Fixes
+
+* Always use invoke-static/range for presenter constructor hooks ([a0d779c](https://github.com/Ayufa/youtube-custom-patches/commit/a0d779ced7951c68a5575d204d5992bf2a3f62ec))
+
 ## [1.0.0-dev.3](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0-dev.2...v1.0.0-dev.3) (2026-11-03)
 
 ### 🐛 Bug Fixes
