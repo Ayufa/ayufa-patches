@@ -4,10 +4,16 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.booleanOption
 import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.ayufa.patches.youtube.shared.Constants.COMPATIBILITY_YOUTUBE_MODERN
+import org.w3c.dom.Document
+import org.w3c.dom.Element
 
 private const val EXTENSION_CLASS = "Lapp/ayufa/extension/youtube/LiveChatClutterHider;"
+
+private const val KEY_HIDE_PINNED_BANNER = "ayufa_hide_live_chat_pinned_banner"
+private const val KEY_HIDE_POLL = "ayufa_hide_live_chat_poll"
 
 private val hidePinnedBannerOption = booleanOption(
     key = "hideLiveChatPinnedBanner",
@@ -23,14 +29,127 @@ private val hidePollsOption = booleanOption(
     description = "Hides poll (questionnaire) cards shown in the live chat."
 )
 
+/**
+ * Declares the two features as switches on the Morphe settings General
+ * screen, using the official add-on preference mechanism: the settings
+ * patch of the Morphe bundle merges `morphe_addon_prefs.xml` into its
+ * preference files and removes the declaration afterwards. If the Morphe
+ * settings patch is not applied, the declaration file is left behind in
+ * the APK root, which is harmless, and the features simply stay on.
+ *
+ * The switches write to the "morphe_prefs" shared preferences, which the
+ * extension reads at runtime, so toggling takes effect without
+ * re-patching (from the next time a chat is opened).
+ */
+private val hideLiveChatClutterSettingsPatch = resourcePatch {
+    execute {
+        if (!get("morphe_addon_prefs.xml").exists()) {
+            get("morphe_addon_prefs.xml").writeText(
+                "<morphe-add-on-preferences " +
+                    "xmlns:android=\"http://schemas.android.com/apk/res/android\"/>"
+            )
+        }
+        document("morphe_addon_prefs.xml").use { document ->
+            addClutterSwitches(document)
+        }
+
+        addStrings(
+            "res/values/strings.xml",
+            mapOf(
+                "${KEY_HIDE_PINNED_BANNER}_title" to "Hide pinned message banner",
+                "${KEY_HIDE_PINNED_BANNER}_summary" to
+                    "Hides the pinned comment shown above the live chat. " +
+                    "Ayufa patch; takes effect the next time a chat is opened.",
+                "${KEY_HIDE_POLL}_title" to "Hide live chat polls",
+                "${KEY_HIDE_POLL}_summary" to
+                    "Hides poll cards shown in the live chat. " +
+                    "Ayufa patch; takes effect the next time a chat is opened."
+            )
+        )
+        if (get("res/values-ja/strings.xml").exists()) {
+            addStrings(
+                "res/values-ja/strings.xml",
+                mapOf(
+                    "${KEY_HIDE_PINNED_BANNER}_title" to "固定メッセージ（バナー）を隠す",
+                    "${KEY_HIDE_PINNED_BANNER}_summary" to
+                        "ライブチャットの上に表示される固定コメントを非表示にします。" +
+                        "Ayufaのパッチです。次にチャットを開いたときから反映されます。",
+                    "${KEY_HIDE_POLL}_title" to "アンケートを隠す",
+                    "${KEY_HIDE_POLL}_summary" to
+                        "ライブチャットに表示されるアンケートカードを非表示にします。" +
+                        "Ayufaのパッチです。次にチャットを開いたときから反映されます。"
+                )
+            )
+        }
+    }
+}
+
+private fun addClutterSwitches(document: Document) {
+    val root = document.documentElement
+
+    val existingScreens = root.getElementsByTagName("screen")
+    for (i in 0 until existingScreens.length) {
+        val screen = existingScreens.item(i) as? Element ?: continue
+        if (screen.getAttribute("key") == "morphe_settings_screen_04_general") {
+            return // Already declared.
+        }
+    }
+
+    val screen = document.createElement("screen")
+    screen.setAttribute("key", "morphe_settings_screen_04_general")
+    screen.appendChild(switchPreference(document, KEY_HIDE_PINNED_BANNER))
+    screen.appendChild(switchPreference(document, KEY_HIDE_POLL))
+    root.appendChild(screen)
+}
+
+private fun switchPreference(document: Document, key: String): Element {
+    val preference = document.createElement("SwitchPreference")
+    preference.setAttribute("android:key", key)
+    preference.setAttribute("android:title", "@string/${key}_title")
+    preference.setAttribute("android:summary", "@string/${key}_summary")
+    preference.setAttribute("android:defaultValue", "true")
+    return preference
+}
+
+/**
+ * Appends string resources, skipping names that already exist.
+ * Runs inside a resource patch execute block.
+ */
+private fun app.morphe.patcher.patch.ResourcePatchContext.addStrings(
+    path: String,
+    strings: Map<String, String>
+) {
+    document(path).use { document ->
+        val root = document.documentElement
+        val existing = mutableSetOf<String>()
+        val nodes = root.getElementsByTagName("string")
+        for (i in 0 until nodes.length) {
+            val element = nodes.item(i) as? Element ?: continue
+            existing += element.getAttribute("name")
+        }
+        for ((name, value) in strings) {
+            if (name in existing) {
+                continue
+            }
+            val element = document.createElement("string")
+            element.setAttribute("name", name)
+            element.textContent = value
+            root.appendChild(element)
+        }
+    }
+}
+
 @Suppress("unused")
 val hideLiveChatClutterPatch = bytecodePatch(
     name = "Hide live chat clutter",
     description = "Hides the pinned message banner and poll cards in live chat. " +
+        "Each can be toggled in Morphe settings (General) without re-patching. " +
         "For YouTube 21.30.216.",
     default = false
 ) {
     compatibleWith(COMPATIBILITY_YOUTUBE_MODERN)
+
+    dependsOn(hideLiveChatClutterSettingsPatch)
 
     extendWith("extensions/youtube.mpe")
 
@@ -45,8 +164,8 @@ val hideLiveChatClutterPatch = bytecodePatch(
 
         if (hidePinnedBanner == true) {
             // Hook the end of the banner presenter constructor. The extension
-            // receives the presenter instance and keeps its banner container
-            // hidden for the whole chat session.
+            // receives the live chat root view and keeps the banner container
+            // inside it hidden for the whole chat session.
             // matchAll throws when nothing matches; treat that as zero hooks.
             val matches = runCatching { LiveChatBannerPresenterFingerprint.matchAll() }
                 .getOrDefault(emptyList())
@@ -61,7 +180,9 @@ val hideLiveChatClutterPatch = bytecodePatch(
 
         if (hidePolls == true) {
             // The fingerprint matches a poll presenter getter. Hook the
-            // constructors of every matched presenter's class.
+            // constructors of every matched presenter's class. The extension
+            // receives the live chat root view and hides only the poll
+            // container inside it.
             val hookedClasses = mutableSetOf<String>()
             val matches = runCatching { LiveChatPollPresenterFingerprint.matchAll() }
                 .getOrDefault(emptyList())
