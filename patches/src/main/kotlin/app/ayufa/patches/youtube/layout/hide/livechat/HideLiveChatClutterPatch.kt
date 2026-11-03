@@ -39,6 +39,8 @@ val hideLiveChatClutterPatch = bytecodePatch(
         val hidePolls by hidePollsOption
 
         var hookCount = 0
+        val bannerDebug = mutableListOf<String>()
+        val pollDebug = mutableListOf<String>()
 
         if (hidePinnedBanner == true) {
             // Hook the end of the banner presenter constructor. The extension
@@ -49,9 +51,9 @@ val hideLiveChatClutterPatch = bytecodePatch(
                 .getOrDefault(emptyList())
             for (match in matches) {
                 val register = match.method.viewParameterRegister() ?: continue
+                bannerDebug += "${match.classDef.type} reg=$register"
                 match.method.insertBeforeReturn(
-                    "invoke-static { p$register }, " +
-                        "$EXTENSION_CLASS->onBannerRootView(Landroid/view/View;)V"
+                    invokeStaticCall(register, "$EXTENSION_CLASS->onBannerRootView(Landroid/view/View;)V")
                 )
                 hookCount++
             }
@@ -71,9 +73,9 @@ val hideLiveChatClutterPatch = bytecodePatch(
                 for (method in classDef.methods) {
                     if (method.name == "<init>") {
                         val register = method.viewParameterRegister() ?: continue
+                        pollDebug += "${classDef.type} reg=$register"
                         method.insertBeforeReturn(
-                            "invoke-static { p$register }, " +
-                                "$EXTENSION_CLASS->onPollRootView(Landroid/view/View;)V"
+                            invokeStaticCall(register, "$EXTENSION_CLASS->onPollRootView(Landroid/view/View;)V")
                         )
                         hookCount++
                     }
@@ -87,6 +89,9 @@ val hideLiveChatClutterPatch = bytecodePatch(
                     "This patch was verified only for YouTube 21.30.216."
             )
         }
+
+        // TEMP-DEBUG: report what was hooked, removed before release.
+        throw PatchException("DEBUG hooks=$hookCount banner=${bannerDebug} poll=${pollDebug}")
     }
 }
 
@@ -99,6 +104,17 @@ private fun MutableMethod.insertBeforeReturn(instruction: String) {
         ?: throw PatchException("Method has no instructions: $this")
     addInstruction(index, instruction)
 }
+
+/**
+ * Builds an invoke-static instruction passing a single parameter register.
+ * Registers above v15 need the /range form.
+ */
+private fun invokeStaticCall(register: Int, methodDescriptor: String): String =
+    if (register <= 15) {
+        "invoke-static { p$register }, $methodDescriptor"
+    } else {
+        "invoke-static/range { p$register .. p$register }, $methodDescriptor"
+    }
 
 /**
  * Returns the parameter register (pN) of this method's
