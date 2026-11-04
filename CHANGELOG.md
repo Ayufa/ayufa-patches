@@ -1,3 +1,10 @@
+## [1.2.0-dev.3](https://github.com/Ayufa/youtube-custom-patches/compare/v1.2.0-dev.2...v1.2.0-dev.3) (2026-11-04)
+
+### 🐛 Bug Fixes
+
+* Do fingerprint matching in the execute block (needs patch context) ([e67bc71](https://github.com/Ayufa/youtube-custom-patches/commit/e67bc717598da9bb4ee1122f98fb87cc55a33488))
+* Ship the keyboard fix inside the clutter patch, and stop padding resets ([b532fcf](https://github.com/Ayufa/youtube-custom-patches/commit/b532fcfd151f89c3502a249dd315ec900ce18572))
+
 ## [1.2.0-dev.2](https://github.com/Ayufa/youtube-custom-patches/compare/v1.2.0-dev.1...v1.2.0-dev.2) (2026-11-04)
 
 ### 🐛 Bug Fixes
