@@ -35,13 +35,13 @@ private val liveLatencyKeeperSettingsPatch = resourcePatch {
             enStrings = mapOf(
                 "${KEY_KEEP_LIVE_AT_EDGE}_title" to "Keep live streams at the live edge",
                 "${KEY_KEEP_LIVE_AT_EDGE}_summary" to
-                    "At a fixed interval, moves live playback back to the live edge. " +
-                    "Takes effect immediately."
+                    "At a fixed interval, momentarily pauses and resumes live playback " +
+                    "to snap it back to the newest position. Takes effect immediately."
             ),
             jaStrings = mapOf(
                 "${KEY_KEEP_LIVE_AT_EDGE}_title" to "ライブ配信を最新の状態に保つ",
                 "${KEY_KEEP_LIVE_AT_EDGE}_summary" to
-                    "一定の間隔で、ライブ再生を最新の位置（ライブの先端）に合わせ直します。" +
+                    "一定の間隔で、ライブ再生を瞬間的に停止→再生して最新の位置に合わせ直します。" +
                     "その場で反映されます。"
             )
         )
@@ -54,13 +54,13 @@ private val liveLatencyKeeperSettingsPatch = resourcePatch {
             enStrings = mapOf(
                 "${KEY_SYNC_INTERVAL_SECONDS}_title" to "Live sync interval",
                 "${KEY_SYNC_INTERVAL_SECONDS}_summary" to
-                    "How often live playback is moved back to the live edge. " +
-                    "Takes effect immediately."
+                    "How often live playback is snapped back to the newest position " +
+                    "with a momentary pause and resume. Takes effect immediately."
             ),
             jaStrings = mapOf(
                 "${KEY_SYNC_INTERVAL_SECONDS}_title" to "先端に合わせる間隔",
                 "${KEY_SYNC_INTERVAL_SECONDS}_summary" to
-                    "ライブ再生を先端に合わせ直す間隔です。その場で反映されます。"
+                    "ライブ再生を停止→再生で最新に合わせ直す間隔です。その場で反映されます。"
             )
         )
     }
@@ -69,7 +69,6 @@ private val liveLatencyKeeperSettingsPatch = resourcePatch {
 // Defaults declared in the extension class <clinit>.
 // The patch rewrites these literals when the user changes the options.
 private const val DEFAULT_CHECK_INTERVAL_SECONDS = 45
-private const val DEFAULT_SAFETY_SECONDS = 2
 
 private val checkIntervalOption = intOption(
     key = "liveLatencyCheckIntervalSeconds",
@@ -82,29 +81,18 @@ private val checkIntervalOption = intOption(
         "120 seconds" to 120
     ),
     title = "Default sync interval",
-    description = "How often live playback is moved back to the live edge. " +
+    description = "How often live playback is snapped back to the newest position " +
+        "with a momentary pause and resume. " +
         "Used until the interval is changed in Morphe settings (Ayufa patch settings).",
-    required = true
-)
-
-private val safetyOption = intOption(
-    key = "liveLatencySafetySeconds",
-    default = DEFAULT_SAFETY_SECONDS,
-    values = mapOf(
-        "0 seconds" to 0,
-        "2 seconds" to 2,
-        "5 seconds" to 5
-    ),
-    title = "Live edge safety margin",
-    description = "Seek to this many seconds before the live edge, to avoid rebuffering at the very edge.",
     required = true
 )
 
 @Suppress("unused")
 val liveLatencyKeeperPatch = bytecodePatch(
     name = "Live latency keeper",
-    description = "At a fixed interval, seeks live stream playback back to the live edge, " +
-        "however small the lag is. The interval and the on/off switch can be changed in " +
+    description = "At a fixed interval, momentarily pauses and resumes live stream playback " +
+        "so it snaps back to the live edge (the newest position), no matter how far behind " +
+        "it has fallen. The interval and the on/off switch can be changed in " +
         "Morphe settings (Ayufa patch settings) without re-patching. For YouTube 20.26.46 " +
         "(Android 8.0) and 21.30.216. Requires the official Morphe patches to be applied as well.",
     default = false
@@ -116,11 +104,9 @@ val liveLatencyKeeperPatch = bytecodePatch(
     extendWith("extensions/youtube.mpe")
 
     checkIntervalOption()
-    safetyOption()
 
     execute {
         val checkIntervalSeconds by checkIntervalOption
-        val safetySeconds by safetyOption
 
         // Write the option values into the extension class by replacing the
         // static initial values of its config fields. (The extension is
@@ -131,7 +117,6 @@ val liveLatencyKeeperPatch = bytecodePatch(
             if (classDefByOrNull(EXTENSION_CLASS) != null) {
                 val extensionClass = mutableClassDefBy(EXTENSION_CLASS)
                 setFieldInitialValue(extensionClass, "checkIntervalSeconds", checkIntervalSeconds)
-                setFieldInitialValue(extensionClass, "safetySeconds", safetySeconds)
             }
         } catch (ex: Exception) {
             // Keep the extension defaults.
