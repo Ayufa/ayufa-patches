@@ -1,3 +1,9 @@
+## [1.2.0-dev.2](https://github.com/Ayufa/youtube-custom-patches/compare/v1.2.0-dev.1...v1.2.0-dev.2) (2026-11-04)
+
+### 🐛 Bug Fixes
+
+* Match the live chat view setup with plain literals ([f73b8eb](https://github.com/Ayufa/youtube-custom-patches/commit/f73b8eb47c16f0f1c97f159c8579bfb99ac76daa))
+
 ## [1.2.0-dev.1](https://github.com/Ayufa/youtube-custom-patches/compare/v1.1.0...v1.2.0-dev.1) (2026-11-04)
 
 ### ✨ New Features
