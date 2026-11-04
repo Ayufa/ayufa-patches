@@ -24,8 +24,11 @@ import java.lang.reflect.Method;
  * <p>While a live stream plays, the playback position slowly falls behind
  * the live edge (the end of the seek bar). This class is called about once
  * per second with the current playback time by the "Live latency keeper"
- * patch. When the lag behind the live edge exceeds the configured
- * threshold, it seeks forward by the lag (minus a safety margin).
+ * patch. At a fixed interval it seeks forward by whatever lag has
+ * accumulated (minus a safety margin), so playback is periodically
+ * re-synced to the live edge no matter how small the lag is. The interval
+ * can be changed in Morphe settings (Ayufa patch settings); until it is
+ * changed there, the interval configured at patch time applies.
  *
  * <p>How far behind playback is cannot be derived from the video length
  * reported by the official Morphe extension: for long-running streams
@@ -57,6 +60,7 @@ public final class LiveLatencyKeeper {
 
     private static final String MORPHE_PREFS_NAME = "morphe_prefs";
     private static final String KEY_KEEP_LIVE_AT_EDGE = "ayufa_keep_live_at_edge";
+    private static final String KEY_SYNC_INTERVAL_SECONDS = "ayufa_live_sync_interval_seconds";
 
     // Shared preferences holding the Morphe settings, resolved lazily.
     private static SharedPreferences morphePrefs;
@@ -64,21 +68,26 @@ public final class LiveLatencyKeeper {
     // region Configuration.
     //
     // The values in the static initializer are the defaults. At patch time
-    // the patch replaces the static initial values of these three fields
-    // with the values of the patch options (check interval / threshold /
-    // safety margin). Do not make these fields final.
+    // the patch replaces the static initial values of these two fields
+    // with the values of the patch options (default sync interval / safety
+    // margin). Do not make these fields final.
 
     private static int checkIntervalSeconds;
-    private static int thresholdSeconds;
     private static int safetySeconds;
 
     static {
         checkIntervalSeconds = 45;
-        thresholdSeconds = 15;
         safetySeconds = 2;
     }
 
     // endregion
+
+    /**
+     * Accumulated lag below this is not worth a seek: playback is already
+     * essentially at the live edge, and a sub-second seek would only
+     * stutter. (This is a no-op guard, not a user-facing threshold.)
+     */
+    private static final long MIN_SEEK_FORWARD_MS = 1000;
 
     /**
      * How long catch-up is suppressed after the user manually rewinds.
@@ -220,8 +229,9 @@ public final class LiveLatencyKeeper {
                 }
             }
 
-            // Throttle the actual check to the configured interval.
-            if (now - lastCheckAtMs < checkIntervalSeconds * 1000L) {
+            // Re-sync at the configured interval, regardless of how
+            // much lag has accumulated.
+            if (now - lastCheckAtMs < syncIntervalSeconds() * 1000L) {
                 return;
             }
             lastCheckAtMs = now;
@@ -233,12 +243,9 @@ public final class LiveLatencyKeeper {
                 // Paused or stalled right now: do not yank the player.
                 return;
             }
-            if (behindMs <= thresholdSeconds * 1000L) {
-                return;
-            }
 
             final long seekForwardMs = behindMs - safetySeconds * 1000L;
-            if (seekForwardMs <= 0) {
+            if (seekForwardMs < MIN_SEEK_FORWARD_MS) {
                 return;
             }
             final long behindBeforeSeekMs = behindMs;
@@ -264,24 +271,63 @@ public final class LiveLatencyKeeper {
     }
 
     /**
-     * Reads the on/off switch from the Morphe settings. Defaults to on
-     * when the setting was never touched or cannot be read.
+     * The Morphe settings shared preferences, or null when they cannot
+     * be reached yet (retried on the next call).
      */
-    private static boolean isEnabledInSettings() {
+    private static SharedPreferences settings() {
         try {
             if (morphePrefs == null) {
                 Context context = resolveAppContext();
                 if (context == null) {
-                    // Too early to tell; stay enabled and retry next call.
-                    return true;
+                    return null;
                 }
                 morphePrefs = context.getSharedPreferences(
                         MORPHE_PREFS_NAME, Context.MODE_PRIVATE);
             }
-            return morphePrefs.getBoolean(KEY_KEEP_LIVE_AT_EDGE, true);
+            return morphePrefs;
+        } catch (Throwable ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * Reads the on/off switch from the Morphe settings. Defaults to on
+     * when the setting was never touched or cannot be read.
+     */
+    private static boolean isEnabledInSettings() {
+        SharedPreferences prefs = settings();
+        if (prefs == null) {
+            // Too early to tell; stay enabled and retry next call.
+            return true;
+        }
+        try {
+            return prefs.getBoolean(KEY_KEEP_LIVE_AT_EDGE, true);
         } catch (Throwable ignored) {
             return true;
         }
+    }
+
+    /**
+     * The re-sync interval in seconds: the value chosen in Morphe
+     * settings when one is set, otherwise the interval configured at
+     * patch time.
+     */
+    private static int syncIntervalSeconds() {
+        SharedPreferences prefs = settings();
+        if (prefs != null) {
+            try {
+                String value = prefs.getString(KEY_SYNC_INTERVAL_SECONDS, null);
+                if (value != null) {
+                    int parsed = Integer.parseInt(value.trim());
+                    if (parsed >= 5 && parsed <= 600) {
+                        return parsed;
+                    }
+                }
+            } catch (Throwable ignored) {
+                // Fall through to the patch-time default.
+            }
+        }
+        return checkIntervalSeconds;
     }
 
     private static Context resolveAppContext() {
