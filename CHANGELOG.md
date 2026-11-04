@@ -1,3 +1,9 @@
+## [1.2.0-dev.5](https://github.com/Ayufa/youtube-custom-patches/compare/v1.2.0-dev.4...v1.2.0-dev.5) (2026-11-04)
+
+### ✨ New Features
+
+* Re-sync live playback with a momentary pause and resume ([d74cbb0](https://github.com/Ayufa/youtube-custom-patches/commit/d74cbb04459a09b6fdce36193dc925e6ca0d36e5))
+
 ## [1.2.0-dev.4](https://github.com/Ayufa/youtube-custom-patches/compare/v1.2.0-dev.3...v1.2.0-dev.4) (2026-11-04)
 
 ### ✨ New Features

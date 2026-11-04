@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.2.0-dev.4",
+  "version": "1.2.0-dev.5",
   "patches": [
     {
       "name": "Hide live chat clutter",
@@ -62,7 +62,7 @@
     },
     {
       "name": "Live latency keeper",
-      "description": "At a fixed interval, seeks live stream playback back to the live edge, however small the lag is. The interval and the on/off switch can be changed in Morphe settings (Ayufa patch settings) without re-patching. For YouTube 20.26.46 (Android 8.0) and 21.30.216. Requires the official Morphe patches to be applied as well.",
+      "description": "At a fixed interval, momentarily pauses and resumes live stream playback so it snaps back to the live edge (the newest position), no matter how far behind it has fallen. The interval and the on/off switch can be changed in Morphe settings (Ayufa patch settings) without re-patching. For YouTube 20.26.46 (Android 8.0) and 21.30.216. Requires the official Morphe patches to be applied as well.",
       "default": false,
       "category": null,
       "compatiblePackages": [
@@ -113,7 +113,7 @@
         {
           "key": "liveLatencyCheckIntervalSeconds",
           "title": "Default sync interval",
-          "description": "How often live playback is moved back to the live edge. Used until the interval is changed in Morphe settings (Ayufa patch settings).",
+          "description": "How often live playback is snapped back to the newest position with a momentary pause and resume. Used until the interval is changed in Morphe settings (Ayufa patch settings).",
           "required": true,
           "type": "kotlin.Int",
           "default": 45,
@@ -123,19 +123,6 @@
             "45 seconds": 45,
             "60 seconds": 60,
             "120 seconds": 120
-          }
-        },
-        {
-          "key": "liveLatencySafetySeconds",
-          "title": "Live edge safety margin",
-          "description": "Seek to this many seconds before the live edge, to avoid rebuffering at the very edge.",
-          "required": true,
-          "type": "kotlin.Int",
-          "default": 2,
-          "values": {
-            "0 seconds": 0,
-            "2 seconds": 2,
-            "5 seconds": 5
           }
         }
       ]
