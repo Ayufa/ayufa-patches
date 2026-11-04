@@ -6,15 +6,12 @@ import app.morphe.patcher.literal
 /**
  * Matches the live chat controller method that builds the chat view
  * hierarchy: it inflates the engagement panel layout
- * (id 2131624334 = layout/constraint_default_engagement_panel) and
- * looks up the engagement panel content view
- * (id 2131429167 = id/engagement_panel_content). Both values are loaded
- * as const instructions in this method only.
- *
- * Plain literals are used instead of resource literals on purpose: the
- * `fixed` view (the chat content view this patch hooks) is looked up
- * through an inlined R field reference, so it has no const instruction
- * to match, while these two sibling lookups in the same method do.
+ * (2131624334 = layout/constraint_default_engagement_panel) and looks
+ * up the engagement panel content view
+ * (2131429167 = id/engagement_panel_content). Both values are loaded
+ * as const instructions in this method, and together they occur in no
+ * other method. The patch hooks this method's store of the `footer`
+ * frame layout (id/footer) into the controller's content view field.
  * Verified against YouTube 21.30.216.
  */
 internal object LiveChatViewSetupFingerprint : Fingerprint(

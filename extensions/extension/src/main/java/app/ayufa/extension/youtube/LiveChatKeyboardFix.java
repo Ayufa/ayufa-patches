@@ -20,7 +20,7 @@ import android.view.WindowInsets;
  * opens, so the keyboard covers the input field.
  *
  * This installs an {@link View.OnApplyWindowInsetsListener} on the chat
- * content view (the "fixed" FrameLayout inside the engagement panel
+ * content view (the "footer" FrameLayout inside the engagement panel
  * layout, the same view whose bottom padding the app itself manages).
  * While the keyboard is open, the bottom padding is raised to at least
  * the IME inset, which lifts the message list and the input field above

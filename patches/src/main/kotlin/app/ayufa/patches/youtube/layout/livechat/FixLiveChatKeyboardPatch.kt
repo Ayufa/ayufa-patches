@@ -54,7 +54,7 @@ private val fixLiveChatKeyboardSettingsPatch = resourcePatch {
  * keyboard opens, so the keyboard covers the input field.
  *
  * This patch hooks the controller method that creates the chat content
- * view (the `fixed` FrameLayout of the engagement panel layout) and
+ * view (the `footer` FrameLayout of the engagement panel layout) and
  * lets the extension install an OnApplyWindowInsetsListener on it that
  * raises the bottom padding to the IME inset while the keyboard is
  * open. See LiveChatKeyboardFix.
