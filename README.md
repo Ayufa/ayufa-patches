@@ -14,6 +14,16 @@ Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集�
 
 ## 入っているパッチ
 
+### ライブ遅延キーパー
+
+| 項目 | 内容 |
+|---|---|
+| 対象 | YouTube **20.26.46**（Android 8.0 で動く最後の YouTube）と **21.30.216**（最新の推奨版） |
+| 何をするか | ライブ配信を長時間つけっぱなしにしていると、再生位置が配信の先端から少しずつ遅れていきます。このパッチは再生中に定期的に遅れ具合を確認し、設定した秒数以上遅れていたら自動で先端（最新状態）まで進めます |
+| 調整 | パッチ適用時に、確認間隔と「何秒遅れたら進めるか」を変更できます。さらに、適用後は Morphe 設定の「Ayufaパッチ設定」にある「ライブ配信を最新の状態に保つ」で、再パッチなしにオン/オフできます（その場で反映） |
+
+使う場面の例：Android 8.0 の古い端末（SOV34 など）をライブ配信のつけっぱなし用にしていて、気づいたら数分遅れている、という場合の対策です。
+
 ### ライブチャットの余計な表示を隠す
 
 | 項目 | 内容 |
@@ -27,7 +37,7 @@ Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集�
 1. 上のボタンから、このリポジトリを Morphe のパッチソースに追加します
 2. いつもどおり本家のパッチと一緒に、使いたいパッチを選んで適用します
 
-- YouTube **21.30.216** の APK に当ててください
+- ライブチャットのパッチは YouTube **21.30.216** の APK に、ライブ遅延キーパーは YouTube **20.26.46** と **21.30.216** の APK に当ててください
 - 対象以外のバージョンには当てられません（バージョンごとに動作を確認しているためです）
 
 ## 本家との関係
@@ -46,9 +56,9 @@ Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集�
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.0.0](https://github.com/Ayufa/youtube-custom-patches/releases/tag/v1.0.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;1 patches total
+> **[v1.1.0-dev.4](https://github.com/Ayufa/youtube-custom-patches/releases/tag/v1.1.0-dev.4)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
 <details open>
-<summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;1 patch</summary>
+<summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>
 
 **Package name:** `com.google.android.youtube`
@@ -61,6 +71,7 @@ Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集�
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Hide live chat clutter](#hide-live-chat-clutter) | Hides the pinned message banner and poll cards in live chat. Each can be toggled in Morphe settings (Ayufa patch settings) without re-patching. For YouTube 21.30.216. | • Hide pinned message banner<br>• Hide live chat polls |
+| [Live latency keeper](#live-latency-keeper) | Periodically checks live stream playback and automatically seeks to the live edge when playback has fallen behind. Can be toggled in Morphe settings (Ayufa patch settings) without re-patching. For YouTube 20.26.46 (Android 8.0) and 21.30.216. Requires the official Morphe patches to be applied as well. | • Check interval<br>• Catch-up threshold<br>• Live edge safety margin |
 
 </details>
 
