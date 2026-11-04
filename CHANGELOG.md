@@ -1,3 +1,9 @@
+## [1.2.0-dev.4](https://github.com/Ayufa/youtube-custom-patches/compare/v1.2.0-dev.3...v1.2.0-dev.4) (2026-11-04)
+
+### ✨ New Features
+
+* Sync live playback at a fixed interval, adjustable in settings ([2c38d75](https://github.com/Ayufa/youtube-custom-patches/commit/2c38d75ebf673a2567bfd007b857ae1bb8a4f186))
+
 ## [1.2.0-dev.3](https://github.com/Ayufa/youtube-custom-patches/compare/v1.2.0-dev.2...v1.2.0-dev.3) (2026-11-04)
 
 ### 🐛 Bug Fixes
