@@ -1,3 +1,15 @@
+## [1.1.0](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0...v1.1.0) (2026-11-04)
+
+### ✨ New Features
+
+* Restore the Live latency keeper with a Morphe settings toggle ([812189e](https://github.com/Ayufa/youtube-custom-patches/commit/812189eb8b6d38b0a6e0fb51386ea63340aee267))
+* Support the Live latency keeper on YouTube 21.30.216 as well ([9b1f35b](https://github.com/Ayufa/youtube-custom-patches/commit/9b1f35b04aa0f69a69e28398d43206d1b98e0c10))
+
+### 🐛 Bug Fixes
+
+* Add temporary diagnostic logging to find why the keeper does not seek ([69edf67](https://github.com/Ayufa/youtube-custom-patches/commit/69edf677a4b07ef1b2479b8ea2daf5dc01b3b379))
+* Estimate live lag from wall-clock time instead of the video length ([bfbca52](https://github.com/Ayufa/youtube-custom-patches/commit/bfbca522833b417f166a0db98ec162870165e6f6))
+
 ## [1.1.0-dev.4](https://github.com/Ayufa/youtube-custom-patches/compare/v1.1.0-dev.3...v1.1.0-dev.4) (2026-11-03)
 
 ### 🐛 Bug Fixes
