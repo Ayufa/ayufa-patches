@@ -2,6 +2,7 @@ package app.ayufa.patches.youtube.layout.hide.livechat
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.checkCast
+import app.morphe.patcher.literal
 import app.morphe.patcher.methodCall
 import app.morphe.patcher.resource.ResourceType
 import app.morphe.patcher.resourceLiteral
@@ -38,5 +39,49 @@ internal object LiveChatPollPresenterFingerprint : Fingerprint(
             returnType = "Landroid/view/View;"
         ),
         checkCast("Landroid/widget/TextView;")
+    )
+)
+
+/**
+ * Matches the live chat controller method that builds the chat view
+ * hierarchy: it inflates the engagement panel layout
+ * (2131624334 = layout/constraint_default_engagement_panel) and looks
+ * up the engagement panel content view
+ * (2131429167 = id/engagement_panel_content). Both values are loaded
+ * as const instructions in this method, and together they occur in no
+ * other method. The keyboard fix hooks this method's store of the
+ * `footer` frame layout (id/footer) into the controller's content
+ * view field. Verified against YouTube 21.30.216.
+ */
+internal object LiveChatViewSetupFingerprint : Fingerprint(
+    filters = listOf(
+        literal(2131624334),
+        literal(2131429167)
+    )
+)
+
+/**
+ * Matches the live chat controller method that applies the chat
+ * content view's bottom padding (the app sets it from a static system
+ * inset value and re-applies it whenever new chat data arrives). The
+ * keyboard fix adjusts this method's argument so the padding also
+ * clears the on-screen keyboard. Verified against YouTube 21.30.216.
+ */
+internal object LiveChatBottomPaddingFingerprint : Fingerprint(
+    returnType = "V",
+    parameters = listOf("I"),
+    classFingerprint = LiveChatViewSetupFingerprint,
+    filters = listOf(
+        methodCall(
+            name = "getChildCount",
+            returnType = "I"
+        ),
+        methodCall(
+            name = "getPaddingBottom",
+            returnType = "I"
+        ),
+        methodCall(
+            name = "setPadding"
+        )
     )
 )

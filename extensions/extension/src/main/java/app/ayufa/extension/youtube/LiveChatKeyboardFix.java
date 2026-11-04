@@ -87,6 +87,29 @@ public final class LiveChatKeyboardFix {
         view.requestApplyInsets();
     }
 
+    /**
+     * Called from the patched live chat controller at the start of the
+     * method that applies the chat content view's bottom padding, with
+     * the value the app is about to use. Returns the value that should
+     * actually be used: the app's own value, raised to the current IME
+     * inset while the keyboard is open.
+     *
+     * This hook is what keeps the fix in effect while a stream is
+     * running: the controller re-applies its (keyboard-unaware) padding
+     * whenever new chat data arrives, which would otherwise push the
+     * input field back below the keyboard seconds after it opened.
+     */
+    public static int effectiveBottomPadding(View view, int appValue) {
+        if (view == null || !isEnabled(view.getContext())) {
+            return appValue;
+        }
+        WindowInsets insets = view.getRootWindowInsets();
+        if (insets == null) {
+            return appValue;
+        }
+        return Math.max(appValue, imeBottom(insets));
+    }
+
     private static int imeBottom(WindowInsets insets) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             return insets.getInsets(WindowInsets.Type.ime()).bottom;
