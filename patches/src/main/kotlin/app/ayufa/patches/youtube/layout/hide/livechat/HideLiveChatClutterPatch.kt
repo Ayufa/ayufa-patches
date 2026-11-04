@@ -152,7 +152,24 @@ val hideLiveChatClutterPatch = bytecodePatch(
         }
 
         if (fixKeyboard == true) {
-            hookLiveChatKeyboardFix()
+            // Fingerprint matching needs the patch context, so it happens
+            // here in the execute block; the injection itself is delegated.
+            val setupMatch = LiveChatViewSetupFingerprint.matchAll().singleOrNull()
+                ?: throw PatchException(
+                    "Hide live chat clutter (keyboard fix): the live chat view setup " +
+                        "method was not found exactly once. This patch was verified " +
+                        "only for YouTube 21.30.216."
+                )
+            val paddingMatch = LiveChatBottomPaddingFingerprint.matchAll().singleOrNull()
+                ?: throw PatchException(
+                    "Hide live chat clutter (keyboard fix): the live chat bottom " +
+                        "padding method was not found exactly once. This patch was " +
+                        "verified only for YouTube 21.30.216."
+                )
+            hookLiveChatKeyboardFix(
+                setupMatch.method, setupMatch.classDef.type,
+                paddingMatch.method, paddingMatch.classDef.type
+            )
             hookCount++
         }
 
@@ -176,14 +193,12 @@ val hideLiveChatClutterPatch = bytecodePatch(
  *    its keyboard-unaware padding whenever new chat data arrives,
  *    which would otherwise undo the listener's padding right away.
  */
-private fun hookLiveChatKeyboardFix() {
-    val setupMatch = LiveChatViewSetupFingerprint.matchAll().singleOrNull()
-        ?: throw PatchException(
-            "Hide live chat clutter (keyboard fix): the live chat view setup " +
-                "method was not found exactly once. This patch was verified " +
-                "only for YouTube 21.30.216."
-        )
-    val setupMethod = setupMatch.method
+private fun hookLiveChatKeyboardFix(
+    setupMethod: MutableMethod,
+    setupClassType: String,
+    paddingMethod: MutableMethod,
+    paddingClassType: String
+) {
     val setupInstructions = setupMethod.implementation?.instructions
         ?: throw PatchException(
             "Hide live chat clutter (keyboard fix): the view setup method has no instructions."
@@ -195,7 +210,7 @@ private fun hookLiveChatKeyboardFix() {
         }
         val reference = (instruction as? ReferenceInstruction)?.reference as? FieldReference
             ?: continue
-        if (reference.definingClass != setupMatch.classDef.type ||
+        if (reference.definingClass != setupClassType ||
             reference.type != "Landroid/widget/FrameLayout;"
         ) {
             continue
@@ -217,13 +232,6 @@ private fun hookLiveChatKeyboardFix() {
         )
     }
 
-    val paddingMatch = LiveChatBottomPaddingFingerprint.matchAll().singleOrNull()
-        ?: throw PatchException(
-            "Hide live chat clutter (keyboard fix): the live chat bottom " +
-                "padding method was not found exactly once. This patch was " +
-                "verified only for YouTube 21.30.216."
-        )
-    val paddingMethod = paddingMatch.method
     val paddingInstructions = paddingMethod.implementation?.instructions
         ?: throw PatchException(
             "Hide live chat clutter (keyboard fix): the bottom padding method has no instructions."
@@ -235,7 +243,7 @@ private fun hookLiveChatKeyboardFix() {
         }
         val reference = (instruction as? ReferenceInstruction)?.reference as? FieldReference
             ?: continue
-        if (reference.definingClass != paddingMatch.classDef.type ||
+        if (reference.definingClass != paddingClassType ||
             reference.type != "Landroid/widget/FrameLayout;"
         ) {
             continue
