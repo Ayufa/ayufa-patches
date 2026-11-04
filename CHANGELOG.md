@@ -1,3 +1,9 @@
+## [1.2.0-dev.1](https://github.com/Ayufa/youtube-custom-patches/compare/v1.1.0...v1.2.0-dev.1) (2026-11-04)
+
+### ✨ New Features
+
+* Fix live chat input being covered by the on-screen keyboard ([914d178](https://github.com/Ayufa/youtube-custom-patches/commit/914d17820cc2faff4fe1ada9cddbf887128b4aa7)), closes [#3453](https://github.com/Ayufa/youtube-custom-patches/issues/3453)
+
 ## [1.1.0](https://github.com/Ayufa/youtube-custom-patches/compare/v1.0.0...v1.1.0) (2026-11-04)
 
 ### ✨ New Features
