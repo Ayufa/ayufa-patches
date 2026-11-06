@@ -60,7 +60,7 @@ Morphe 用に個人的に作っている、いろいろなアプリ向けの独�
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.2.0-dev.6](https://github.com/Ayufa/youtube-custom-patches/releases/tag/v1.2.0-dev.6)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
+> **[v1.2.0-dev.7](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.2.0-dev.7)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;2 patches total
 <details open>
 <summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
 <br>

@@ -1,3 +1,9 @@
+## [1.2.0-dev.7](https://github.com/Ayufa/ayufa-patches/compare/v1.2.0-dev.6...v1.2.0-dev.7) (2026-11-06)
+
+### ✨ New Features
+
+* Rename the bundle to Ayufa Patches, a multi-app custom patch collection ([2d88f9b](https://github.com/Ayufa/ayufa-patches/commit/2d88f9b20c27911a7b189e19945eab038f402c7c))
+
 ## [1.2.0-dev.6](https://github.com/Ayufa/youtube-custom-patches/compare/v1.2.0-dev.5...v1.2.0-dev.6) (2026-11-06)
 
 ### ✨ New Features
