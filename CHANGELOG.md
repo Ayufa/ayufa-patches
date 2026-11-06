@@ -1,3 +1,9 @@
+## [1.3.0-dev.17](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.16...v1.3.0-dev.17) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* accept invoke-direct/range in Transit constructor hook ([d81b72d](https://github.com/Ayufa/ayufa-patches/commit/d81b72dbbf9cc793fdca17152c081f10c38887ac))
+
 ## [1.3.0-dev.16](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.15...v1.3.0-dev.16) (2026-11-06)
 
 ### ✨ New Features

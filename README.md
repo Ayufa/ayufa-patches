@@ -113,7 +113,7 @@
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START -->
-> **[v1.3.0-dev.16](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.16)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;15 patches total
+> **[v1.3.0-dev.17](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.17)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;15 patches total
 <details>
 <summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;11 patches</summary>
 <br>
