@@ -26,7 +26,7 @@ val hidePromotionsPatch = bytecodePatch(
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
-    extendWith("extensions/youtube.mpe")
+    extendWith("extensions/simeji.mpe")
 
     execute {
         PromotionActivityOnCreateFingerprint.method

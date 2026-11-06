@@ -21,7 +21,7 @@ val disableAnalyticsPatch = bytecodePatch(
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
-    extendWith("extensions/youtube.mpe")
+    extendWith("extensions/simeji.mpe")
 
     execute {
         // AppsFlyer facade: every public statistic* entry point is

@@ -26,7 +26,7 @@ val skipSubscriptionRetentionPatch = bytecodePatch(
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
-    extendWith("extensions/youtube.mpe")
+    extendWith("extensions/simeji.mpe")
 
     execute {
         SubscriptionKeepActivityOnCreateFingerprint.method

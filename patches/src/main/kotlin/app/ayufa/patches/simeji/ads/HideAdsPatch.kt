@@ -17,7 +17,7 @@ val hideAdsPatch = bytecodePatch(
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
-    extendWith("extensions/youtube.mpe")
+    extendWith("extensions/simeji.mpe")
 
     execute {
         // Central ad gate: report "cannot show" while the toggle is on.

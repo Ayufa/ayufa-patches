@@ -38,7 +38,7 @@ val disableReviewPromptsPatch = bytecodePatch(
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
-    extendWith("extensions/youtube.mpe")
+    extendWith("extensions/simeji.mpe")
 
     execute {
         GpGuideDialogActivityOnCreateFingerprint.method

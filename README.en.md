@@ -22,7 +22,7 @@
 >
 > A personal collection of custom patches for Morphe. These are not official Morphe patches.
 >
-> The YouTube patches are meant to be used together with the official patches. The Simeji patches work on their own, as upstream has no Simeji patches.
+> The Simeji patches work on their own, as upstream has no Simeji patches. The YouTube patches were split into [Ayufa YouTube Patches](https://github.com/Ayufa/ayufa-youtube-patches).
 
 ## Contents
 
@@ -40,9 +40,10 @@
 
 This collection adds the small things the official patches ([MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches)) left unsatisfied, plus features I wanted myself.
 
+The YouTube patches were split into [Ayufa YouTube Patches](https://github.com/Ayufa/ayufa-youtube-patches) in November 2026. This repository is Simeji-only now.
+
 | App | Supported versions | Patches |
 |---|---|---|
-| YouTube | 21.30.216 / 20.26.46 | 2 |
 | Simeji | 20.7 | 11 |
 
 ## ⚠️ Disclaimer
@@ -51,35 +52,13 @@ This is a personal hobby project. The patches are tested in my own environment, 
 
 ## How to use
 
-Use the button above to add this repository as a patch source in Morphe, then select the patches you want and apply them (select the YouTube patches together with the official patches; the Simeji patches are fine on their own).
+Use the button above to add this repository as a patch source in Morphe, then select the patches you want and apply them (the patches in this repository are all you need).
 
 ⚠️ **Match the target versions exactly** (each patch is verified per version, and cannot be applied to other versions).
 
-- YouTube "Hide live chat clutter" → **21.30.216**
-- YouTube "Live latency keeper" → **20.26.46**
 - All Simeji patches → **20.7** (do not apply them to 23.7)
 
 ## Patch details
-
-### 📺 YouTube
-
-#### Live latency keeper
-
-| | |
-|---|---|
-| Target | YouTube **20.26.46** only (the last YouTube that runs on Android 8.0) |
-| What it does | When a live stream plays for a long time, the playback position gradually falls behind the live edge. At a fixed interval, this patch momentarily pauses and resumes playback. Resuming a live stream jumps to the newest position, so playback snaps back to the live edge no matter how far behind it has fallen (it does not measure the delay and fast-forward bit by bit) |
-| Adjusting | After patching, you can change it in Morphe settings ("Ayufa patch settings") without re-patching: an on/off switch ("Keep live playback at the live edge") and the interval, typed directly as **0–120 minutes** (0 turns automatic resync off; changes apply immediately). The initial interval can also be set when applying the patch (default 10 minutes) |
-
-Example use: an old Android 8.0 device (e.g. SOV34) left playing live streams all day, which ends up minutes behind without you noticing.
-
-#### Hide live chat clutter
-
-| | |
-|---|---|
-| Target | YouTube **21.30.216** (the latest stable version recommended upstream; for recent Android) |
-| What it does | Hides visual clutter in live chat, such as the pinned message banner and poll cards, that gets in the way while reading chat. It also fixes the chat input field being covered by the on-screen keyboard (while the keyboard is open, the chat is lifted by the keyboard's height) |
-| Adjusting | Each item can be selected individually when applying the patch. After patching, a dedicated "Ayufa patch settings" screen appears in Morphe settings, where "Hide pinned message banner", "Hide live chat polls" and "Fix live chat keyboard overlap" can be toggled without re-patching (applied the next time you open chat) |
 
 ### ⌨️ Simeji
 
@@ -140,7 +119,7 @@ With 「アプリ内設定画面を追加」 applied, "Ayufaパッチ設定" app
 
 ### Do I use these together with the official patches?
 
-The YouTube patches are meant to be used together with the official patches. The Simeji patches work on their own (upstream has no Simeji patches).
+The Simeji patches work on their own (upstream has no Simeji patches). The YouTube patches live in a separate repository (Ayufa YouTube Patches).
 
 ## Relationship with upstream
 
@@ -150,7 +129,6 @@ The YouTube patches are meant to be used together with the official patches. The
 ### How upstream updates are tracked
 
 - Dependabot periodically reports dependency updates (such as the patcher) from upstream
-- When upstream changes its supported YouTube version, GitHub Actions (upstream-watch) detects it and opens an issue in this repository only. Nothing is ever written to upstream
 - See [How upstream is tracked](docs/UPSTREAM.md) for details
 - Releases are unsigned (no signing key is configured)
 

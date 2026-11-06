@@ -3,7 +3,7 @@ group = "app.ayufa"
 patches {
     about {
         name = "Ayufa Patches"
-        description = "Custom Morphe patches by Ayufa for various apps. Currently: YouTube live stream latency keeper (Android 8.0 target) and live chat clutter hider (current Android target)"
+        description = "Custom Morphe patches by Ayufa for Simeji: in-app settings with runtime toggles, ad and promotion removal, VIP utilities and more (Simeji 20.7 target)"
         source = "git@github.com:Ayufa/ayufa-patches.git"
         author = "Ayufa"
         contact = "https://github.com/Ayufa/ayufa-patches/issues"

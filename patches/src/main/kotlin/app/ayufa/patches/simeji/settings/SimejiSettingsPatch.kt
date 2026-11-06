@@ -38,7 +38,7 @@ val simejiSettingsPatch = bytecodePatch(
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
-    extendWith("extensions/youtube.mpe")
+    extendWith("extensions/simeji.mpe")
 
     execute {
         SettingHomeFragmentInitItemsFingerprint.method.addInstructions(

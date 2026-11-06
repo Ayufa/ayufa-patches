@@ -56,7 +56,7 @@ val spoofVipPatch = bytecodePatch(
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
-    extendWith("extensions/youtube.mpe")
+    extendWith("extensions/simeji.mpe")
 
     execute {
         // While the spoof toggle is on: pay status reports PAYED (0)

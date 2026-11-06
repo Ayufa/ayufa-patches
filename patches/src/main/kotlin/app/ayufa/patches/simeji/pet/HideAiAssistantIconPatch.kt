@@ -55,7 +55,7 @@ val hideAiAssistantIconPatch = bytecodePatch(
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
-    extendWith("extensions/youtube.mpe")
+    extendWith("extensions/simeji.mpe")
 
     execute {
         // Freezing changeMode keeps the manager's mode at 0 (off)
