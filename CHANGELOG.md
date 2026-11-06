@@ -1,3 +1,9 @@
+## [1.3.0-dev.7](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.6...v1.3.0-dev.7) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* **simeji:** stock-styled settings entry and settings page ([7c5db62](https://github.com/Ayufa/ayufa-patches/commit/7c5db622915c953d47ead8a8e43b099c6ba45570))
+
 ## [1.3.0-dev.6](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.5...v1.3.0-dev.6) (2026-11-06)
 
 ### 🐛 Bug Fixes
