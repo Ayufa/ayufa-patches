@@ -207,6 +207,14 @@ YouTube のパッチは本家のパッチと一緒に使う想定です。Simeji
 - できたファイルは Morphe Desktop などから、他のパッチバンドルと同じように使えます
 - 開発は `dev` ブランチで行い、`main` にマージすると安定版のリリースが作られます
 
+## ❤️ 寄付
+
+寄付は完全に任意です。使ってくれること、不具合を報告してくれることが一番の支援です。
+
+もし開発の支援をしたい場合は、GitHub Sponsors からお願いします。
+
+- [GitHub Sponsors](https://github.com/sponsors/Ayufa)
+
 ## ❤️ クレジット
 
 - [Morphe](https://github.com/MorpheApp/)
