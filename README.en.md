@@ -28,7 +28,7 @@ The YouTube patches are meant to be used together with the official patches ([Mo
 
 - YouTube "Hide live chat clutter" → **21.30.216**
 - YouTube "Live latency keeper" → **20.26.46**
-- All Simeji patches → **20.7** (do not apply them to 23.7; see "Simeji notes" below)
+- All Simeji patches → **20.7** (do not apply them to 23.7)
 
 ## Patch details
 
@@ -72,8 +72,6 @@ All patches target Simeji **20.7**. Every patch can be toggled in the in-app "Ay
 
 #### Simeji notes
 
-- **20.7 only (do not apply to 23.7)**: in 23.7, the conversion engine verifies the app's signature in native code, and on a re-signed APK the engine never initializes, so no conversion candidates ever appear (verified to happen even on a patch-free rebuild). 20.7 predates that check and was distributed as a single APK, so it can be patched as-is
-- **Replacement install required**: the signature changes, so if the Play version is installed, uninstall it first (your user dictionary and settings are not carried over)
 - **Where the settings are**: with 「アプリ内設定画面を追加」 applied, "Ayufaパッチ設定" appears at the very bottom of the **Settings** tab in the Simeji app. Defaults: everything on, except 「VIPを偽装」
 - **Google account sign-in does not work**: a re-signed app cannot pass Google Sign-In's signature check (package name + certificate), and this cannot be worked around with a patch. Signing in with a Baidu account ID/password is not affected
 - **Limits of Spoof VIP**: VIP perks managed on the server (cloud skins, backup, translation, AI quota, etc.) remain unavailable even with spoofing
