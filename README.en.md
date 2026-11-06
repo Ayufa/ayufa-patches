@@ -44,6 +44,7 @@ This collection adds the small things the official patches ([MorpheApp/morphe-pa
 | App | Supported versions | Patches |
 |---|---|---|
 | Simeji | 20.7 | 11 |
+| Yahoo! Transit | 8.5.8 | 2 |
 
 </details>
 
@@ -87,6 +88,26 @@ All patches target Simeji **20.7**. Every patch can be toggled in the in-app "Ay
 - **Where the settings are**: with 「アプリ内設定画面を追加」 applied, "Ayufaパッチ設定" appears at the very bottom of the **Settings** tab in the Simeji app. Defaults: everything on, except 「VIPを偽装」
 - **Google account sign-in does not work**: a re-signed app cannot pass Google Sign-In's signature check (package name + certificate), and this cannot be worked around with a patch. Signing in with a Baidu account ID/password is not affected
 - **Limits of VIP spoofing**: VIP perks managed on the server (cloud skins, backup, translation, AI quota, etc.) remain unavailable even with spoofing
+
+</details>
+
+### 🚃 Yahoo! Transit
+
+<details>
+<summary>Yahoo! Transit patch details</summary>
+
+All of these target Yahoo! Transit **8.5.8**.
+
+| Patch | What it does |
+|---|---|
+| 広告を非表示 | Removes the per-screen banner/native ads and the full-screen overlay ads |
+| プロモーションを非表示 | Stops the LY linkage promotion modal from appearing |
+
+#### Yahoo! Transit notes
+
+- **There is no premium system**: the app is fully free, so there is nothing to unlock
+- Video ads are not covered
+- The app is distributed as split APKs
 
 </details>
 
