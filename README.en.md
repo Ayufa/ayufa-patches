@@ -45,6 +45,7 @@ This collection adds the small things the official patches ([MorpheApp/morphe-pa
 |---|---|---|
 | Simeji | 20.7 | 11 |
 | Weathernews | 7.5.1 | 2 |
+| Yahoo! Transit | 8.5.8 | 2 |
 
 </details>
 
@@ -106,6 +107,26 @@ All of these target Weathernews **7.5.1**.
 #### Weathernews notes
 
 - **Premium membership is not touched**: membership state is managed server-side, so it is out of scope for patching
+- The app is distributed as split APKs
+
+</details>
+
+### 🚃 Yahoo! Transit
+
+<details>
+<summary>Yahoo! Transit patch details</summary>
+
+All of these target Yahoo! Transit **8.5.8**.
+
+| Patch | What it does |
+|---|---|
+| 広告を非表示 | Removes the per-screen banner/native ads and the full-screen overlay ads |
+| プロモーションを非表示 | Stops the LY linkage promotion modal from appearing |
+
+#### Yahoo! Transit notes
+
+- **There is no premium system**: the app is fully free, so there is nothing to unlock
+- Video ads are not covered
 - The app is distributed as split APKs
 
 </details>
