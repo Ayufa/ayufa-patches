@@ -38,11 +38,16 @@
 
 ## ❓ About
 
+<details>
+<summary>Overview</summary>
+
 This collection adds the small things the official patches ([MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches)) left unsatisfied, plus features I wanted myself.
 
 | App | Supported versions | Patches |
 |---|---|---|
 | Simeji | 20.7 | 11 |
+
+</details>
 
 ## ⚠️ Disclaimer
 
