@@ -160,6 +160,14 @@ The YouTube patches are meant to be used together with the official patches. The
 - The resulting file can be used with Morphe Desktop, like any other patch bundle
 - Development happens on the `dev` branch; merging into `main` creates a stable release
 
+## ❤️ Donate
+
+Donations are completely optional. Using the patches and reporting bugs is already the best support.
+
+If you would like to support development, you can do so through GitHub Sponsors.
+
+- [GitHub Sponsors](https://github.com/sponsors/Ayufa)
+
 ## ❤️ Credits
 
 - [Morphe](https://github.com/MorpheApp/)
