@@ -1,3 +1,9 @@
+## [1.3.0-dev.19](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.18...v1.3.0-dev.19) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* pin Transit ad slots GONE inside their visibility state machines ([19272f0](https://github.com/Ayufa/ayufa-patches/commit/19272f06c9f14c4466f747dca49da8da849f8783))
+
 ## [1.3.0-dev.18](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.17...v1.3.0-dev.18) (2026-11-06)
 
 ### 🐛 Bug Fixes
