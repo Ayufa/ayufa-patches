@@ -53,8 +53,12 @@ internal val AD_VIEW_CLASSES = listOf(
     "Ljp/co/yahoo/android/apps/transit/ui/view/navi/list/SearchResultListRowAdView;"
 )
 
-internal val adViewConstructorFingerprints: List<Fingerprint> =
-    AD_VIEW_CLASSES.flatMap { definingClass ->
+/**
+ * Constructor fingerprints grouped by view class, so patches can
+ * work per class without reading fingerprint internals.
+ */
+internal val adViewConstructorFingerprintsByClass: Map<String, List<Fingerprint>> =
+    AD_VIEW_CLASSES.associateWith { definingClass ->
         if (definingClass.endsWith("SearchResultListRowAdView;")) {
             // Search-result rows only expose the 3-argument constructor.
             constructorFingerprints(definingClass, listOf(CONTEXT_ATTRS_INT))
@@ -65,6 +69,9 @@ internal val adViewConstructorFingerprints: List<Fingerprint> =
             )
         }
     }
+
+internal val adViewConstructorFingerprints: List<Fingerprint> =
+    adViewConstructorFingerprintsByClass.values.flatten()
 
 /**
  * The ad views share a visibility state machine: a declared
@@ -83,3 +90,4 @@ internal val adViewStateMachineFingerprints: List<Fingerprint> =
             returnType = "V"
         )
     }
+

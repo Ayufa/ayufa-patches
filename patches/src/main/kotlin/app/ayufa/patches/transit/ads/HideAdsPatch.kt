@@ -27,11 +27,8 @@ val hideTransitAdsPatch = bytecodePatch(
         // collectors and load callbacks call setVisibility(VISIBLE)
         // on the view). Give every ad view a setVisibility override
         // that always applies GONE, so no caller can revive it.
-        AD_VIEW_CLASSES.forEach { classType ->
-            val anyConstructor = adViewConstructorFingerprints.first {
-                it.definingClass == classType
-            }
-            anyConstructor.classDef.pinVisibilityGone()
+        adViewConstructorFingerprintsByClass.values.forEach { constructors ->
+            constructors.first().classDef.pinVisibilityGone()
         }
 
         // The views' own visibility state machines force the slot
