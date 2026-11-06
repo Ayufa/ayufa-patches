@@ -105,7 +105,7 @@ val liveLatencyKeeperPatch = bytecodePatch(
         "and the on/off switch can be changed in " +
         "Morphe settings (Ayufa patch settings) without re-patching. For YouTube 20.26.46 " +
         "(Android 8.0) only. Requires the official Morphe patches to be applied as well.",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_YOUTUBE_ANDROID_8)
 

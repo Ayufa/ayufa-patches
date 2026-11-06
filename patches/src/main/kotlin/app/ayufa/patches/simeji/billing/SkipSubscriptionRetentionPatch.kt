@@ -22,7 +22,7 @@ val skipSubscriptionRetentionPatch = bytecodePatch(
     description = "VIPサブスクリプション解約時に表示される引き止め画面を" +
         "スキップし、そのまま解約フローへ進みます。有効・無効はアプリ内" +
         "設定（Ayufaパッチ設定）でいつでも切り替えられます。",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 

@@ -52,7 +52,7 @@ val spoofVipPatch = bytecodePatch(
         "なります。クラウドきせかえ・クラウド定型文・AIチャットなど、" +
         "サーバー側で判定される特典は使えません。有効・無効はアプリ内設定" +
         "（Ayufaパッチ設定）で切り替えます（初期値はオフです）。",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 

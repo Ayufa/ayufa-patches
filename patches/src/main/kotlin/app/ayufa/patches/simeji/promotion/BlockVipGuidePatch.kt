@@ -23,7 +23,7 @@ val blockVipGuidePatch = bytecodePatch(
         "アプリ内のサブスクリプション購入画面も兼ねているため、ブロック中は" +
         "アプリ内から契約できなくなります。有効・無効はアプリ内設定" +
         "（Ayufaパッチ設定）でいつでも切り替えられます。",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
