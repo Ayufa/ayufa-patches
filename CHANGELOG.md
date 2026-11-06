@@ -1,3 +1,9 @@
+## [1.3.0-dev.3](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.2...v1.3.0-dev.3) (2026-11-06)
+
+### ✨ New Features
+
+* **simeji:** collapse the empty top strip with the AI icon patch ([77d3c51](https://github.com/Ayufa/ayufa-patches/commit/77d3c51e163103b4195b0f17c361ce291886bab8))
+
 ## [1.3.0-dev.2](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.1...v1.3.0-dev.2) (2026-11-06)
 
 ### ✨ New Features
