@@ -38,5 +38,9 @@ internal object AdDelegateImplShowAppOpenAdFingerprint : Fingerprint(
     definingClass = "Lcom/weathernews/wrapper/ad/AdDelegateImpl;",
     name = "showAppOpenAd",
     returnType = "V",
-    parameters = listOf("Lcom/weathernews/wrapper/ad/AppOpenAdResponse;")
+    parameters = listOf(
+        "Landroid/app/Activity;",
+        "Lcom/weathernews/wrapper/ad/AppOpenAdResponse;",
+        "Lkotlin/jvm/functions/Function3;"
+    )
 )
