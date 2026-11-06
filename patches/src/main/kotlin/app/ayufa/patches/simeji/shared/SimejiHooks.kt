@@ -30,6 +30,21 @@ internal fun MutableMethod.returnVoidImmediately() {
 }
 
 /**
+ * Makes a no-argument static int method return 0 immediately. Such a
+ * method has no parameter registers, so the result goes through v0;
+ * only use this on methods known to declare local registers.
+ */
+internal fun MutableMethod.returnZeroImmediately() {
+    addInstructions(
+        0,
+        """
+            const/4 v0, 0x0
+            return v0
+        """
+    )
+}
+
+/**
  * Makes an activity finish itself right after its super.onCreate()
  * call, so the screen never becomes visible. Used for popup and
  * promotion activities that should never appear.
