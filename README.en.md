@@ -10,7 +10,7 @@
 
 A personal collection of custom patches for Morphe. These are not official Morphe patches (developed in Ayufa's personal repository).
 
-They are meant to be used together with the official patches ([MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches)): this collection only adds the small things the official set left unsatisfied, plus features I wanted myself.
+The YouTube patches are meant to be used together with the official patches ([MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches)), adding the small things the official set left unsatisfied. The Simeji patches work entirely on their own, as upstream has no Simeji patches.
 
 ## Overview
 
@@ -22,7 +22,7 @@ They are meant to be used together with the official patches ([MorpheApp/morphe-
 ## How to use
 
 1. Use the button above to add this repository as a patch source in Morphe
-2. Select the patches you want and apply them together with the official patches, as usual
+2. Select the patches you want and apply them (select the YouTube patches together with the official patches; the Simeji patches are fine on their own)
 
 ⚠️ **Match the target versions exactly** (each patch is verified per version, and cannot be applied to other versions).
 
