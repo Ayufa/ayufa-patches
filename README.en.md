@@ -22,7 +22,7 @@
 >
 > A personal collection of custom patches for Morphe. These are not official Morphe patches.
 >
-> The YouTube patches are meant to be used together with the official patches. The Simeji patches work on their own, as upstream has no Simeji patches.
+> The YouTube patches are meant to be used together with the official patches. The Simeji patches work on their own, as upstream has no Simeji patches. The YouTube patches were split into [Ayufa YouTube Patches](https://github.com/Ayufa/ayufa-youtube-patches), where future YouTube updates will be published.
 
 ## Contents
 

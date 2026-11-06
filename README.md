@@ -22,7 +22,7 @@
 >
 > 個人的に作っている、Morphe 用の独自パッチ集です。公式の Morphe パッチではありません。
 >
-> YouTube のパッチは本家のパッチと一緒に使う想定です。Simeji のパッチは、本家に Simeji 向けがないため単体で動作します。
+> YouTube のパッチは本家のパッチと一緒に使う想定です。Simeji のパッチは、本家に Simeji 向けがないため単体で動作します。YouTube のパッチは [Ayufa YouTube Patches](https://github.com/Ayufa/ayufa-youtube-patches) へ分離しました。今後の YouTube パッチの更新はそちらで配布します。
 
 ## Contents
 
