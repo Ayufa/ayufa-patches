@@ -1,19 +1,23 @@
 package app.ayufa.patches.simeji.settings
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.bytecodePatch
 import app.ayufa.patches.simeji.shared.Constants.COMPATIBILITY_SIMEJI
 import app.ayufa.patches.simeji.shared.SIMEJI_SETTINGS_ENTRY_CLASS
-import app.ayufa.patches.simeji.shared.invokeStaticBeforeFinalReturn
 
 /**
  * Builds the settings tab's item list (the 設定 tab of the home
  * screen). The list is a static layout of SimejiSettingItemView
  * items wired up here; it contains a hidden test item that the
- * extension repurposes into the "Ayufaパッチ設定" entry. The hook
- * sits at the end of this method so it runs after the fragment has
- * reset the item, every time the list is built. Verified against
- * Simeji 20.7.
+ * extension repurposes into the "Ayufaパッチ設定" entry.
+ *
+ * The hook sits at the very start of this method, where the view
+ * parameter register is still intact (by the end of the method the
+ * compiler has recycled it as scratch — an end-of-method hook here
+ * received an unrelated item view instead). The extension posts the
+ * actual work, so it runs after this method has finished resetting
+ * the items. Verified against Simeji 20.7.
  */
 internal object SettingHomeFragmentInitItemsFingerprint : Fingerprint(
     definingClass = "Ljp/baidu/simeji/home/setting/SettingHomeFragment;",
@@ -37,10 +41,10 @@ val simejiSettingsPatch = bytecodePatch(
     extendWith("extensions/youtube.mpe")
 
     execute {
-        SettingHomeFragmentInitItemsFingerprint.method
-            .invokeStaticBeforeFinalReturn(
-                "invoke-static { p1 }, " +
-                    "$SIMEJI_SETTINGS_ENTRY_CLASS->attach(Landroid/view/View;)V"
-            )
+        SettingHomeFragmentInitItemsFingerprint.method.addInstructions(
+            0,
+            "invoke-static { p1 }, " +
+                "$SIMEJI_SETTINGS_ENTRY_CLASS->attach(Landroid/view/View;)V"
+        )
     }
 }

@@ -22,6 +22,11 @@ import java.lang.reflect.Method;
  * native look, guaranteed placement inside the list. If the item is
  * missing, a plain row is appended next to a known item instead, and
  * as a last resort to the scroll view's content.
+ *
+ * <p>The work is posted to the view's message queue: attach() itself
+ * is called at the start of initSettingItems, and the fragment goes
+ * on to reset the items (including hiding the test item again), so
+ * the changes must be applied after that method has completed.
  */
 public final class SimejiSettingsEntry {
 
@@ -38,16 +43,34 @@ public final class SimejiSettingsEntry {
         if (root == null) {
             return;
         }
+        root.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!tryAttach(root)) {
+                    // The list may still be settling; retry once.
+                    root.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            tryAttach(root);
+                        }
+                    }, 600);
+                }
+            }
+        });
+    }
+
+    private static boolean tryAttach(View root) {
         try {
             if (repurposeTestItem(root)) {
-                return;
+                return true;
             }
             if (appendNearKnownItem(root)) {
-                return;
+                return true;
             }
-            appendToScrollContent(root);
+            return appendToScrollContent(root);
         } catch (Throwable ignored) {
             // Never crash the host app because of the settings entry.
+            return false;
         }
     }
 
