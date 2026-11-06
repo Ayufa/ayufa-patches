@@ -78,7 +78,7 @@ Morphe 用に個人的に作っている、いろいろなアプリ向けの独�
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.2.0](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.2.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;10 patches total
+> **[v1.3.0-dev.1](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;10 patches total
 <details open>
 <summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;8 patches</summary>
 <br>
@@ -87,7 +87,7 @@ Morphe 用に個人的に作っている、いろいろなアプリ向けの独�
 
 **🎯 Supported versions:**
 
-| 23.7 |
+| 20.7 |
 | :---: |
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |

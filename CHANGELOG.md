@@ -1,3 +1,9 @@
+## [1.3.0-dev.1](https://github.com/Ayufa/ayufa-patches/compare/v1.2.0...v1.3.0-dev.1) (2026-11-06)
+
+### ✨ New Features
+
+* **simeji:** retarget patches from Simeji 23.7 to 20.7 ([c4280ee](https://github.com/Ayufa/ayufa-patches/commit/c4280ee3b22744d2b007548271a0abb9cf8de36f))
+
 ## [1.2.0](https://github.com/Ayufa/ayufa-patches/compare/v1.1.0...v1.2.0) (2026-11-06)
 
 ### ✨ New Features
