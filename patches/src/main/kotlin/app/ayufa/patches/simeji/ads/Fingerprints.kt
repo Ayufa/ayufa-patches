@@ -74,6 +74,6 @@ internal object AdShowHelperShowRewardedFingerprint : Fingerprint(
     returnType = "V",
     parameters = listOf(
         "Ljava/lang/String;",
-        "Ljp/baidu/simeji/AdShowHelper\$RewardedAdShowCallback;"
+        "Ljp/baidu/simeji/RewardedAdShowCallback;"
     )
 )
