@@ -1,3 +1,9 @@
+## [1.3.0-dev.11](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.10...v1.3.0-dev.11) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* make every patch recommended (selected by default) ([82135ad](https://github.com/Ayufa/ayufa-patches/commit/82135ad71246724a40b6f5d2bd1e647715667876))
+
 ## [1.3.0-dev.10](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.9...v1.3.0-dev.10) (2026-11-06)
 
 ### 🐛 Bug Fixes
