@@ -1,3 +1,9 @@
+## [1.3.0-dev.8](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.7...v1.3.0-dev.8) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* **simeji:** English patch titles, Japanese descriptions stay ([aa4c08b](https://github.com/Ayufa/ayufa-patches/commit/aa4c08bb0fb2b0409f4e40b7693d2ed73f571e36))
+
 ## [1.3.0-dev.7](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.6...v1.3.0-dev.7) (2026-11-06)
 
 ### 🐛 Bug Fixes
