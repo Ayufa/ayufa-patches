@@ -3,7 +3,7 @@ group = "app.ayufa"
 patches {
     about {
         name = "Ayufa Patches"
-        description = "Custom Morphe patches by Ayufa for Simeji: in-app settings with runtime toggles, ad and promotion removal, VIP utilities and more (Simeji 20.7 target)"
+        description = "Custom Morphe patches by Ayufa for various apps (currently Simeji: in-app settings with runtime toggles, ad and promotion removal, VIP utilities and more)"
         source = "git@github.com:Ayufa/ayufa-patches.git"
         author = "Ayufa"
         contact = "https://github.com/Ayufa/ayufa-patches/issues"
