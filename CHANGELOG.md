@@ -1,3 +1,9 @@
+## [1.3.0-dev.14](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.13...v1.3.0-dev.14) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* correct the showAppOpenAd fingerprint signature ([4175e61](https://github.com/Ayufa/ayufa-patches/commit/4175e611ff3564497d5b9f019145ebf657c61bed))
+
 ## [1.3.0-dev.13](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.12...v1.3.0-dev.13) (2026-11-06)
 
 ### ✨ New Features
