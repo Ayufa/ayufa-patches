@@ -22,7 +22,7 @@
 >
 > 個人的に作っている、Morphe 用の独自パッチ集です。公式の Morphe パッチではありません。
 >
-> Simeji のパッチは、本家に Simeji 向けがないため単体で動作します。YouTube のパッチは [Ayufa YouTube Patches](https://github.com/Ayufa/ayufa-youtube-patches) へ分離しました。
+> Simeji のパッチは、本家に Simeji 向けがないため単体で動作します。
 
 ## Contents
 
@@ -39,8 +39,6 @@
 ## ❓ このリポジトリについて
 
 本家のパッチ（[MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches)）で満足できなかったところや、自分が欲しい機能だけを少し足す、という位置づけのパッチ集です。
-
-YouTube のパッチは 2026年11月に [Ayufa YouTube Patches](https://github.com/Ayufa/ayufa-youtube-patches) へ分離しました。このリポジトリは Simeji 専用です。
 
 | 対象アプリ | 対象バージョン | パッチ数 |
 |---|---|---|
@@ -86,9 +84,9 @@ YouTube のパッチは 2026年11月に [Ayufa YouTube Patches](https://github.c
 
 ## 🩹 パッチ一覧
 
-<!-- PATCHES_START EXPANDED -->
+<!-- PATCHES_START -->
 > **[v1.3.0-dev.12](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.12)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;11 patches total
-<details open>
+<details>
 <summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;11 patches</summary>
 <br>
 
@@ -148,7 +146,7 @@ YouTube のパッチは 2026年11月に [Ayufa YouTube Patches](https://github.c
 
 ### 本家のパッチと一緒に使うのですか？
 
-Simeji のパッチは単体で動作します（本家に Simeji 向けのパッチはありません）。YouTube のパッチは別リポジトリ（Ayufa YouTube Patches）です。
+Simeji のパッチは単体で動作します（本家に Simeji 向けのパッチはありません）。
 
 ## 本家との関係
 

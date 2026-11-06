@@ -22,7 +22,7 @@
 >
 > A personal collection of custom patches for Morphe. These are not official Morphe patches.
 >
-> The Simeji patches work on their own, as upstream has no Simeji patches. The YouTube patches were split into [Ayufa YouTube Patches](https://github.com/Ayufa/ayufa-youtube-patches).
+> The Simeji patches work on their own, as upstream has no Simeji patches.
 
 ## Contents
 
@@ -39,8 +39,6 @@
 ## ❓ About
 
 This collection adds the small things the official patches ([MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches)) left unsatisfied, plus features I wanted myself.
-
-The YouTube patches were split into [Ayufa YouTube Patches](https://github.com/Ayufa/ayufa-youtube-patches) in November 2026. This repository is Simeji-only now.
 
 | App | Supported versions | Patches |
 |---|---|---|
@@ -119,7 +117,7 @@ With 「アプリ内設定画面を追加」 applied, "Ayufaパッチ設定" app
 
 ### Do I use these together with the official patches?
 
-The Simeji patches work on their own (upstream has no Simeji patches). The YouTube patches live in a separate repository (Ayufa YouTube Patches).
+The Simeji patches work on their own (upstream has no Simeji patches).
 
 ## Relationship with upstream
 
