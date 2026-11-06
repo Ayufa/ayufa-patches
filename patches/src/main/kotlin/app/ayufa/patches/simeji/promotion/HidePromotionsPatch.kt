@@ -3,7 +3,7 @@ package app.ayufa.patches.simeji.promotion
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.patch.bytecodePatch
 import app.ayufa.patches.simeji.shared.Constants.COMPATIBILITY_SIMEJI
-import app.ayufa.patches.simeji.shared.finishImmediatelyAfterSuperOnCreate
+import app.ayufa.patches.simeji.shared.finishIfEnabledAfterSuperOnCreate
 
 /**
  * The full-screen promotion activity (campaign / upsell pages).
@@ -18,15 +18,18 @@ internal object PromotionActivityOnCreateFingerprint : Fingerprint(
 
 @Suppress("unused")
 val hidePromotionsPatch = bytecodePatch(
-    name = "Hide promotions",
-    description = "Prevents the full-screen promotion activity from " +
-        "opening, so campaign and upsell pages never appear.",
+    name = "プロモーションを非表示",
+    description = "全画面のプロモーション画面（キャンペーンやアップセルの" +
+        "ページ）を開かないようにします。有効・無効はアプリ内設定" +
+        "（Ayufaパッチ設定）でいつでも切り替えられます。",
     default = false
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
+    extendWith("extensions/youtube.mpe")
+
     execute {
         PromotionActivityOnCreateFingerprint.method
-            .finishImmediatelyAfterSuperOnCreate()
+            .finishIfEnabledAfterSuperOnCreate("hidePromotions", "ayufa_hide_promotions")
     }
 }

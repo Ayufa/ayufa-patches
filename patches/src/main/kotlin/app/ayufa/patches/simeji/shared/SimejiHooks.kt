@@ -50,6 +50,16 @@ internal fun MutableMethod.returnZeroImmediately() {
  * promotion activities that should never appear.
  */
 internal fun MutableMethod.finishImmediatelyAfterSuperOnCreate() {
+    addInstructions(
+        superOnCreateIndex() + 1,
+        """
+            invoke-virtual { p0 }, Landroid/app/Activity;->finish()V
+            return-void
+        """
+    )
+}
+
+internal fun MutableMethod.superOnCreateIndex(): Int {
     val methodInstructions = implementation?.instructions
         ?: throw PatchException("onCreate has no implementation: $this")
     val superIndex = methodInstructions.indexOfFirst { instruction ->
@@ -60,11 +70,128 @@ internal fun MutableMethod.finishImmediatelyAfterSuperOnCreate() {
     if (superIndex < 0) {
         throw PatchException("No super.onCreate() call found in $this")
     }
+    return superIndex
+}
+
+// region Runtime-settings gates.
+//
+// The Simeji patches no longer hard-disable their targets: each hook
+// first asks the extension's SimejiSettings whether the feature is
+// enabled and only then short-circuits the method; otherwise the
+// original code runs unchanged. The settings live in a small file
+// the extension maintains, so toggles apply at runtime and propagate
+// between the app and IME processes.
+//
+// Every gate stores the helper's boolean result in v0, the first
+// local register. All gated methods in Simeji 20.7 declare at least
+// one local register (verified per method against the dex), and a
+// local register holds no meaningful value at method entry, so
+// overwriting it before the original code runs is safe. [label] must
+// be unique within the method being patched.
+
+internal const val SIMEJI_SETTINGS_CLASS =
+    "Lapp/ayufa/extension/simeji/SimejiSettings;"
+
+internal const val SIMEJI_SETTINGS_ENTRY_CLASS =
+    "Lapp/ayufa/extension/simeji/SimejiSettingsEntry;"
+
+/** Smali prefix: calls settings helper [helper] and jumps to [label] when disabled. */
+private fun settingsGate(helper: String, label: String): String =
+    """
+        invoke-static {}, $SIMEJI_SETTINGS_CLASS->$helper()Z
+        move-result v0
+        if-eqz v0, :$label
+    """
+
+/** Returns void immediately when the settings helper reports enabled. */
+internal fun MutableMethod.returnVoidIfEnabled(helper: String, label: String) {
     addInstructions(
-        superIndex + 1,
-        """
-            invoke-virtual { p0 }, Landroid/app/Activity;->finish()V
-            return-void
-        """
+        0,
+        settingsGate(helper, label) +
+            """
+                return-void
+                :$label
+            """
     )
 }
+
+/** Returns false (or 0) immediately when the helper reports enabled. */
+internal fun MutableMethod.returnFalseIfEnabled(helper: String, label: String) {
+    addInstructions(
+        0,
+        settingsGate(helper, label) +
+            """
+                const/4 v0, 0x0
+                return v0
+                :$label
+            """
+    )
+}
+
+/** Returns true immediately when the helper reports enabled. */
+internal fun MutableMethod.returnTrueIfEnabled(helper: String, label: String) {
+    addInstructions(
+        0,
+        settingsGate(helper, label) +
+            """
+                const/4 v0, 0x1
+                return v0
+                :$label
+            """
+    )
+}
+
+/** Returns `this` immediately when the helper reports enabled. */
+internal fun MutableMethod.returnThisIfEnabled(helper: String, label: String) {
+    addInstructions(
+        0,
+        settingsGate(helper, label) +
+            """
+                return-object p0
+                :$label
+            """
+    )
+}
+
+/**
+ * Finishes the activity right after super.onCreate() when the helper
+ * reports enabled; the original onCreate continues otherwise.
+ */
+internal fun MutableMethod.finishIfEnabledAfterSuperOnCreate(
+    helper: String,
+    label: String
+) {
+    addInstructions(
+        superOnCreateIndex() + 1,
+        settingsGate(helper, label) +
+            """
+                invoke-virtual { p0 }, Landroid/app/Activity;->finish()V
+                return-void
+                :$label
+            """
+    )
+}
+
+/**
+ * Inserts a static call right after the super call of the method
+ * named [superMethodName] (for example onViewCreated), passing the
+ * registers listed in [smali].
+ */
+internal fun MutableMethod.invokeStaticAfterSuper(
+    superMethodName: String,
+    smali: String
+) {
+    val methodInstructions = implementation?.instructions
+        ?: throw PatchException("Method has no implementation: $this")
+    val superIndex = methodInstructions.indexOfFirst { instruction ->
+        instruction.opcode == Opcode.INVOKE_SUPER &&
+            ((instruction as? ReferenceInstruction)?.reference as? MethodReference)
+                ?.name == superMethodName
+    }
+    if (superIndex < 0) {
+        throw PatchException("No super.$superMethodName() call found in $this")
+    }
+    addInstructions(superIndex + 1, smali)
+}
+
+// endregion

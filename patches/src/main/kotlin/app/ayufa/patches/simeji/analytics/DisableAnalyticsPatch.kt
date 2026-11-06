@@ -3,31 +3,30 @@ package app.ayufa.patches.simeji.analytics
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
 import app.ayufa.patches.simeji.shared.Constants.COMPATIBILITY_SIMEJI
-import app.ayufa.patches.simeji.shared.returnVoidImmediately
+import app.ayufa.patches.simeji.shared.returnVoidIfEnabled
 
 private const val APPSFLYER_STATISTIC_CLASS =
     "Ljp/baidu/simeji/ad/statistic/AppsflyerStatistic;"
-private const val STATISTIC_HELPER_CLASS =
-    "Ljp/baidu/simeji/ad/statistic/StatisticHelper;"
 private const val NEW_STATISTIC_CLASS = "Lka/e;"
 
 @Suppress("unused")
 val disableAnalyticsPatch = bytecodePatch(
-    name = "Disable analytics reporting",
-    description = "Stops Simeji's event reporting: every AppsFlyer " +
-        "event entry point and the in-house statistic event dispatch " +
-        "become no-ops, so usage events are no longer sent. The " +
-        "statistic module initialization is deliberately left intact " +
-        "(the keyboard reads its config when the window is shown), and " +
-        "core keyboard, conversion and account features are not touched.",
+    name = "解析レポートを無効化",
+    description = "Simeji の利用状況イベント送信を止めます。AppsFlyer 向けの" +
+        "入口と、自社統計の送信処理が、アプリ内設定（Ayufaパッチ設定）の" +
+        "トグルがオンの間だけ無効になります。統計モジュールの初期化には" +
+        "触りません（キーボード表示時に設定オブジェクトを参照するため、" +
+        "潰すとキーボードが落ちます）。",
     default = false
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
+    extendWith("extensions/youtube.mpe")
+
     execute {
-        // AppsFlyer facade: all of its public statistic* entry points
-        // funnel into AppsFlyerLib.logEvent. Silencing the facade
-        // silences AppsFlyer event reporting from Simeji code.
+        // AppsFlyer facade: every public statistic* entry point is
+        // gated. Each one has at least one local register (verified
+        // against the 20.7 dex), which the gate needs as scratch.
         val appsflyerStatistic = mutableClassDefByOrNull(APPSFLYER_STATISTIC_CLASS)
             ?: throw PatchException("AppsflyerStatistic class not found")
         val appsflyerMethods = appsflyerStatistic.methods.filter { method ->
@@ -36,27 +35,18 @@ val disableAnalyticsPatch = bytecodePatch(
         if (appsflyerMethods.isEmpty()) {
             throw PatchException("No AppsflyerStatistic entry points found")
         }
-        appsflyerMethods.forEach { it.returnVoidImmediately() }
+        appsflyerMethods.forEachIndexed { index, method ->
+            method.returnVoidIfEnabled("disableAnalytics", "ayufa_analytics_af_$index")
+        }
 
-        // In-house statistic events: silence only the event dispatch
-        // (onEvent overloads). initStatistic must NOT be touched: it
-        // also installs the statistic module's config object, which
-        // the keyboard dereferences in onWindowShown — removing it
+        // In-house statistic events: StatisticHelper.onEvent overloads
+        // all funnel into ka.e.b, and ka.e.f flushes the queued
+        // real-time logs, so gating these two senders covers the
+        // dispatch. initStatistic must NOT be touched: it also
+        // installs the statistic module's config object, which the
+        // keyboard dereferences in onWindowShown — removing it
         // crashes the keyboard with a NullPointerException (verified
         // on Simeji 20.7).
-        val statisticHelper = mutableClassDefByOrNull(STATISTIC_HELPER_CLASS)
-            ?: throw PatchException("StatisticHelper class not found")
-        val helperMethods = statisticHelper.methods.filter { method ->
-            method.returnType == "V" && method.name == "onEvent"
-        }
-        if (helperMethods.isEmpty()) {
-            throw PatchException("No StatisticHelper onEvent entry points found")
-        }
-        helperMethods.forEach { it.returnVoidImmediately() }
-
-        // The statistic module's own senders: b() dispatches single
-        // events, f() flushes queued real-time logs. Both only send
-        // broadcasts to the statistic receiver.
         val newStatistic = mutableClassDefByOrNull(NEW_STATISTIC_CLASS)
             ?: throw PatchException("New statistic class (ka.e) not found")
         val senderMethods = newStatistic.methods.filter { method ->
@@ -73,6 +63,8 @@ val disableAnalyticsPatch = bytecodePatch(
                 "Expected 2 statistic sender methods, found ${senderMethods.size}"
             )
         }
-        senderMethods.forEach { it.returnVoidImmediately() }
+        senderMethods.forEachIndexed { index, method ->
+            method.returnVoidIfEnabled("disableAnalytics", "ayufa_analytics_sender_$index")
+        }
     }
 }

@@ -3,7 +3,7 @@ package app.ayufa.patches.simeji.push
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.patch.bytecodePatch
 import app.ayufa.patches.simeji.shared.Constants.COMPATIBILITY_SIMEJI
-import app.ayufa.patches.simeji.shared.finishImmediatelyAfterSuperOnCreate
+import app.ayufa.patches.simeji.shared.finishIfEnabledAfterSuperOnCreate
 
 /**
  * The dialog-style activity shown for push campaign messages.
@@ -18,15 +18,20 @@ internal object PopupMsgDialogActivityOnCreateFingerprint : Fingerprint(
 
 @Suppress("unused")
 val disablePushPopupsPatch = bytecodePatch(
-    name = "Disable push popups",
-    description = "Prevents push campaign popup dialogs from appearing " +
-        "on screen. Normal notifications are not affected.",
+    name = "プッシュポップアップを無効化",
+    description = "プッシュキャンペーンのポップアップダイアログを表示しなく" +
+        "します。通常の通知には影響しません。有効・無効はアプリ内設定" +
+        "（Ayufaパッチ設定）でいつでも切り替えられます。",
     default = false
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
+    extendWith("extensions/youtube.mpe")
+
     execute {
         PopupMsgDialogActivityOnCreateFingerprint.method
-            .finishImmediatelyAfterSuperOnCreate()
+            .finishIfEnabledAfterSuperOnCreate(
+                "disablePushPopups", "ayufa_disable_push_popups"
+            )
     }
 }
