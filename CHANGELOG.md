@@ -1,3 +1,10 @@
+## [1.3.0-dev.20](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.19...v1.3.0-dev.20) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* compile errors in the Transit setVisibility override ([776ad24](https://github.com/Ayufa/ayufa-patches/commit/776ad24643a53f65c265cd55fdb30c73e99e6c0c))
+* give Transit ad views a setVisibility override pinned to GONE ([c721e9d](https://github.com/Ayufa/ayufa-patches/commit/c721e9dae9d4f4705d2b295da224516384585e39))
+
 ## [1.3.0-dev.19](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.18...v1.3.0-dev.19) (2026-11-06)
 
 ### 🐛 Bug Fixes

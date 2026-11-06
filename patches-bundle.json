@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-06T11:28:07",
-  "description": "## [1.3.0-dev.19](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.18...v1.3.0-dev.19) (2026-11-06)\n\n### 🐛 Bug Fixes\n\n* pin Transit ad slots GONE inside their visibility state machines ([19272f0](https://github.com/Ayufa/ayufa-patches/commit/19272f06c9f14c4466f747dca49da8da849f8783))",
-  "download_url": "https://github.com/Ayufa/ayufa-patches/releases/download/v1.3.0-dev.19/patches-1.3.0-dev.19.mpp",
+  "created_at": "2026-11-06T11:52:17",
+  "description": "## [1.3.0-dev.20](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.19...v1.3.0-dev.20) (2026-11-06)\n\n### 🐛 Bug Fixes\n\n* compile errors in the Transit setVisibility override ([776ad24](https://github.com/Ayufa/ayufa-patches/commit/776ad24643a53f65c265cd55fdb30c73e99e6c0c))\n* give Transit ad views a setVisibility override pinned to GONE ([c721e9d](https://github.com/Ayufa/ayufa-patches/commit/c721e9dae9d4f4705d2b295da224516384585e39))",
+  "download_url": "https://github.com/Ayufa/ayufa-patches/releases/download/v1.3.0-dev.20/patches-1.3.0-dev.20.mpp",
   "signature_download_url": "",
-  "version": "1.3.0-dev.19"
+  "version": "1.3.0-dev.20"
 }
