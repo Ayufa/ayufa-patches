@@ -28,7 +28,7 @@ internal object SettingHomeFragmentInitItemsFingerprint : Fingerprint(
 
 @Suppress("unused")
 val simejiSettingsPatch = bytecodePatch(
-    name = "Add in-app settings screen",
+    name = "アプリ内設定画面を追加",
     description = "Simeji の設定タブの一覧に「Ayufaパッチ設定」の入口を" +
         "追加します。各 Simeji パッチの有効・無効や VIP偽装を、再パッチ" +
         "なしでアプリ内から切り替えられるようになります。他の Simeji " +

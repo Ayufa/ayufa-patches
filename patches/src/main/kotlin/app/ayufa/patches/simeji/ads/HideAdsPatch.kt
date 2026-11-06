@@ -8,7 +8,7 @@ import app.ayufa.patches.simeji.shared.returnVoidIfEnabled
 
 @Suppress("unused")
 val hideAdsPatch = bytecodePatch(
-    name = "Hide ads",
+    name = "広告を非表示",
     description = "Simeji の広告（候補欄の広告、ストア入口の全画面広告、" +
         "Webキャンペーンのポップアップ）を非表示にします。リワード広告も" +
         "ブロックします。有効・無効はアプリ内設定（Ayufaパッチ設定）で" +

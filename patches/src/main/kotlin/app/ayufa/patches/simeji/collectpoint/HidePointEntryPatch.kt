@@ -17,7 +17,7 @@ internal object CollectPointManagerCanShowFingerprint : Fingerprint(
 
 @Suppress("unused")
 val hidePointEntryPatch = bytecodePatch(
-    name = "Hide point entry",
+    name = "ポイント入口を非表示",
     description = "ポイントストアやキャンペーンへの入口となる Simejiポイントの" +
         "入口を非表示にします。有効・無効はアプリ内設定（Ayufaパッチ設定）で" +
         "いつでも切り替えられます。",

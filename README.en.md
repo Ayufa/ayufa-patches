@@ -58,23 +58,23 @@ All patches target Simeji **20.7**. Every patch can be toggled in the in-app "Ay
 
 | Patch | What it does |
 |---|---|
-| Hide ads | Removes ads in the suggestion bar, full-screen store-entry ads and web campaign popups. Rewarded ads are blocked too (features unlocked by watching ads stop working) |
-| Hide promotions | Prevents full-screen campaign / upsell activities from opening |
-| Block VIP guide screen | Prevents the VIP guide screen from opening. This screen doubles as the in-app subscription purchase screen, so while it is blocked you cannot subscribe from inside the app |
-| Disable push popups | Stops dialog-style push campaign popups (normal notifications are not affected) |
-| Skip subscription retention screen | Skips the retention screen shown when cancelling VIP and goes straight to the cancellation flow |
-| Disable analytics reporting | Stops event sending to AppsFlyer and Simeji's own statistic reporting. Core features (keyboard, conversion, sync) are not touched |
-| Hide point entry | Hides the entry points to the point store and campaigns |
-| Disable review prompts | Stops the Google Play rating prompts (both Simeji's own dialog and the Play in-app review flow) |
-| Hide AI assistant icon | Hides the robot (AI assistant) icon at the top right of the keyboard and its speech-bubble messages. The top strip the icon lived in is collapsed too, so no empty band remains. Input and conversion are not affected |
-| Spoof VIP | Turns on only the on-device VIP checks. Features that complete entirely on the device, such as toolbar customization and VIP parts in custom skins, become usable (off by default) |
-| Add in-app settings screen | Adds an "Ayufaパッチ設定" entry at the bottom of Simeji's Settings tab. This patch is required to toggle the other Simeji patches |
+| 広告を非表示 | Removes ads in the suggestion bar, full-screen store-entry ads and web campaign popups. Rewarded ads are blocked too (features unlocked by watching ads stop working) |
+| プロモーションを非表示 | Prevents full-screen campaign / upsell activities from opening |
+| VIP案内画面をブロック | Prevents the VIP guide screen from opening. This screen doubles as the in-app subscription purchase screen, so while it is blocked you cannot subscribe from inside the app |
+| プッシュポップアップを無効化 | Stops dialog-style push campaign popups (normal notifications are not affected) |
+| 解約時の引き止め画面をスキップ | Skips the retention screen shown when cancelling VIP and goes straight to the cancellation flow |
+| 解析レポートを無効化 | Stops event sending to AppsFlyer and Simeji's own statistic reporting. Core features (keyboard, conversion, sync) are not touched |
+| ポイント入口を非表示 | Hides the entry points to the point store and campaigns |
+| レビュー依頼を無効化 | Stops the Google Play rating prompts (both Simeji's own dialog and the Play in-app review flow) |
+| AIアシスタントのアイコンを非表示 | Hides the robot (AI assistant) icon at the top right of the keyboard and its speech-bubble messages. The top strip the icon lived in is collapsed too, so no empty band remains. Input and conversion are not affected |
+| VIPを偽装 | Turns on only the on-device VIP checks. Features that complete entirely on the device, such as toolbar customization and VIP parts in custom skins, become usable (off by default) |
+| アプリ内設定画面を追加 | Adds an "Ayufaパッチ設定" entry at the bottom of Simeji's Settings tab. This patch is required to toggle the other Simeji patches |
 
 #### Simeji notes
 
 - **20.7 only (do not apply to 23.7)**: in 23.7, the conversion engine verifies the app's signature in native code, and on a re-signed APK the engine never initializes, so no conversion candidates ever appear (verified to happen even on a patch-free rebuild). 20.7 predates that check and was distributed as a single APK, so it can be patched as-is
 - **Replacement install required**: the signature changes, so if the Play version is installed, uninstall it first (your user dictionary and settings are not carried over)
-- **Where the settings are**: with "Add in-app settings screen" applied, "Ayufaパッチ設定" appears at the very bottom of the **Settings** tab in the Simeji app. Defaults: everything on, except Spoof VIP
+- **Where the settings are**: with 「アプリ内設定画面を追加」 applied, "Ayufaパッチ設定" appears at the very bottom of the **Settings** tab in the Simeji app. Defaults: everything on, except 「VIPを偽装」
 - **Google account sign-in does not work**: a re-signed app cannot pass Google Sign-In's signature check (package name + certificate), and this cannot be worked around with a patch. Signing in with a Baidu account ID/password is not affected
 - **Limits of Spoof VIP**: VIP perks managed on the server (cloud skins, backup, translation, AI quota, etc.) remain unavailable even with spoofing
 
