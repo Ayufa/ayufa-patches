@@ -2,7 +2,6 @@
 
 ### ✨ New Features
 
-* move the YouTube patches to Ayufa/ayufa-youtube-patches ([7b4a08f](https://github.com/Ayufa/ayufa-patches/commit/7b4a08f6523c5c671a3e07dafed15f41583b60e2))
 
 ## [1.3.0-dev.11](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.10...v1.3.0-dev.11) (2026-11-06)
 
