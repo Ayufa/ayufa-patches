@@ -8,12 +8,12 @@ internal const val AYUFA_SETTINGS_SCREEN_KEY = "ayufa_settings_screen"
 
 private val SCREEN_STRINGS_EN = mapOf(
     "ayufa_settings_screen_title" to "Ayufa patch settings",
-    "ayufa_settings_screen_summary" to "Settings for Ayufa YouTube Patches."
+    "ayufa_settings_screen_summary" to "Settings for Ayufa Patches."
 )
 
 private val SCREEN_STRINGS_JA = mapOf(
     "ayufa_settings_screen_title" to "Ayufaパッチ設定",
-    "ayufa_settings_screen_summary" to "Ayufa YouTube Patches の設定です。"
+    "ayufa_settings_screen_summary" to "Ayufa Patches の設定です。"
 )
 
 /**

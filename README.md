@@ -1,20 +1,24 @@
 <p align="center">
-  <a href="https://morphe.software/add-source?github=Ayufa/youtube-custom-patches">
+  <a href="https://morphe.software/add-source?github=Ayufa/ayufa-patches">
     <img src=".github/assets/add-to-morphe.svg" alt="Morphe に追加" height="48">
   </a>
 </p>
 
-# Ayufa の YouTube 独自パッチ
+# Ayufa パッチ
 
-Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集です。
+Morphe 用に個人的に作っている、いろいろなアプリ向けの独自パッチ集です。
 公式の Morphe パッチではありません。Ayufa 個人のリポジトリで開発しています。
 
 本家のパッチ（[MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches)）と一緒に使う想定です。
 本家のパッチで満足できなかったところ、自分が欲しい機能だけを少し足す、という位置づけです。
 
+現在入っているのは YouTube 向けのパッチです。今後、他のアプリ向けのパッチもこのリポジトリに追加していきます。
+
 ## 入っているパッチ
 
-### ライブ遅延キーパー
+### YouTube
+
+#### ライブ遅延キーパー
 
 | 項目 | 内容 |
 |---|---|
@@ -24,7 +28,7 @@ Morphe 用に個人的に作っている、YouTube 向けの独自パッチ集�
 
 使う場面の例：Android 8.0 の古い端末（SOV34 など）をライブ配信のつけっぱなし用にしていて、気づいたら数分遅れている、という場合の対策です。
 
-### ライブチャットの余計な表示を隠す
+#### ライブチャットの余計な表示を隠す
 
 | 項目 | 内容 |
 |---|---|

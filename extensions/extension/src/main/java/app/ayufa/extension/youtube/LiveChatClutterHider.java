@@ -1,6 +1,6 @@
 /*
  * Copyright 2026 Ayufa.
- * Part of Ayufa YouTube Patches (GPL-3.0).
+ * Part of Ayufa Patches (GPL-3.0).
  */
 
 package app.ayufa.extension.youtube;

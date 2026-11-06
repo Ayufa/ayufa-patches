@@ -1,6 +1,6 @@
 /*
  * Copyright 2026 Ayufa.
- * Part of Ayufa YouTube Patches (GPL-3.0).
+ * Part of Ayufa Patches (GPL-3.0).
  *
  * The hooking design follows the approach proven by Morphe's
  * "Remember live stream playback position" patch
