@@ -11,7 +11,7 @@ private const val NEW_STATISTIC_CLASS = "Lka/e;"
 
 @Suppress("unused")
 val disableAnalyticsPatch = bytecodePatch(
-    name = "解析レポートを無効化",
+    name = "Disable analytics reporting",
     description = "Simeji の利用状況イベント送信を止めます。AppsFlyer 向けの" +
         "入口と、自社統計の送信処理が、アプリ内設定（Ayufaパッチ設定）の" +
         "トグルがオンの間だけ無効になります。統計モジュールの初期化には" +

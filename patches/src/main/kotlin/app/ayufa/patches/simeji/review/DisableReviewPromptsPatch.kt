@@ -30,7 +30,7 @@ internal object GpInAppReviewAskFingerprint : Fingerprint(
 
 @Suppress("unused")
 val disableReviewPromptsPatch = bytecodePatch(
-    name = "レビュー依頼を無効化",
+    name = "Disable review prompts",
     description = "Google Play の評価依頼を無効化します。Simeji 独自のガイド" +
         "ダイアログと、Play のアプリ内レビューの両方が対象です。有効・無効は" +
         "アプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。",

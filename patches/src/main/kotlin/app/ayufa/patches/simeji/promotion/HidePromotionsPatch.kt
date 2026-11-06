@@ -18,7 +18,7 @@ internal object PromotionActivityOnCreateFingerprint : Fingerprint(
 
 @Suppress("unused")
 val hidePromotionsPatch = bytecodePatch(
-    name = "プロモーションを非表示",
+    name = "Hide promotions",
     description = "全画面のプロモーション画面（キャンペーンやアップセルの" +
         "ページ）を開かないようにします。有効・無効はアプリ内設定" +
         "（Ayufaパッチ設定）でいつでも切り替えられます。",

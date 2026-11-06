@@ -18,7 +18,7 @@ internal object SubscriptionKeepActivityOnCreateFingerprint : Fingerprint(
 
 @Suppress("unused")
 val skipSubscriptionRetentionPatch = bytecodePatch(
-    name = "解約時の引き止め画面をスキップ",
+    name = "Skip subscription retention screen",
     description = "VIPサブスクリプション解約時に表示される引き止め画面を" +
         "スキップし、そのまま解約フローへ進みます。有効・無効はアプリ内" +
         "設定（Ayufaパッチ設定）でいつでも切り替えられます。",

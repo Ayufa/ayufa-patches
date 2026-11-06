@@ -46,7 +46,7 @@ internal object UserInfoHelperIsVipLv2Fingerprint : Fingerprint(
 
 @Suppress("unused")
 val spoofVipPatch = bytecodePatch(
-    name = "VIPを偽装",
+    name = "Spoof VIP",
     description = "端末内のVIP判定を有効化します。ツールバーのカスタマイズや" +
         "自作きせかえのVIPパーツなど、端末内で完結する機能が使えるように" +
         "なります。クラウドきせかえ・クラウド定型文・AIチャットなど、" +

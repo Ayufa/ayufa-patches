@@ -18,7 +18,7 @@ internal object VipLevelGuideActivityOnCreateFingerprint : Fingerprint(
 
 @Suppress("unused")
 val blockVipGuidePatch = bytecodePatch(
-    name = "VIP案内画面をブロック",
+    name = "Block VIP guide screen",
     description = "VIPの案内画面を開かないようにします。注意: この画面は" +
         "アプリ内のサブスクリプション購入画面も兼ねているため、ブロック中は" +
         "アプリ内から契約できなくなります。有効・無効はアプリ内設定" +

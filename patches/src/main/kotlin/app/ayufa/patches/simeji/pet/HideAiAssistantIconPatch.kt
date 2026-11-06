@@ -45,7 +45,7 @@ internal object StuffHeightFingerprint : Fingerprint(
 
 @Suppress("unused")
 val hideAiAssistantIconPatch = bytecodePatch(
-    name = "AIアシスタントのアイコンを非表示",
+    name = "Hide AI assistant icon",
     description = "キーボード右上に表示されるロボット（AIアシスタント）の" +
         "アイコンと吹き出しメッセージを非表示にします。アイコンがあった" +
         "一番上の帯も畳むので、空の帯は残りません。入力・変換には影響" +
