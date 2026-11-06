@@ -54,21 +54,21 @@ Example use: an old Android 8.0 device (e.g. SOV34) left playing live streams al
 
 ### Simeji
 
-All patches target Simeji **20.7**. Every patch can be toggled in the in-app "Ayufaパッチ設定" screen without re-patching.
+All patches target Simeji **20.7**. Every patch can be toggled in the in-app "Ayufaパッチ設定" screen without re-patching. ⭐ marks the recommended patches (pre-selected in Morphe).
 
 | Patch | What it does |
 |---|---|
-| 広告を非表示 | Removes ads in the suggestion bar, full-screen store-entry ads and web campaign popups. Rewarded ads are blocked too (features unlocked by watching ads stop working) |
-| プロモーションを非表示 | Prevents full-screen campaign / upsell activities from opening |
+| ⭐ 広告を非表示 | Removes ads in the suggestion bar, full-screen store-entry ads and web campaign popups. Rewarded ads are blocked too (features unlocked by watching ads stop working) |
+| ⭐ プロモーションを非表示 | Prevents full-screen campaign / upsell activities from opening |
 | VIP案内画面をブロック | Prevents the VIP guide screen from opening. This screen doubles as the in-app subscription purchase screen, so while it is blocked you cannot subscribe from inside the app |
-| プッシュポップアップを無効化 | Stops dialog-style push campaign popups (normal notifications are not affected) |
+| ⭐ プッシュポップアップを無効化 | Stops dialog-style push campaign popups (normal notifications are not affected) |
 | 解約時の引き止め画面をスキップ | Skips the retention screen shown when cancelling VIP and goes straight to the cancellation flow |
-| 解析レポートを無効化 | Stops event sending to AppsFlyer and Simeji's own statistic reporting. Core features (keyboard, conversion, sync) are not touched |
-| ポイント入口を非表示 | Hides the entry points to the point store and campaigns |
-| レビュー依頼を無効化 | Stops the Google Play rating prompts (both Simeji's own dialog and the Play in-app review flow) |
-| AIアシスタントのアイコンを非表示 | Hides the robot (AI assistant) icon at the top right of the keyboard and its speech-bubble messages. The top strip the icon lived in is collapsed too, so no empty band remains. Input and conversion are not affected |
+| ⭐ 解析レポートを無効化 | Stops event sending to AppsFlyer and Simeji's own statistic reporting. Core features (keyboard, conversion, sync) are not touched |
+| ⭐ ポイント入口を非表示 | Hides the entry points to the point store and campaigns |
+| ⭐ レビュー依頼を無効化 | Stops the Google Play rating prompts (both Simeji's own dialog and the Play in-app review flow) |
+| ⭐ AIアシスタントのアイコンを非表示 | Hides the robot (AI assistant) icon at the top right of the keyboard and its speech-bubble messages. The top strip the icon lived in is collapsed too, so no empty band remains. Input and conversion are not affected |
 | VIPを偽装 | Turns on only the on-device VIP checks. Features that complete entirely on the device, such as toolbar customization and VIP parts in custom skins, become usable (off by default) |
-| アプリ内設定画面を追加 | Adds an "Ayufaパッチ設定" entry at the bottom of Simeji's Settings tab. This patch is required to toggle the other Simeji patches |
+| ⭐ アプリ内設定画面を追加 | Adds an "Ayufaパッチ設定" entry at the bottom of Simeji's Settings tab. This patch is required to toggle the other Simeji patches |
 
 #### Simeji notes
 
