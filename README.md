@@ -114,7 +114,7 @@
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START -->
-> **[v1.3.0-dev.17](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.17)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;15 patches total
+> **[v1.3.0-dev.18](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.18)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;13 patches total
 <details>
 <summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;11 patches</summary>
 <br>
@@ -157,24 +157,6 @@
 |----------|----------------|-----------|
 | [プロモーションを非表示](#) | Yahoo!乗換案内のLY連携プロモーションモーダルを表示しません。 |  |
 | [広告を非表示](#) | Yahoo!乗換案内の広告（各画面のバナー・ネイティブ広告、全画面のオーバーレイ広告）を非表示にします。 |  |
-
-</details>
-
-<details>
-<summary>📦 ウェザーニュース&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
-<br>
-
-**Package name:** `wni.WeathernewsTouch.jp`
-
-**🎯 Supported versions:**
-
-| 7.5.1 |
-| :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| [ポップアップを非表示](#) | ウェザーニュースのアプリ内メッセージ（キャンペーン等のポップアップ、ヘッズアップ表示）を非表示にします。 |  |
-| [広告を非表示](#) | ウェザーニュースの広告（バナー広告、起動時の全画面広告）を非表示にします。 |  |
 
 </details>
 

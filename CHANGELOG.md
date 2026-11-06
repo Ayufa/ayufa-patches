@@ -1,3 +1,9 @@
+## [1.3.0-dev.18](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.17...v1.3.0-dev.18) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* remove the Weathernews patches ([21ea164](https://github.com/Ayufa/ayufa-patches/commit/21ea16455edd534031a370dcd48fd89e3628348d))
+
 ## [1.3.0-dev.17](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.16...v1.3.0-dev.17) (2026-11-06)
 
 ### 🐛 Bug Fixes
