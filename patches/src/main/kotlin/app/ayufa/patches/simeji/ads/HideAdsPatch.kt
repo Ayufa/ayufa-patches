@@ -13,7 +13,7 @@ val hideAdsPatch = bytecodePatch(
         "Webキャンペーンのポップアップ）を非表示にします。リワード広告も" +
         "ブロックします。有効・無効はアプリ内設定（Ayufaパッチ設定）で" +
         "いつでも切り替えられます。",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 

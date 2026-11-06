@@ -34,7 +34,7 @@ val simejiSettingsPatch = bytecodePatch(
         "なしでアプリ内から切り替えられるようになります。他の Simeji " +
         "パッチを切り替えるには、このパッチの適用が必要です（未適用の" +
         "場合は各パッチの初期値どおりに動作します）。",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 

@@ -22,7 +22,7 @@ val hidePromotionsPatch = bytecodePatch(
     description = "全画面のプロモーション画面（キャンペーンやアップセルの" +
         "ページ）を開かないようにします。有効・無効はアプリ内設定" +
         "（Ayufaパッチ設定）でいつでも切り替えられます。",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 

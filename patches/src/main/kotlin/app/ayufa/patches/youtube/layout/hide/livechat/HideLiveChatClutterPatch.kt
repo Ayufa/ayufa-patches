@@ -91,7 +91,7 @@ val hideLiveChatClutterPatch = bytecodePatch(
         "fixes the chat input field being covered by the on-screen keyboard. " +
         "Each can be toggled in Morphe settings (Ayufa patch settings) without re-patching. " +
         "For YouTube 21.30.216.",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_YOUTUBE_MODERN)
 

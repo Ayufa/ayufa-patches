@@ -21,7 +21,7 @@ val hidePointEntryPatch = bytecodePatch(
     description = "ポイントストアやキャンペーンへの入口となる Simejiポイントの" +
         "入口を非表示にします。有効・無効はアプリ内設定（Ayufaパッチ設定）で" +
         "いつでも切り替えられます。",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 

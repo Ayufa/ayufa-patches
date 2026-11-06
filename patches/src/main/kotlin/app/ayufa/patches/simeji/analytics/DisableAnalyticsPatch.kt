@@ -17,7 +17,7 @@ val disableAnalyticsPatch = bytecodePatch(
         "トグルがオンの間だけ無効になります。統計モジュールの初期化には" +
         "触りません（キーボード表示時に設定オブジェクトを参照するため、" +
         "潰すとキーボードが落ちます）。",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 

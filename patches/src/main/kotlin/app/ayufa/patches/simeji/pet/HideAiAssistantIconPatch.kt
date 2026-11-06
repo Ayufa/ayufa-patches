@@ -51,7 +51,7 @@ val hideAiAssistantIconPatch = bytecodePatch(
         "一番上の帯も畳むので、空の帯は残りません。入力・変換には影響" +
         "しません。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも" +
         "切り替えられます。",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 

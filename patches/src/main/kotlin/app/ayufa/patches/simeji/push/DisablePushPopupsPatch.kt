@@ -22,7 +22,7 @@ val disablePushPopupsPatch = bytecodePatch(
     description = "プッシュキャンペーンのポップアップダイアログを表示しなく" +
         "します。通常の通知には影響しません。有効・無効はアプリ内設定" +
         "（Ayufaパッチ設定）でいつでも切り替えられます。",
-    default = false
+    default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
 
