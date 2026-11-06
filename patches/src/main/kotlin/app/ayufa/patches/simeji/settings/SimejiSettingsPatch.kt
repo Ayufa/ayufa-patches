@@ -4,25 +4,28 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.patch.bytecodePatch
 import app.ayufa.patches.simeji.shared.Constants.COMPATIBILITY_SIMEJI
 import app.ayufa.patches.simeji.shared.SIMEJI_SETTINGS_ENTRY_CLASS
-import app.ayufa.patches.simeji.shared.invokeStaticAfterSuper
+import app.ayufa.patches.simeji.shared.invokeStaticBeforeFinalReturn
 
 /**
- * Simeji's settings tab (the 設定 tab of the home screen). Its root
- * view hosts a scrollable list of setting items, and the extension
- * appends the "Ayufaパッチ設定" row at the end of that list.
- * Verified against Simeji 20.7.
+ * Builds the settings tab's item list (the 設定 tab of the home
+ * screen). The list is a static layout of SimejiSettingItemView
+ * items wired up here; it contains a hidden test item that the
+ * extension repurposes into the "Ayufaパッチ設定" entry. The hook
+ * sits at the end of this method so it runs after the fragment has
+ * reset the item, every time the list is built. Verified against
+ * Simeji 20.7.
  */
-internal object SettingHomeFragmentOnViewCreatedFingerprint : Fingerprint(
+internal object SettingHomeFragmentInitItemsFingerprint : Fingerprint(
     definingClass = "Ljp/baidu/simeji/home/setting/SettingHomeFragment;",
-    name = "onViewCreated",
+    name = "initSettingItems",
     returnType = "V",
-    parameters = listOf("Landroid/view/View;", "Landroid/os/Bundle;")
+    parameters = listOf("Landroid/view/View;")
 )
 
 @Suppress("unused")
 val simejiSettingsPatch = bytecodePatch(
     name = "アプリ内設定画面を追加",
-    description = "Simeji の設定タブの末尾に「Ayufaパッチ設定」の入口を" +
+    description = "Simeji の設定タブの一覧に「Ayufaパッチ設定」の入口を" +
         "追加します。各 Simeji パッチの有効・無効や VIP偽装を、再パッチ" +
         "なしでアプリ内から切り替えられるようになります。他の Simeji " +
         "パッチを切り替えるには、このパッチの適用が必要です（未適用の" +
@@ -34,9 +37,8 @@ val simejiSettingsPatch = bytecodePatch(
     extendWith("extensions/youtube.mpe")
 
     execute {
-        SettingHomeFragmentOnViewCreatedFingerprint.method
-            .invokeStaticAfterSuper(
-                "onViewCreated",
+        SettingHomeFragmentInitItemsFingerprint.method
+            .invokeStaticBeforeFinalReturn(
                 "invoke-static { p1 }, " +
                     "$SIMEJI_SETTINGS_ENTRY_CLASS->attach(Landroid/view/View;)V"
             )

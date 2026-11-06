@@ -173,6 +173,23 @@ internal fun MutableMethod.finishIfEnabledAfterSuperOnCreate(
 }
 
 /**
+ * Inserts instructions right before the method's final return-void,
+ * so they run on the normal completion path (early returns, which in
+ * the target methods only guard against null arguments, are skipped).
+ */
+internal fun MutableMethod.invokeStaticBeforeFinalReturn(smali: String) {
+    val methodInstructions = implementation?.instructions
+        ?: throw PatchException("Method has no implementation: $this")
+    val lastReturn = methodInstructions.indexOfLast { instruction ->
+        instruction.opcode == Opcode.RETURN_VOID
+    }
+    if (lastReturn < 0) {
+        throw PatchException("No return-void found in $this")
+    }
+    addInstructions(lastReturn, smali)
+}
+
+/**
  * Inserts a static call right after the super call of the method
  * named [superMethodName] (for example onViewCreated), passing the
  * registers listed in [smali].

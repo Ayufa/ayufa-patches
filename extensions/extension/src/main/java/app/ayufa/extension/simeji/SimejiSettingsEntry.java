@@ -8,14 +8,27 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.lang.reflect.Method;
+
 /**
- * Adds the "Ayufaパッチ設定" row at the end of Simeji's settings tab.
- * Called from the patched {@code SettingHomeFragment.onViewCreated}
- * with the fragment's root view; the actual insertion is posted so it
- * runs after the fragment has built its own items.
+ * Adds the "Ayufaパッチ設定" entry to Simeji's settings tab. Called
+ * from the patched {@code SettingHomeFragment.initSettingItems} with
+ * the fragment's root view, after the fragment has wired up its own
+ * items.
+ *
+ * <p>The settings list is a static layout whose items include a
+ * hidden test item (id below) that the app always sets to GONE with
+ * an empty title. The primary strategy repurposes that item: same
+ * native look, guaranteed placement inside the list. If the item is
+ * missing, a plain row is appended next to a known item instead, and
+ * as a last resort to the scroll view's content.
  */
 public final class SimejiSettingsEntry {
 
+    /** Id of the always-hidden test item in the settings layout. */
+    private static final int TEST_ITEM_ID = 2131364907;
+    /** Id of the "about" item, used as an anchor for the fallback row. */
+    private static final int ABOUT_ITEM_ID = 2131364515;
     private static final String ROW_TAG = "ayufa_simeji_settings_row";
 
     private SimejiSettingsEntry() {
@@ -25,42 +38,69 @@ public final class SimejiSettingsEntry {
         if (root == null) {
             return;
         }
-        root.post(new Runnable() {
-            @Override
-            public void run() {
-                if (!tryAttach(root)) {
-                    // The settings list may be built a moment later;
-                    // retry once before giving up quietly.
-                    root.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            tryAttach(root);
-                        }
-                    }, 600);
-                }
+        try {
+            if (repurposeTestItem(root)) {
+                return;
             }
-        });
+            if (appendNearKnownItem(root)) {
+                return;
+            }
+            appendToScrollContent(root);
+        } catch (Throwable ignored) {
+            // Never crash the host app because of the settings entry.
+        }
     }
 
-    private static boolean tryAttach(View root) {
-        try {
-            ScrollView scrollView = findScrollView(root);
-            if (scrollView == null || scrollView.getChildCount() == 0) {
-                return false;
-            }
-            View child = scrollView.getChildAt(0);
-            if (!(child instanceof ViewGroup)) {
-                return false;
-            }
-            ViewGroup container = (ViewGroup) child;
-            if (container.findViewWithTag(ROW_TAG) != null) {
-                return true;
-            }
-            container.addView(buildRow(root.getContext()));
-            return true;
-        } catch (Throwable ignored) {
+    private static boolean repurposeTestItem(final View root) {
+        View item = root.findViewById(TEST_ITEM_ID);
+        if (item == null) {
             return false;
         }
+        try {
+            Method setTitle = item.getClass().getMethod("setTitle", String.class);
+            setTitle.invoke(item, "Ayufaパッチ設定");
+        } catch (Throwable ignored) {
+            // Without a title the row is useless; keep it hidden.
+            return false;
+        }
+        item.setVisibility(View.VISIBLE);
+        item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SimejiSettingsUi.show(view.getContext());
+            }
+        });
+        return true;
+    }
+
+    private static boolean appendNearKnownItem(View root) {
+        View anchor = root.findViewById(ABOUT_ITEM_ID);
+        if (anchor == null || !(anchor.getParent() instanceof ViewGroup)) {
+            return false;
+        }
+        ViewGroup parent = (ViewGroup) anchor.getParent();
+        if (parent.findViewWithTag(ROW_TAG) != null) {
+            return true;
+        }
+        parent.addView(buildRow(root.getContext()));
+        return true;
+    }
+
+    private static boolean appendToScrollContent(View root) {
+        ScrollView scrollView = findScrollView(root);
+        if (scrollView == null || scrollView.getChildCount() == 0) {
+            return false;
+        }
+        View child = scrollView.getChildAt(0);
+        if (!(child instanceof ViewGroup)) {
+            return false;
+        }
+        ViewGroup container = (ViewGroup) child;
+        if (container.findViewWithTag(ROW_TAG) != null) {
+            return true;
+        }
+        container.addView(buildRow(root.getContext()));
+        return true;
     }
 
     private static View buildRow(final Context context) {
