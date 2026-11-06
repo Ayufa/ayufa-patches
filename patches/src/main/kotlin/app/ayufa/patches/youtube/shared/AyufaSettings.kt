@@ -84,6 +84,29 @@ internal fun ResourcePatchContext.declareAyufaSettingsListPreference(
     }
 }
 
+/**
+ * Declares a free-text (edit text) preference on the same "Ayufa patch
+ * settings" screen. The value is stored as a string in the "morphe_prefs"
+ * shared preferences, like the switches and lists. Used for values the
+ * user types in directly (for example a number of minutes), which the
+ * extension then parses and validates itself.
+ */
+internal fun ResourcePatchContext.declareAyufaSettingsEditTextPreference(
+    key: String,
+    defaultValue: String,
+    enStrings: Map<String, String>,
+    jaStrings: Map<String, String>
+) {
+    editAddonPreferences { document ->
+        addEditTextPreference(document, key, defaultValue)
+    }
+
+    addStrings("res/values/strings.xml", SCREEN_STRINGS_EN + enStrings)
+    if (get("res/values-ja/strings.xml").exists()) {
+        addStrings("res/values-ja/strings.xml", SCREEN_STRINGS_JA + jaStrings)
+    }
+}
+
 private fun ResourcePatchContext.editAddonPreferences(block: (Document) -> Unit) {
     if (!get("morphe_addon_prefs.xml").exists()) {
         get("morphe_addon_prefs.xml").writeText(
@@ -156,6 +179,25 @@ private fun addListPreference(document: Document, key: String, defaultValue: Str
     preference.setAttribute("android:summary", "@string/${key}_summary")
     preference.setAttribute("android:entries", "@array/${key}_entries")
     preference.setAttribute("android:entryValues", "@array/${key}_values")
+    preference.setAttribute("android:defaultValue", defaultValue)
+    ayufaScreen.appendChild(preference)
+}
+
+private fun addEditTextPreference(document: Document, key: String, defaultValue: String) {
+    val ayufaScreen = ayufaScreen(document)
+
+    val existing = ayufaScreen.getElementsByTagName("EditTextPreference")
+    for (i in 0 until existing.length) {
+        val element = existing.item(i) as? Element ?: continue
+        if (element.getAttribute("android:key") == key) {
+            return
+        }
+    }
+
+    val preference = document.createElement("EditTextPreference")
+    preference.setAttribute("android:key", key)
+    preference.setAttribute("android:title", "@string/${key}_title")
+    preference.setAttribute("android:summary", "@string/${key}_summary")
     preference.setAttribute("android:defaultValue", defaultValue)
     ayufaScreen.appendChild(preference)
 }

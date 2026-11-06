@@ -12,9 +12,9 @@ internal object Constants {
      * (patches/src/main/kotlin/app/morphe/patches/youtube/shared/Constants.kt:
      * "20.26.46 // Last version for Android 8.0").
      *
-     * The live latency keeper patch was originally developed and verified
-     * against this target; it also supports the modern target below (the
-     * media progress fingerprint is the same one upstream uses for both).
+     * The live latency keeper patch targets this version only (since
+     * v1.2.0-dev.6, at the owner's request: the keeper is for the
+     * Android 8.0 device that plays live streams for long hours).
      */
     val COMPATIBILITY_YOUTUBE_ANDROID_8 = Compatibility(
         name = "YouTube",
@@ -41,7 +41,7 @@ internal object Constants {
      * 21.30.216 is the newest non-experimental target declared by upstream
      * MorpheApp/morphe-patches (the recommended target for current Android).
      * The live chat clutter patch is developed and verified against
-     * this target; the live latency keeper supports it as well.
+     * this target.
      */
     val COMPATIBILITY_YOUTUBE_MODERN = Compatibility(
         name = "YouTube",

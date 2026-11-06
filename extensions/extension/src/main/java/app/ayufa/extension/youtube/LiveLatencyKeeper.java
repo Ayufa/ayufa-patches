@@ -31,9 +31,10 @@ import java.lang.reflect.Method;
  * behind playback has fallen: it momentarily pauses playback and resumes
  * it right away. Resuming a live stream snaps playback to the newest
  * position, so the amount of lag never needs to be measured or turned
- * into a seek distance. The interval can be changed in Morphe settings
- * (Ayufa patch settings); until it is changed there, the interval
- * configured at patch time applies.
+ * into a seek distance. The interval (in minutes) can be typed in
+ * directly in Morphe settings (Ayufa patch settings), from 0 to 120
+ * minutes; 0 turns the automatic re-sync off. Until it is changed
+ * there, the interval configured at patch time applies.
  *
  * <p>The pause/resume is sent as media key events through
  * {@link AudioManager#dispatchMediaKeyEvent(KeyEvent)} with
@@ -63,7 +64,7 @@ public final class LiveLatencyKeeper {
 
     private static final String MORPHE_PREFS_NAME = "morphe_prefs";
     private static final String KEY_KEEP_LIVE_AT_EDGE = "ayufa_keep_live_at_edge";
-    private static final String KEY_SYNC_INTERVAL_SECONDS = "ayufa_live_sync_interval_seconds";
+    private static final String KEY_SYNC_INTERVAL_MINUTES = "ayufa_live_sync_interval_minutes";
 
     // Shared preferences holding the Morphe settings, resolved lazily.
     private static SharedPreferences morphePrefs;
@@ -75,10 +76,10 @@ public final class LiveLatencyKeeper {
     // value of the patch option (default sync interval). Do not make
     // this field final.
 
-    private static int checkIntervalSeconds;
+    private static int checkIntervalMinutes;
 
     static {
-        checkIntervalSeconds = 45;
+        checkIntervalMinutes = 10;
     }
 
     // endregion
@@ -188,8 +189,14 @@ public final class LiveLatencyKeeper {
             }
 
             // Re-sync at the configured interval, regardless of how
-            // much lag has accumulated.
-            if (now - lastCheckAtMs < syncIntervalSeconds() * 1000L) {
+            // much lag has accumulated. An interval of 0 minutes turns
+            // the automatic re-sync off.
+            int intervalMinutes = syncIntervalMinutes();
+            if (intervalMinutes <= 0) {
+                lastCheckAtMs = now;
+                return;
+            }
+            if (now - lastCheckAtMs < intervalMinutes * 60_000L) {
                 return;
             }
             lastCheckAtMs = now;
@@ -336,26 +343,26 @@ public final class LiveLatencyKeeper {
     }
 
     /**
-     * The re-sync interval in seconds: the value chosen in Morphe
+     * The re-sync interval in minutes: the value typed in Morphe
      * settings when one is set, otherwise the interval configured at
-     * patch time.
+     * patch time. Typed-in values are clamped to 0..120 minutes
+     * (0 turns the automatic re-sync off); unparseable values fall
+     * back to the patch-time default.
      */
-    private static int syncIntervalSeconds() {
+    private static int syncIntervalMinutes() {
         SharedPreferences prefs = settings();
         if (prefs != null) {
             try {
-                String value = prefs.getString(KEY_SYNC_INTERVAL_SECONDS, null);
+                String value = prefs.getString(KEY_SYNC_INTERVAL_MINUTES, null);
                 if (value != null) {
                     int parsed = Integer.parseInt(value.trim());
-                    if (parsed >= 5 && parsed <= 600) {
-                        return parsed;
-                    }
+                    return Math.max(0, Math.min(120, parsed));
                 }
             } catch (Throwable ignored) {
                 // Fall through to the patch-time default.
             }
         }
-        return checkIntervalSeconds;
+        return checkIntervalMinutes;
     }
 
     private static Context resolveAppContext() {
