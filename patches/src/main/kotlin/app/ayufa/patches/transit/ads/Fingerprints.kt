@@ -21,13 +21,12 @@ private fun constructorFingerprints(
 }
 
 /**
- * Constructors of every ad placement view in the app. The views'
- * load/render methods are R8-obfuscated and differ per screen,
- * but the view classes kept their names and the standard Android
- * view constructor signatures, so each view is hidden (GONE) at
- * construction time instead. Verified against Yahoo! Transit 8.5.8.
+ * Every ad placement view class in the app. The views' load/render
+ * methods are R8-obfuscated and differ per screen, but the view
+ * classes kept their names and the standard Android view
+ * constructor signatures. Verified against Yahoo! Transit 8.5.8.
  */
-internal val adViewConstructorFingerprints: List<Fingerprint> = listOf(
+internal val AD_VIEW_CLASSES = listOf(
     // Each screen's banner / native ad views (transit/ad).
     "Ljp/co/yahoo/android/apps/transit/ad/NaviSearchTopAdView;",
     "Ljp/co/yahoo/android/apps/transit/ad/NaviSearchBottomAdView;",
@@ -46,12 +45,41 @@ internal val adViewConstructorFingerprints: List<Fingerprint> = listOf(
     "Ljp/co/yahoo/android/apps/transit/ad/YdnInfeed002FullWidthImageView;",
     "Ljp/co/yahoo/android/apps/transit/ad/YdnInfeedImageWidth1200View;",
     "Ljp/co/yahoo/android/apps/transit/ad/YdnInfeedImageWidth65View;",
+    // Text ads.
+    "Ljp/co/yahoo/android/apps/transit/ad/YdaTextLarge;",
     // Full-screen overlay ads (Yahoo ads SDK).
-    "Ljp/co/yahoo/android/ads/YJCpfOverlayView;"
-).flatMap { definingClass ->
-    constructorFingerprints(definingClass, listOf(CONTEXT_ATTRS, CONTEXT_ATTRS_INT))
-} + constructorFingerprints(
-    // Search-result rows only expose the 3-argument constructor.
-    "Ljp/co/yahoo/android/apps/transit/ui/view/navi/list/SearchResultListRowAdView;",
-    listOf(CONTEXT_ATTRS_INT)
+    "Ljp/co/yahoo/android/ads/YJCpfOverlayView;",
+    // In-list ad rows on the search result screen.
+    "Ljp/co/yahoo/android/apps/transit/ui/view/navi/list/SearchResultListRowAdView;"
 )
+
+internal val adViewConstructorFingerprints: List<Fingerprint> =
+    AD_VIEW_CLASSES.flatMap { definingClass ->
+        if (definingClass.endsWith("SearchResultListRowAdView;")) {
+            // Search-result rows only expose the 3-argument constructor.
+            constructorFingerprints(definingClass, listOf(CONTEXT_ATTRS_INT))
+        } else {
+            constructorFingerprints(
+                definingClass,
+                listOf(CONTEXT_ATTRS, CONTEXT_ATTRS_INT)
+            )
+        }
+    }
+
+/**
+ * The ad views share a visibility state machine: a declared
+ * setVisibility(<state enum>) method that force-shows the view's
+ * inner root and toggles loading / ad / error children whenever
+ * the ad state changes. Hiding the view at construction time is
+ * not enough, because the state machine revives the slot (an
+ * empty ad frame on the search result screen was the visible
+ * symptom). Classes without such a method are skipped.
+ */
+internal val adViewStateMachineFingerprints: List<Fingerprint> =
+    AD_VIEW_CLASSES.map { definingClass ->
+        Fingerprint(
+            definingClass = definingClass,
+            name = "setVisibility",
+            returnType = "V"
+        )
+    }
