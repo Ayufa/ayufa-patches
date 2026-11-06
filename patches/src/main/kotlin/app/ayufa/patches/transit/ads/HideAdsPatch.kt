@@ -5,6 +5,7 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.ayufa.patches.transit.shared.Constants.COMPATIBILITY_YAHOO_TRANSIT
 import app.ayufa.patches.transit.shared.forceVisibilityCallsGone
 import app.ayufa.patches.transit.shared.goneAfterSuperInit
+import app.ayufa.patches.transit.shared.pinVisibilityGone
 
 @Suppress("unused")
 val hideTransitAdsPatch = bytecodePatch(
@@ -20,6 +21,17 @@ val hideTransitAdsPatch = bytecodePatch(
         // ad slot that starts out GONE has no area to render into.
         adViewConstructorFingerprints.forEach { fingerprint ->
             fingerprint.method.goneAfterSuperInit()
+        }
+
+        // Slots are also re-shown from outside the view (state
+        // collectors and load callbacks call setVisibility(VISIBLE)
+        // on the view). Give every ad view a setVisibility override
+        // that always applies GONE, so no caller can revive it.
+        AD_VIEW_CLASSES.forEach { classType ->
+            val anyConstructor = adViewConstructorFingerprints.first {
+                it.definingClass == classType
+            }
+            anyConstructor.classDef.pinVisibilityGone()
         }
 
         // The views' own visibility state machines force the slot

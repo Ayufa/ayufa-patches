@@ -2,6 +2,16 @@ package app.ayufa.patches.transit.shared
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.util.proxy.mutableTypes.MutableClass
+import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
+import com.android.tools.smali.dexlib2.AccessFlags
+import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
+import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction10x
+import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction21s
+import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction35c
+import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
+import com.android.tools.smali.dexlib2.immutable.ImmutableMethodParameter
+import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
@@ -108,4 +118,51 @@ internal fun MutableMethod.forceVisibilityCallsGone() {
         }
         addInstructions(index, "const/16 v$argRegister, 0x8")
     }
+}
+
+/**
+ * Adds a setVisibility(int) override to this class that always
+ * applies GONE, whatever the caller asked for. Several ad slots
+ * are re-shown by code outside the view itself (state collectors,
+ * image-load callbacks in the ad manager package all call
+ * View.setVisibility(VISIBLE) on the view), so hiding at
+ * construction time or inside the view's own state machine is
+ * not enough; the override intercepts every show request at
+ * dispatch time. No-op if the class already declares the method.
+ */
+internal fun MutableClass.pinVisibilityGone() {
+    val alreadyDeclared = methods.any {
+        it.name == "setVisibility" && it.parameterTypes == listOf("I")
+    }
+    if (alreadyDeclared) return
+
+    val viewSetVisibility = ImmutableMethodReference(
+        "Landroid/view/View;",
+        "setVisibility",
+        listOf("I"),
+        "V"
+    )
+    val implementation = MutableMethodImplementation(3)
+    implementation.instructions.addAll(
+        listOf(
+            BuilderInstruction21s(Opcode.CONST_16, 0, 8),
+            BuilderInstruction35c(
+                Opcode.INVOKE_SUPER, 2, 1, 0, 0, 0, 0, viewSetVisibility
+            ),
+            BuilderInstruction10x(Opcode.RETURN_VOID)
+        )
+    )
+    val override = MutableMethod(
+        ImmutableMethod(
+            type,
+            "setVisibility",
+            listOf(ImmutableMethodParameter("I", null, null)),
+            "V",
+            AccessFlags.PUBLIC.value,
+            null,
+            null,
+            implementation
+        )
+    )
+    virtualMethods.add(override)
 }
