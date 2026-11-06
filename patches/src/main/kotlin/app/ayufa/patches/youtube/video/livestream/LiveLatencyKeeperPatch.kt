@@ -5,7 +5,7 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.intOption
 import app.morphe.patcher.patch.resourcePatch
 import app.ayufa.patches.youtube.shared.Constants.COMPATIBILITY_YOUTUBE_ANDROID_8
-import app.ayufa.patches.youtube.shared.Constants.COMPATIBILITY_YOUTUBE_MODERN
+import app.ayufa.patches.youtube.shared.declareAyufaSettingsEditTextPreference
 import app.ayufa.patches.youtube.shared.declareAyufaSettingsSwitches
 import app.morphe.patcher.util.proxy.mutableTypes.encodedValue.MutableIntEncodedValue
 
@@ -15,9 +15,19 @@ private const val EXTENSION_CLASS = "Lapp/ayufa/extension/youtube/LiveLatencyKee
 // runtime. The extension reads the same key from "morphe_prefs".
 private const val KEY_KEEP_LIVE_AT_EDGE = "ayufa_keep_live_at_edge"
 
+// Key of the Morphe settings text field that sets the re-sync interval
+// (in minutes) at runtime. The user types the value in directly; the
+// extension reads the same key from "morphe_prefs", parses it and
+// clamps it to 0..120 (0 turns the automatic re-sync off).
+private const val KEY_SYNC_INTERVAL_MINUTES = "ayufa_live_sync_interval_minutes"
+
+private const val DEFAULT_SYNC_INTERVAL_MINUTES = "10"
+
 /**
- * Declares the keeper's on/off switch on the dedicated "Ayufa patch
- * settings" screen in Morphe settings. See [declareAyufaSettingsSwitches].
+ * Declares the keeper's on/off switch and the re-sync interval text
+ * field on the dedicated "Ayufa patch settings" screen in Morphe
+ * settings. See [declareAyufaSettingsSwitches] and
+ * [declareAyufaSettingsEditTextPreference].
  */
 private val liveLatencyKeeperSettingsPatch = resourcePatch {
     execute {
@@ -26,14 +36,31 @@ private val liveLatencyKeeperSettingsPatch = resourcePatch {
             enStrings = mapOf(
                 "${KEY_KEEP_LIVE_AT_EDGE}_title" to "Keep live streams at the live edge",
                 "${KEY_KEEP_LIVE_AT_EDGE}_summary" to
-                    "Periodically checks live playback and seeks to the live edge " +
-                    "when it has fallen behind. Takes effect immediately."
+                    "At a fixed interval, momentarily pauses and resumes live playback " +
+                    "to snap it back to the newest position. Takes effect immediately."
             ),
             jaStrings = mapOf(
                 "${KEY_KEEP_LIVE_AT_EDGE}_title" to "ライブ配信を最新の状態に保つ",
                 "${KEY_KEEP_LIVE_AT_EDGE}_summary" to
-                    "ライブ再生が遅れてきたら、自動で最新の位置（ライブの先端）へ進めます。" +
+                    "一定の間隔で、ライブ再生を瞬間的に停止→再生して最新の位置に合わせ直します。" +
                     "その場で反映されます。"
+            )
+        )
+        declareAyufaSettingsEditTextPreference(
+            key = KEY_SYNC_INTERVAL_MINUTES,
+            defaultValue = DEFAULT_SYNC_INTERVAL_MINUTES,
+            enStrings = mapOf(
+                "${KEY_SYNC_INTERVAL_MINUTES}_title" to "Live sync interval (minutes)",
+                "${KEY_SYNC_INTERVAL_MINUTES}_summary" to
+                    "Type in how often (0-120 minutes) live playback is snapped back " +
+                    "to the newest position with a momentary pause and resume. " +
+                    "0 turns the automatic re-sync off. Takes effect immediately."
+            ),
+            jaStrings = mapOf(
+                "${KEY_SYNC_INTERVAL_MINUTES}_title" to "先端に合わせる間隔（分）",
+                "${KEY_SYNC_INTERVAL_MINUTES}_summary" to
+                    "ライブ再生を停止→再生で最新に合わせ直す間隔を、0〜120分で入力します。" +
+                    "0分では自動更新しません。その場で反映されます。"
             )
         )
     }
@@ -41,75 +68,55 @@ private val liveLatencyKeeperSettingsPatch = resourcePatch {
 
 // Defaults declared in the extension class <clinit>.
 // The patch rewrites these literals when the user changes the options.
-private const val DEFAULT_CHECK_INTERVAL_SECONDS = 45
-private const val DEFAULT_THRESHOLD_SECONDS = 15
-private const val DEFAULT_SAFETY_SECONDS = 2
+private const val DEFAULT_CHECK_INTERVAL_MINUTES = 10
 
 private val checkIntervalOption = intOption(
-    key = "liveLatencyCheckIntervalSeconds",
-    default = DEFAULT_CHECK_INTERVAL_SECONDS,
+    key = "liveLatencySyncIntervalMinutes",
+    default = DEFAULT_CHECK_INTERVAL_MINUTES,
     values = mapOf(
-        "15 seconds" to 15,
-        "30 seconds" to 30,
-        "45 seconds" to 45,
-        "60 seconds" to 60,
-        "120 seconds" to 120
+        "Off (0 minutes)" to 0,
+        "1 minute" to 1,
+        "2 minutes" to 2,
+        "3 minutes" to 3,
+        "5 minutes" to 5,
+        "10 minutes" to 10,
+        "15 minutes" to 15,
+        "20 minutes" to 20,
+        "30 minutes" to 30,
+        "45 minutes" to 45,
+        "60 minutes" to 60,
+        "90 minutes" to 90,
+        "120 minutes" to 120
     ),
-    title = "Check interval",
-    description = "How often to check how far live playback is behind the live edge.",
-    required = true
-)
-
-private val thresholdOption = intOption(
-    key = "liveLatencyThresholdSeconds",
-    default = DEFAULT_THRESHOLD_SECONDS,
-    values = mapOf(
-        "10 seconds" to 10,
-        "15 seconds" to 15,
-        "30 seconds" to 30,
-        "60 seconds" to 60
-    ),
-    title = "Catch-up threshold",
-    description = "Seek to the live edge when playback is behind it by more than this.",
-    required = true
-)
-
-private val safetyOption = intOption(
-    key = "liveLatencySafetySeconds",
-    default = DEFAULT_SAFETY_SECONDS,
-    values = mapOf(
-        "0 seconds" to 0,
-        "2 seconds" to 2,
-        "5 seconds" to 5
-    ),
-    title = "Live edge safety margin",
-    description = "Seek to this many seconds before the live edge, to avoid rebuffering at the very edge.",
+    title = "Default sync interval (minutes)",
+    description = "How often live playback is snapped back to the newest position " +
+        "with a momentary pause and resume. " +
+        "Used until the interval is changed in Morphe settings (Ayufa patch settings), " +
+        "where any value from 0 to 120 minutes can be typed in.",
     required = true
 )
 
 @Suppress("unused")
 val liveLatencyKeeperPatch = bytecodePatch(
     name = "Live latency keeper",
-    description = "Periodically checks live stream playback and automatically seeks to the " +
-        "live edge when playback has fallen behind. Can be toggled in Morphe settings " +
-        "(Ayufa patch settings) without re-patching. For YouTube 20.26.46 (Android 8.0) " +
-        "and 21.30.216. Requires the official Morphe patches to be applied as well.",
+    description = "At a fixed interval, momentarily pauses and resumes live stream playback " +
+        "so it snaps back to the live edge (the newest position), no matter how far behind " +
+        "it has fallen. The interval (any value from 0 to 120 minutes, typed in directly) " +
+        "and the on/off switch can be changed in " +
+        "Morphe settings (Ayufa patch settings) without re-patching. For YouTube 20.26.46 " +
+        "(Android 8.0) only. Requires the official Morphe patches to be applied as well.",
     default = false
 ) {
-    compatibleWith(COMPATIBILITY_YOUTUBE_ANDROID_8, COMPATIBILITY_YOUTUBE_MODERN)
+    compatibleWith(COMPATIBILITY_YOUTUBE_ANDROID_8)
 
     dependsOn(liveLatencyKeeperSettingsPatch)
 
     extendWith("extensions/youtube.mpe")
 
     checkIntervalOption()
-    thresholdOption()
-    safetyOption()
 
     execute {
-        val checkIntervalSeconds by checkIntervalOption
-        val thresholdSeconds by thresholdOption
-        val safetySeconds by safetyOption
+        val checkIntervalMinutes by checkIntervalOption
 
         // Write the option values into the extension class by replacing the
         // static initial values of its config fields. (The extension is
@@ -119,9 +126,7 @@ val liveLatencyKeeperPatch = bytecodePatch(
         try {
             if (classDefByOrNull(EXTENSION_CLASS) != null) {
                 val extensionClass = mutableClassDefBy(EXTENSION_CLASS)
-                setFieldInitialValue(extensionClass, "checkIntervalSeconds", checkIntervalSeconds)
-                setFieldInitialValue(extensionClass, "thresholdSeconds", thresholdSeconds)
-                setFieldInitialValue(extensionClass, "safetySeconds", safetySeconds)
+                setFieldInitialValue(extensionClass, "checkIntervalMinutes", checkIntervalMinutes)
             }
         } catch (ex: Exception) {
             // Keep the extension defaults.

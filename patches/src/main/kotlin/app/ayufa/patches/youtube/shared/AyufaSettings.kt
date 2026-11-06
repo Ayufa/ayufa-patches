@@ -8,12 +8,12 @@ internal const val AYUFA_SETTINGS_SCREEN_KEY = "ayufa_settings_screen"
 
 private val SCREEN_STRINGS_EN = mapOf(
     "ayufa_settings_screen_title" to "Ayufa patch settings",
-    "ayufa_settings_screen_summary" to "Settings for Ayufa YouTube Patches."
+    "ayufa_settings_screen_summary" to "Settings for Ayufa Patches."
 )
 
 private val SCREEN_STRINGS_JA = mapOf(
     "ayufa_settings_screen_title" to "Ayufaパッチ設定",
-    "ayufa_settings_screen_summary" to "Ayufa YouTube Patches の設定です。"
+    "ayufa_settings_screen_summary" to "Ayufa Patches の設定です。"
 )
 
 /**
@@ -39,13 +39,7 @@ internal fun ResourcePatchContext.declareAyufaSettingsSwitches(
     enStrings: Map<String, String>,
     jaStrings: Map<String, String>
 ) {
-    if (!get("morphe_addon_prefs.xml").exists()) {
-        get("morphe_addon_prefs.xml").writeText(
-            "<morphe-add-on-preferences " +
-                "xmlns:android=\"http://schemas.android.com/apk/res/android\"/>"
-        )
-    }
-    document("morphe_addon_prefs.xml").use { document ->
+    editAddonPreferences { document ->
         addSwitches(document, keys)
     }
 
@@ -55,32 +49,105 @@ internal fun ResourcePatchContext.declareAyufaSettingsSwitches(
     }
 }
 
-private fun addSwitches(document: Document, keys: List<String>) {
-    val root = document.documentElement
+/**
+ * Declares a single-choice list preference on the same "Ayufa patch
+ * settings" screen. [values] are the stored values; [enLabels] and
+ * [jaLabels] are the labels shown for them, index-aligned with [values].
+ * The choice is stored as a string in the "morphe_prefs" shared
+ * preferences, like the switches.
+ */
+internal fun ResourcePatchContext.declareAyufaSettingsListPreference(
+    key: String,
+    values: List<String>,
+    enLabels: List<String>,
+    jaLabels: List<String>,
+    defaultValue: String,
+    enStrings: Map<String, String>,
+    jaStrings: Map<String, String>
+) {
+    require(values.size == enLabels.size && values.size == jaLabels.size) {
+        "List preference labels must align with values: $key"
+    }
+    editAddonPreferences { document ->
+        addListPreference(document, key, defaultValue)
+    }
 
-    // Find the Ayufa settings screen if another patch already declared it.
-    var ayufaScreen: Element? = null
+    addStrings("res/values/strings.xml", SCREEN_STRINGS_EN + enStrings)
+    if (get("res/values-ja/strings.xml").exists()) {
+        addStrings("res/values-ja/strings.xml", SCREEN_STRINGS_JA + jaStrings)
+    }
+
+    addStringArray("res/values/arrays.xml", "${key}_values", values)
+    addStringArray("res/values/arrays.xml", "${key}_entries", enLabels)
+    if (get("res/values-ja/strings.xml").exists()) {
+        addStringArray("res/values-ja/arrays.xml", "${key}_entries", jaLabels)
+    }
+}
+
+/**
+ * Declares a free-text (edit text) preference on the same "Ayufa patch
+ * settings" screen. The value is stored as a string in the "morphe_prefs"
+ * shared preferences, like the switches and lists. Used for values the
+ * user types in directly (for example a number of minutes), which the
+ * extension then parses and validates itself.
+ */
+internal fun ResourcePatchContext.declareAyufaSettingsEditTextPreference(
+    key: String,
+    defaultValue: String,
+    enStrings: Map<String, String>,
+    jaStrings: Map<String, String>
+) {
+    editAddonPreferences { document ->
+        addEditTextPreference(document, key, defaultValue)
+    }
+
+    addStrings("res/values/strings.xml", SCREEN_STRINGS_EN + enStrings)
+    if (get("res/values-ja/strings.xml").exists()) {
+        addStrings("res/values-ja/strings.xml", SCREEN_STRINGS_JA + jaStrings)
+    }
+}
+
+private fun ResourcePatchContext.editAddonPreferences(block: (Document) -> Unit) {
+    if (!get("morphe_addon_prefs.xml").exists()) {
+        get("morphe_addon_prefs.xml").writeText(
+            "<morphe-add-on-preferences " +
+                "xmlns:android=\"http://schemas.android.com/apk/res/android\"/>"
+        )
+    }
+    document("morphe_addon_prefs.xml").use { document ->
+        block(document)
+    }
+}
+
+/**
+ * Finds the Ayufa settings screen in the add-on document, creating it
+ * (attached to the Morphe settings root screen) when missing.
+ */
+private fun ayufaScreen(document: Document): Element {
+    val root = document.documentElement
     val existingScreens = root.getElementsByTagName("PreferenceScreen")
     for (i in 0 until existingScreens.length) {
         val element = existingScreens.item(i) as? Element ?: continue
         if (element.getAttribute("android:key") == AYUFA_SETTINGS_SCREEN_KEY) {
-            ayufaScreen = element
-            break
+            return element
         }
     }
 
-    if (ayufaScreen == null) {
-        ayufaScreen = document.createElement("PreferenceScreen")
-        ayufaScreen.setAttribute("android:key", AYUFA_SETTINGS_SCREEN_KEY)
-        ayufaScreen.setAttribute("android:title", "@string/ayufa_settings_screen_title")
-        ayufaScreen.setAttribute("android:summary", "@string/ayufa_settings_screen_summary")
+    val screen = document.createElement("PreferenceScreen")
+    screen.setAttribute("android:key", AYUFA_SETTINGS_SCREEN_KEY)
+    screen.setAttribute("android:title", "@string/ayufa_settings_screen_title")
+    screen.setAttribute("android:summary", "@string/ayufa_settings_screen_summary")
 
-        // A screen declaration without a key or position is added to the
-        // Morphe settings root screen.
-        val screen = document.createElement("screen")
-        screen.appendChild(ayufaScreen)
-        root.appendChild(screen)
-    }
+    // A screen declaration without a key or position is added to the
+    // Morphe settings root screen.
+    val wrapper = document.createElement("screen")
+    wrapper.appendChild(screen)
+    root.appendChild(wrapper)
+    return screen
+}
+
+private fun addSwitches(document: Document, keys: List<String>) {
+    val ayufaScreen = ayufaScreen(document)
 
     val existingKeys = mutableSetOf<String>()
     val existingSwitches = ayufaScreen.getElementsByTagName("SwitchPreference")
@@ -92,6 +159,78 @@ private fun addSwitches(document: Document, keys: List<String>) {
         if (key !in existingKeys) {
             ayufaScreen.appendChild(switchPreference(document, key))
         }
+    }
+}
+
+private fun addListPreference(document: Document, key: String, defaultValue: String) {
+    val ayufaScreen = ayufaScreen(document)
+
+    val existingLists = ayufaScreen.getElementsByTagName("ListPreference")
+    for (i in 0 until existingLists.length) {
+        val element = existingLists.item(i) as? Element ?: continue
+        if (element.getAttribute("android:key") == key) {
+            return
+        }
+    }
+
+    val preference = document.createElement("ListPreference")
+    preference.setAttribute("android:key", key)
+    preference.setAttribute("android:title", "@string/${key}_title")
+    preference.setAttribute("android:summary", "@string/${key}_summary")
+    preference.setAttribute("android:entries", "@array/${key}_entries")
+    preference.setAttribute("android:entryValues", "@array/${key}_values")
+    preference.setAttribute("android:defaultValue", defaultValue)
+    ayufaScreen.appendChild(preference)
+}
+
+private fun addEditTextPreference(document: Document, key: String, defaultValue: String) {
+    val ayufaScreen = ayufaScreen(document)
+
+    val existing = ayufaScreen.getElementsByTagName("EditTextPreference")
+    for (i in 0 until existing.length) {
+        val element = existing.item(i) as? Element ?: continue
+        if (element.getAttribute("android:key") == key) {
+            return
+        }
+    }
+
+    val preference = document.createElement("EditTextPreference")
+    preference.setAttribute("android:key", key)
+    preference.setAttribute("android:title", "@string/${key}_title")
+    preference.setAttribute("android:summary", "@string/${key}_summary")
+    preference.setAttribute("android:defaultValue", defaultValue)
+    ayufaScreen.appendChild(preference)
+}
+
+/**
+ * Appends a string-array resource, creating the arrays file when the
+ * target APK does not have one and skipping names that already exist.
+ */
+private fun ResourcePatchContext.addStringArray(
+    path: String,
+    name: String,
+    items: List<String>
+) {
+    if (!get(path).exists()) {
+        get(path).writeText("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources/>\n")
+    }
+    document(path).use { document ->
+        val root = document.documentElement
+        val nodes = root.getElementsByTagName("string-array")
+        for (i in 0 until nodes.length) {
+            val element = nodes.item(i) as? Element ?: continue
+            if (element.getAttribute("name") == name) {
+                return@use
+            }
+        }
+        val array = document.createElement("string-array")
+        array.setAttribute("name", name)
+        for (item in items) {
+            val itemElement = document.createElement("item")
+            itemElement.textContent = item
+            array.appendChild(itemElement)
+        }
+        root.appendChild(array)
     }
 }
 

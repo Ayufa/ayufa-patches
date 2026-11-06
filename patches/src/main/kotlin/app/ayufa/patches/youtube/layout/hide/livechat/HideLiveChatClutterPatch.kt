@@ -1,6 +1,7 @@
 package app.ayufa.patches.youtube.layout.hide.livechat
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
+import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.booleanOption
 import app.morphe.patcher.patch.bytecodePatch
@@ -8,11 +9,17 @@ import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.ayufa.patches.youtube.shared.Constants.COMPATIBILITY_YOUTUBE_MODERN
 import app.ayufa.patches.youtube.shared.declareAyufaSettingsSwitches
+import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
+import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
+import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 
 private const val EXTENSION_CLASS = "Lapp/ayufa/extension/youtube/LiveChatClutterHider;"
+private const val KEYBOARD_EXTENSION_CLASS = "Lapp/ayufa/extension/youtube/LiveChatKeyboardFix;"
 
 private const val KEY_HIDE_PINNED_BANNER = "ayufa_hide_live_chat_pinned_banner"
 private const val KEY_HIDE_POLL = "ayufa_hide_live_chat_poll"
+private const val KEY_FIX_LIVE_CHAT_KEYBOARD = "ayufa_fix_live_chat_keyboard"
 
 private val hidePinnedBannerOption = booleanOption(
     key = "hideLiveChatPinnedBanner",
@@ -28,14 +35,22 @@ private val hidePollsOption = booleanOption(
     description = "Hides poll (questionnaire) cards shown in the live chat."
 )
 
+private val fixLiveChatKeyboardOption = booleanOption(
+    key = "fixLiveChatKeyboard",
+    default = true,
+    title = "Fix live chat keyboard overlap",
+    description = "Fixes the live chat input field being covered by the on-screen " +
+        "keyboard while typing."
+)
+
 /**
- * Declares the two features as switches on the dedicated "Ayufa patch
+ * Declares the features as switches on the dedicated "Ayufa patch
  * settings" screen in Morphe settings. See [declareAyufaSettingsSwitches].
  */
 private val hideLiveChatClutterSettingsPatch = resourcePatch {
     execute {
         declareAyufaSettingsSwitches(
-            keys = listOf(KEY_HIDE_PINNED_BANNER, KEY_HIDE_POLL),
+            keys = listOf(KEY_HIDE_PINNED_BANNER, KEY_HIDE_POLL, KEY_FIX_LIVE_CHAT_KEYBOARD),
             enStrings = mapOf(
                 "${KEY_HIDE_PINNED_BANNER}_title" to "Hide pinned message banner",
                 "${KEY_HIDE_PINNED_BANNER}_summary" to
@@ -44,7 +59,11 @@ private val hideLiveChatClutterSettingsPatch = resourcePatch {
                 "${KEY_HIDE_POLL}_title" to "Hide live chat polls",
                 "${KEY_HIDE_POLL}_summary" to
                     "Hides poll cards shown in the live chat. " +
-                    "Takes effect the next time a chat is opened."
+                    "Takes effect the next time a chat is opened.",
+                "${KEY_FIX_LIVE_CHAT_KEYBOARD}_title" to "Fix live chat keyboard overlap",
+                "${KEY_FIX_LIVE_CHAT_KEYBOARD}_summary" to
+                    "Lifts the live chat input above the on-screen keyboard so it is " +
+                    "not covered while typing. Takes effect the next time a chat is opened."
             ),
             jaStrings = mapOf(
                 "${KEY_HIDE_PINNED_BANNER}_title" to "固定メッセージ（バナー）を隠す",
@@ -54,6 +73,11 @@ private val hideLiveChatClutterSettingsPatch = resourcePatch {
                 "${KEY_HIDE_POLL}_title" to "アンケートを隠す",
                 "${KEY_HIDE_POLL}_summary" to
                     "ライブチャットに表示されるアンケートカードを非表示にします。" +
+                    "次にチャットを開いたときから反映されます。",
+                "${KEY_FIX_LIVE_CHAT_KEYBOARD}_title" to "ライブチャットのキーボード重なりを修正",
+                "${KEY_FIX_LIVE_CHAT_KEYBOARD}_summary" to
+                    "文字入力中にライブチャットの入力欄がキーボードに隠れないよう、" +
+                    "キーボードの高さに合わせてチャットを持ち上げます。" +
                     "次にチャットを開いたときから反映されます。"
             )
         )
@@ -63,7 +87,8 @@ private val hideLiveChatClutterSettingsPatch = resourcePatch {
 @Suppress("unused")
 val hideLiveChatClutterPatch = bytecodePatch(
     name = "Hide live chat clutter",
-    description = "Hides the pinned message banner and poll cards in live chat. " +
+    description = "Hides the pinned message banner and poll cards in live chat, and " +
+        "fixes the chat input field being covered by the on-screen keyboard. " +
         "Each can be toggled in Morphe settings (Ayufa patch settings) without re-patching. " +
         "For YouTube 21.30.216.",
     default = false
@@ -76,10 +101,12 @@ val hideLiveChatClutterPatch = bytecodePatch(
 
     hidePinnedBannerOption()
     hidePollsOption()
+    fixLiveChatKeyboardOption()
 
     execute {
         val hidePinnedBanner by hidePinnedBannerOption
         val hidePolls by hidePollsOption
+        val fixKeyboard by fixLiveChatKeyboardOption
 
         var hookCount = 0
 
@@ -124,12 +151,124 @@ val hideLiveChatClutterPatch = bytecodePatch(
             }
         }
 
+        if (fixKeyboard == true) {
+            // Fingerprint matching needs the patch context, so it happens
+            // here in the execute block; the injection itself is delegated.
+            val setupMatch = LiveChatViewSetupFingerprint.matchAll().singleOrNull()
+                ?: throw PatchException(
+                    "Hide live chat clutter (keyboard fix): the live chat view setup " +
+                        "method was not found exactly once. This patch was verified " +
+                        "only for YouTube 21.30.216."
+                )
+            val paddingMatch = LiveChatBottomPaddingFingerprint.matchAll().singleOrNull()
+                ?: throw PatchException(
+                    "Hide live chat clutter (keyboard fix): the live chat bottom " +
+                        "padding method was not found exactly once. This patch was " +
+                        "verified only for YouTube 21.30.216."
+                )
+            hookLiveChatKeyboardFix(
+                setupMatch.method, setupMatch.classDef.type,
+                paddingMatch.method, paddingMatch.classDef.type
+            )
+            hookCount++
+        }
+
         if (hookCount == 0) {
             throw PatchException(
-                "Hide live chat clutter: no target presenter was found. " +
+                "Hide live chat clutter: no target was found. " +
                     "This patch was verified only for YouTube 21.30.216."
             )
         }
+    }
+}
+
+/**
+ * Installs the live chat keyboard fix (see LiveChatKeyboardFix):
+ *
+ * 1. When the chat controller creates the chat content view (the
+ *    `footer` frame layout), the extension installs an insets listener
+ *    on it that raises its bottom padding above the keyboard.
+ * 2. The controller method that applies the bottom padding gets its
+ *    argument adjusted by the extension, because the app re-applies
+ *    its keyboard-unaware padding whenever new chat data arrives,
+ *    which would otherwise undo the listener's padding right away.
+ */
+private fun hookLiveChatKeyboardFix(
+    setupMethod: MutableMethod,
+    setupClassType: String,
+    paddingMethod: MutableMethod,
+    paddingClassType: String
+) {
+    val setupInstructions = setupMethod.implementation?.instructions
+        ?: throw PatchException(
+            "Hide live chat clutter (keyboard fix): the view setup method has no instructions."
+        )
+    var hookedSetup = false
+    for ((index, instruction) in setupInstructions.withIndex()) {
+        if (instruction.opcode != Opcode.IPUT_OBJECT) {
+            continue
+        }
+        val reference = (instruction as? ReferenceInstruction)?.reference as? FieldReference
+            ?: continue
+        if (reference.definingClass != setupClassType ||
+            reference.type != "Landroid/widget/FrameLayout;"
+        ) {
+            continue
+        }
+        val valueRegister = (instruction as TwoRegisterInstruction).registerA
+        setupMethod.addInstruction(
+            index + 1,
+            "invoke-static/range { v$valueRegister .. v$valueRegister }, " +
+                "$KEYBOARD_EXTENSION_CLASS->install(Landroid/view/View;)V"
+        )
+        hookedSetup = true
+        break
+    }
+    if (!hookedSetup) {
+        throw PatchException(
+            "Hide live chat clutter (keyboard fix): the chat content view " +
+                "field assignment was not found. This patch was verified " +
+                "only for YouTube 21.30.216."
+        )
+    }
+
+    val paddingInstructions = paddingMethod.implementation?.instructions
+        ?: throw PatchException(
+            "Hide live chat clutter (keyboard fix): the bottom padding method has no instructions."
+        )
+    var hookedPadding = false
+    for ((index, instruction) in paddingInstructions.withIndex()) {
+        if (instruction.opcode != Opcode.IGET_OBJECT) {
+            continue
+        }
+        val reference = (instruction as? ReferenceInstruction)?.reference as? FieldReference
+            ?: continue
+        if (reference.definingClass != paddingClassType ||
+            reference.type != "Landroid/widget/FrameLayout;"
+        ) {
+            continue
+        }
+        // The register holding the content view at this point. Adjust the
+        // method's int argument (p1) with the extension before the
+        // original code uses it. The method is small (7 registers), so
+        // the plain invoke form can encode every register.
+        val viewRegister = (instruction as TwoRegisterInstruction).registerA
+        paddingMethod.addInstructions(
+            index + 1,
+            """
+                invoke-static { v$viewRegister, p1 }, $KEYBOARD_EXTENSION_CLASS->effectiveBottomPadding(Landroid/view/View;I)I
+                move-result p1
+            """
+        )
+        hookedPadding = true
+        break
+    }
+    if (!hookedPadding) {
+        throw PatchException(
+            "Hide live chat clutter (keyboard fix): the chat content view " +
+                "field read was not found. This patch was verified only " +
+                "for YouTube 21.30.216."
+        )
     }
 }
 
