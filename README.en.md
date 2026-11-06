@@ -60,6 +60,9 @@ Use the button above to add this repository as a patch source in Morphe, then se
 
 ### ⌨️ Simeji
 
+<details>
+<summary>Simeji patch details</summary>
+
 All patches target Simeji **20.7**. Every patch can be toggled in the in-app "Ayufaパッチ設定" screen without re-patching.
 
 | Patch | What it does |
@@ -81,6 +84,8 @@ All patches target Simeji **20.7**. Every patch can be toggled in the in-app "Ay
 - **Where the settings are**: with 「アプリ内設定画面を追加」 applied, "Ayufaパッチ設定" appears at the very bottom of the **Settings** tab in the Simeji app. Defaults: everything on, except 「VIPを偽装」
 - **Google account sign-in does not work**: a re-signed app cannot pass Google Sign-In's signature check (package name + certificate), and this cannot be worked around with a patch. Signing in with a Baidu account ID/password is not affected
 - **Limits of VIP spoofing**: VIP perks managed on the server (cloud skins, backup, translation, AI quota, etc.) remain unavailable even with spoofing
+
+</details>
 
 ## 🩹 Patches list
 
