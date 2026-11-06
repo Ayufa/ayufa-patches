@@ -1,3 +1,9 @@
+## [1.3.0-dev.6](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.5...v1.3.0-dev.6) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* **simeji:** settings entry hook must run before the parameter register is recycled ([3b3342d](https://github.com/Ayufa/ayufa-patches/commit/3b3342dc39754e8f7843fad4f09d76f7e88a78cd))
+
 ## [1.3.0-dev.5](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.4...v1.3.0-dev.5) (2026-11-06)
 
 ### 🐛 Bug Fixes
