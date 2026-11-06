@@ -142,15 +142,13 @@ internal fun MutableClass.pinVisibilityGone() {
         "V"
     )
     val implementation = MutableMethodImplementation(3)
-    implementation.instructions.addAll(
-        listOf(
-            BuilderInstruction21s(Opcode.CONST_16, 0, 8),
-            BuilderInstruction35c(
-                Opcode.INVOKE_SUPER, 2, 1, 0, 0, 0, 0, viewSetVisibility
-            ),
-            BuilderInstruction10x(Opcode.RETURN_VOID)
+    implementation.addInstruction(BuilderInstruction21s(Opcode.CONST_16, 0, 8))
+    implementation.addInstruction(
+        BuilderInstruction35c(
+            Opcode.INVOKE_SUPER, 2, 1, 0, 0, 0, 0, viewSetVisibility
         )
     )
+    implementation.addInstruction(BuilderInstruction10x(Opcode.RETURN_VOID))
     val override = MutableMethod(
         ImmutableMethod(
             type,
