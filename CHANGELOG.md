@@ -1,3 +1,9 @@
+## [1.2.0-dev.9](https://github.com/Ayufa/ayufa-patches/compare/v1.2.0-dev.8...v1.2.0-dev.9) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* correct RewardedAdShowCallback type in Simeji Hide ads fingerprint ([90d754f](https://github.com/Ayufa/ayufa-patches/commit/90d754f057ffb34b2a567a3a5046d25dbaa9bb45))
+
 ## [1.2.0-dev.8](https://github.com/Ayufa/ayufa-patches/compare/v1.2.0-dev.7...v1.2.0-dev.8) (2026-11-06)
 
 ### ✨ New Features
