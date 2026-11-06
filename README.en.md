@@ -17,7 +17,7 @@ They are meant to be used together with the official patches ([MorpheApp/morphe-
 | App | Supported versions | Patches |
 |---|---|---|
 | YouTube | 21.30.216 / 20.26.46 | 2 |
-| Simeji | 23.7 | 8 |
+| Simeji | 20.7 | 11 |
 
 ## How to use
 
@@ -28,7 +28,7 @@ They are meant to be used together with the official patches ([MorpheApp/morphe-
 
 - YouTube "Hide live chat clutter" → **21.30.216**
 - YouTube "Live latency keeper" → **20.26.46**
-- All Simeji patches → **23.7** (split APKs must be merged first; also be sure to read "Simeji notes" below)
+- All Simeji patches → **20.7** (do not apply them to 23.7; see "Simeji notes" below)
 
 ## Patch details
 
@@ -54,26 +54,29 @@ Example use: an old Android 8.0 device (e.g. SOV34) left playing live streams al
 
 ### Simeji
 
-All patches target Simeji **23.7**.
+All patches target Simeji **20.7**. Every patch can be toggled in the in-app "Ayufaパッチ設定" screen without re-patching.
 
 | Patch | What it does |
 |---|---|
-| Hide ads | Removes ads in the suggestion bar, full-screen store-entry ads and web campaign popups. The central ad gate is forced off, and ad candidates are never fetched or stored. Rewarded ads can additionally be blocked with a patch option (off by default, as features unlocked by watching ads stop working too) |
+| Hide ads | Removes ads in the suggestion bar, full-screen store-entry ads and web campaign popups. Rewarded ads are blocked too (features unlocked by watching ads stop working) |
 | Hide promotions | Prevents full-screen campaign / upsell activities from opening |
-| Block VIP guide screen | Prevents the VIP guide screen from opening. This screen doubles as the in-app subscription purchase screen, so subscribing from inside the app becomes impossible |
+| Block VIP guide screen | Prevents the VIP guide screen from opening. This screen doubles as the in-app subscription purchase screen, so while it is blocked you cannot subscribe from inside the app |
 | Disable push popups | Stops dialog-style push campaign popups (normal notifications are not affected) |
 | Skip subscription retention screen | Skips the retention screen shown when cancelling VIP and goes straight to the cancellation flow |
 | Disable analytics reporting | Stops event sending to AppsFlyer and Simeji's own statistic reporting. Core features (keyboard, conversion, sync) are not touched |
 | Hide point entry | Hides the entry points to the point store and campaigns |
 | Disable review prompts | Stops the Google Play rating prompts (both Simeji's own dialog and the Play in-app review flow) |
+| Hide AI assistant icon | Hides the robot (AI assistant) icon at the top right of the keyboard and its speech-bubble messages. The top strip the icon lived in is collapsed too, so no empty band remains. Input and conversion are not affected |
+| Spoof VIP | Turns on only the on-device VIP checks. Features that complete entirely on the device, such as toolbar customization and VIP parts in custom skins, become usable (off by default) |
+| Add in-app settings screen | Adds an "Ayufaパッチ設定" entry at the bottom of Simeji's Settings tab. This patch is required to toggle the other Simeji patches |
 
 #### Simeji notes
 
-- ⚠️ **Known issue (no conversion candidates)**: in 23.7, the conversion engine verifies the app's signature in native code, so on a re-signed APK the engine never initializes and no conversion candidates ever appear. This is caused by re-signing itself, regardless of patches. The development builds (prerelease channel) avoid this by targeting **Simeji 20.7**, which has no such check. If you need working conversion, use the development build from Morphe's prerelease channel
-- **Split APKs must be merged**: Simeji is distributed as split APKs (XAPK etc.), so merge them into a single APK with Morphe's split-merge feature first, or use an already-merged single APK
+- **20.7 only (do not apply to 23.7)**: in 23.7, the conversion engine verifies the app's signature in native code, and on a re-signed APK the engine never initializes, so no conversion candidates ever appear (verified to happen even on a patch-free rebuild). 20.7 predates that check and was distributed as a single APK, so it can be patched as-is
 - **Replacement install required**: the signature changes, so if the Play version is installed, uninstall it first (your user dictionary and settings are not carried over)
-- **Google account sign-in does not work**: a re-signed app cannot pass Google Sign-In's signature check (package name + certificate). Signing in with a Baidu account ID/password is not affected
-- **VIP perks themselves cannot be unlocked**: VIP-only skins, backup, translation, AI quota and similar perks are managed on the server, so no patch can unlock them
+- **Where the settings are**: with "Add in-app settings screen" applied, "Ayufaパッチ設定" appears at the very bottom of the **Settings** tab in the Simeji app. Defaults: everything on, except Spoof VIP
+- **Google account sign-in does not work**: a re-signed app cannot pass Google Sign-In's signature check (package name + certificate), and this cannot be worked around with a patch. Signing in with a Baidu account ID/password is not affected
+- **Limits of Spoof VIP**: VIP perks managed on the server (cloud skins, backup, translation, AI quota, etc.) remain unavailable even with spoofing
 
 ## Relationship with upstream
 
