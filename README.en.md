@@ -107,25 +107,40 @@ Bugs in the official patches themselves cannot be fixed here.
 
 ## FAQ
 
-### Why can't I log in with my Google account?
+<details>
+<summary>Why can't I log in with my Google account?</summary>
 
 A re-signed app cannot pass Google Sign-In's signature check (package name + certificate). This cannot be worked around with a patch. Signing in with a Baidu account ID/password is not affected.
 
-### Can I apply the patches to other app versions?
+</details>
+
+<details>
+<summary>Can I apply the patches to other app versions?</summary>
 
 No. Each patch is verified per version, so please use the exact target version's APK.
 
-### Does turning on the VIP spoofing patch unlock all VIP perks?
+</details>
+
+<details>
+<summary>Does turning on the VIP spoofing patch unlock all VIP perks?</summary>
 
 No. Only features that complete entirely on the device (toolbar customization, VIP parts in custom skins, and the like). Perks managed on the server — cloud skins, backup, translation, AI quota — remain unavailable.
 
-### Where are the Simeji settings?
+</details>
+
+<details>
+<summary>Where are the Simeji settings?</summary>
 
 With 「アプリ内設定画面を追加」 applied, "Ayufaパッチ設定" appears at the very bottom of the **Settings** tab in the Simeji app. That is where each patch is toggled on and off.
 
-### Do I use these together with the official patches?
+</details>
+
+<details>
+<summary>Do I use these together with the official patches?</summary>
 
 The Simeji patches work on their own (upstream has no Simeji patches).
+
+</details>
 
 ## Relationship with upstream
 
