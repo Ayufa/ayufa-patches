@@ -1,3 +1,9 @@
+## [1.3.0-dev.5](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.4...v1.3.0-dev.5) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* **simeji:** make the settings entry actually appear in the settings tab ([a84633f](https://github.com/Ayufa/ayufa-patches/commit/a84633fd9b5350a919ac446e27096bbe79fe3c40))
+
 ## [1.3.0-dev.4](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.3...v1.3.0-dev.4) (2026-11-06)
 
 ### ✨ New Features

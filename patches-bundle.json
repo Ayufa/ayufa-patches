@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-06T07:55:53",
-  "description": "## [1.3.0-dev.4](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.3...v1.3.0-dev.4) (2026-11-06)\n\n### ✨ New Features\n\n* **simeji:** runtime settings toggles, VIP spoof and Japanese patch names ([72a734a](https://github.com/Ayufa/ayufa-patches/commit/72a734afa23a94feb11227a7f959cea93a05f03d))",
-  "download_url": "https://github.com/Ayufa/ayufa-patches/releases/download/v1.3.0-dev.4/patches-1.3.0-dev.4.mpp",
+  "created_at": "2026-11-06T08:16:24",
+  "description": "## [1.3.0-dev.5](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.4...v1.3.0-dev.5) (2026-11-06)\n\n### 🐛 Bug Fixes\n\n* **simeji:** make the settings entry actually appear in the settings tab ([a84633f](https://github.com/Ayufa/ayufa-patches/commit/a84633fd9b5350a919ac446e27096bbe79fe3c40))",
+  "download_url": "https://github.com/Ayufa/ayufa-patches/releases/download/v1.3.0-dev.5/patches-1.3.0-dev.5.mpp",
   "signature_download_url": "",
-  "version": "1.3.0-dev.4"
+  "version": "1.3.0-dev.5"
 }
