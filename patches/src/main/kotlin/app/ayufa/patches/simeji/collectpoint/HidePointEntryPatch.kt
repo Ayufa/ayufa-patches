@@ -7,7 +7,7 @@ import app.ayufa.patches.simeji.shared.returnFalseImmediately
 
 /**
  * Decides whether the Simeji Point entry point may be shown.
- * Verified against Simeji 23.7.
+ * Verified against Simeji 20.7.
  */
 internal object CollectPointManagerCanShowFingerprint : Fingerprint(
     definingClass = "Ljp/baidu/simeji/collectpoint/CollectPointManager;",

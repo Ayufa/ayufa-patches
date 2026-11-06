@@ -7,7 +7,7 @@ import app.ayufa.patches.simeji.shared.finishImmediatelyAfterSuperOnCreate
 
 /**
  * The VIP guide / plan screen. It doubles as the in-app subscription
- * purchase screen. Verified against Simeji 23.7.
+ * purchase screen. Verified against Simeji 20.7.
  */
 internal object VipLevelGuideActivityOnCreateFingerprint : Fingerprint(
     definingClass = "Ljp/baidu/simeji/home/vip/VipLevelGuideActivityNew;",

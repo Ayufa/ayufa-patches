@@ -9,7 +9,7 @@ private const val APPSFLYER_STATISTIC_CLASS =
     "Ljp/baidu/simeji/ad/statistic/AppsflyerStatistic;"
 private const val STATISTIC_HELPER_CLASS =
     "Ljp/baidu/simeji/ad/statistic/StatisticHelper;"
-private const val NEW_STATISTIC_CLASS = "Lw5/e;"
+private const val NEW_STATISTIC_CLASS = "Lka/e;"
 
 @Suppress("unused")
 val disableAnalyticsPatch = bytecodePatch(
@@ -43,7 +43,7 @@ val disableAnalyticsPatch = bytecodePatch(
         // also installs the statistic module's config object, which
         // the keyboard dereferences in onWindowShown — removing it
         // crashes the keyboard with a NullPointerException (verified
-        // on Simeji 23.7).
+        // on Simeji 20.7).
         val statisticHelper = mutableClassDefByOrNull(STATISTIC_HELPER_CLASS)
             ?: throw PatchException("StatisticHelper class not found")
         val helperMethods = statisticHelper.methods.filter { method ->
@@ -58,7 +58,7 @@ val disableAnalyticsPatch = bytecodePatch(
         // events, f() flushes queued real-time logs. Both only send
         // broadcasts to the statistic receiver.
         val newStatistic = mutableClassDefByOrNull(NEW_STATISTIC_CLASS)
-            ?: throw PatchException("New statistic class (w5.e) not found")
+            ?: throw PatchException("New statistic class (ka.e) not found")
         val senderMethods = newStatistic.methods.filter { method ->
             method.returnType == "V" &&
                 ((method.name == "b" &&

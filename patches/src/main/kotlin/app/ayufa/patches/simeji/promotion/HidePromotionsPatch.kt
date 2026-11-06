@@ -7,7 +7,7 @@ import app.ayufa.patches.simeji.shared.finishImmediatelyAfterSuperOnCreate
 
 /**
  * The full-screen promotion activity (campaign / upsell pages).
- * Verified against Simeji 23.7.
+ * Verified against Simeji 20.7.
  */
 internal object PromotionActivityOnCreateFingerprint : Fingerprint(
     definingClass = "Ljp/baidu/simeji/home/promotion/PromotionActivity;",
