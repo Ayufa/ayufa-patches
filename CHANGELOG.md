@@ -1,3 +1,9 @@
+## [1.3.0-dev.4](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.3...v1.3.0-dev.4) (2026-11-06)
+
+### ✨ New Features
+
+* **simeji:** runtime settings toggles, VIP spoof and Japanese patch names ([72a734a](https://github.com/Ayufa/ayufa-patches/commit/72a734afa23a94feb11227a7f959cea93a05f03d))
+
 ## [1.3.0-dev.3](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.2...v1.3.0-dev.3) (2026-11-06)
 
 ### ✨ New Features

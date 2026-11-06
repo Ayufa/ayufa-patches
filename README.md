@@ -83,9 +83,9 @@ Morphe 用に個人的に作っている、いろいろなアプリ向けの独�
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.3.0-dev.3](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.3)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;11 patches total
+> **[v1.3.0-dev.4](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.4)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;13 patches total
 <details open>
-<summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;9 patches</summary>
+<summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;11 patches</summary>
 <br>
 
 **Package name:** `com.adamrocker.android.input.simeji`
@@ -97,15 +97,17 @@ Morphe 用に個人的に作っている、いろいろなアプリ向けの独�
 
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
-| [Block VIP guide screen](#block-vip-guide-screen) | Prevents the VIP guide screen from opening. Note: this screen is also the in-app subscription purchase screen, so subscribing from inside the app becomes impossible. |  |
-| [Disable analytics reporting](#disable-analytics-reporting) | Stops Simeji's event reporting: every AppsFlyer event entry point and the in-house statistic event dispatch become no-ops, so usage events are no longer sent. The statistic module initialization is deliberately left intact (the keyboard reads its config when the window is shown), and core keyboard, conversion and account features are not touched. |  |
-| [Disable push popups](#disable-push-popups) | Prevents push campaign popup dialogs from appearing on screen. Normal notifications are not affected. |  |
-| [Disable review prompts](#disable-review-prompts) | Disables the Google Play rating prompts: both Simeji's own guide dialog and the Play in-app review flow. |  |
-| [Hide AI assistant icon](#hide-ai-assistant-icon) | Hides the AI assistant (robot) icon shown at the top right of the keyboard, together with its speech-bubble messages: the pet manager is frozen in its off state, so the icon is never attached to the keyboard. The top strip that hosted the icon is collapsed as well, so no empty band remains above the toolbar. Typing and conversion are not affected. |  |
-| [Hide ads](#hide-ads) | Hides ads in Simeji: suggestion bar ads, store entry interstitials and web campaign popups. The central ad gate is forced off, and ad candidates are never fetched or stored. | • Also block rewarded ads |
-| [Hide point entry](#hide-point-entry) | Hides the Simeji Point entry point, which leads to the point store and its campaign recommendations. |  |
-| [Hide promotions](#hide-promotions) | Prevents the full-screen promotion activity from opening, so campaign and upsell pages never appear. |  |
-| [Skip subscription retention screen](#skip-subscription-retention-screen) | Skips the retention screen shown during VIP subscription cancellation, going straight to the cancellation flow. |  |
+| [AIアシスタントのアイコンを非表示](#ai) | キーボード右上に表示されるロボット（AIアシスタント）のアイコンと吹き出しメッセージを非表示にします。アイコンがあった一番上の帯も畳むので、空の帯は残りません。入力・変換には影響しません。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
+| [VIPを偽装](#vip) | 端末内のVIP判定を有効化します。ツールバーのカスタマイズや自作きせかえのVIPパーツなど、端末内で完結する機能が使えるようになります。クラウドきせかえ・クラウド定型文・AIチャットなど、サーバー側で判定される特典は使えません。有効・無効はアプリ内設定（Ayufaパッチ設定）で切り替えます（初期値はオフです）。 |  |
+| [VIP案内画面をブロック](#vip) | VIPの案内画面を開かないようにします。注意: この画面はアプリ内のサブスクリプション購入画面も兼ねているため、ブロック中はアプリ内から契約できなくなります。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
+| [アプリ内設定画面を追加](#) | Simeji の設定タブの末尾に「Ayufaパッチ設定」の入口を追加します。各 Simeji パッチの有効・無効や VIP偽装を、再パッチなしでアプリ内から切り替えられるようになります。他の Simeji パッチを切り替えるには、このパッチの適用が必要です（未適用の場合は各パッチの初期値どおりに動作します）。 |  |
+| [プッシュポップアップを無効化](#) | プッシュキャンペーンのポップアップダイアログを表示しなくします。通常の通知には影響しません。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
+| [プロモーションを非表示](#) | 全画面のプロモーション画面（キャンペーンやアップセルのページ）を開かないようにします。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
+| [ポイント入口を非表示](#) | ポイントストアやキャンペーンへの入口となる Simejiポイントの入口を非表示にします。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
+| [レビュー依頼を無効化](#) | Google Play の評価依頼を無効化します。Simeji 独自のガイドダイアログと、Play のアプリ内レビューの両方が対象です。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
+| [広告を非表示](#) | Simeji の広告（候補欄の広告、ストア入口の全画面広告、Webキャンペーンのポップアップ）を非表示にします。リワード広告もブロックします。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
+| [解析レポートを無効化](#) | Simeji の利用状況イベント送信を止めます。AppsFlyer 向けの入口と、自社統計の送信処理が、アプリ内設定（Ayufaパッチ設定）のトグルがオンの間だけ無効になります。統計モジュールの初期化には触りません（キーボード表示時に設定オブジェクトを参照するため、潰すとキーボードが落ちます）。 |  |
+| [解約時の引き止め画面をスキップ](#) | VIPサブスクリプション解約時に表示される引き止め画面をスキップし、そのまま解約フローへ進みます。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
 
 </details>
 
