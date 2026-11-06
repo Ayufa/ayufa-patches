@@ -4,25 +4,54 @@
   </a>
 </p>
 
-# Ayufa Patches
+# 🧩 Ayufa Patches
+
+<p align="center">
+
+![GitHub Release](https://img.shields.io/github/v/release/Ayufa/ayufa-patches?include_prereleases&style=for-the-badge)
+![License](https://img.shields.io/github/license/Ayufa/ayufa-patches?style=for-the-badge)
+![GitHub Stars](https://img.shields.io/github/stars/Ayufa/ayufa-patches?style=for-the-badge)
+![GitHub Forks](https://img.shields.io/github/forks/Ayufa/ayufa-patches?style=for-the-badge)
+![GitHub Issues](https://img.shields.io/github/issues/Ayufa/ayufa-patches?style=for-the-badge)
+
+</p>
 
 [日本語](README.md) | English
 
-A personal collection of custom patches for Morphe. These are not official Morphe patches (developed in Ayufa's personal repository).
+> [!NOTE]
+>
+> A personal collection of custom patches for Morphe. These are not official Morphe patches.
+>
+> The YouTube patches are meant to be used together with the official patches. The Simeji patches work on their own, as upstream has no Simeji patches.
 
-The YouTube patches are meant to be used together with the official patches ([MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches)), adding the small things the official set left unsatisfied. The Simeji patches work entirely on their own, as upstream has no Simeji patches.
+## Contents
 
-## Overview
+- [About](#-about)
+- [How to use](#how-to-use)
+- [Patch details](#patch-details)
+- [Patches list](#-patches-list)
+- [Reporting bugs](#reporting-bugs)
+- [FAQ](#faq)
+- [Relationship with upstream](#relationship-with-upstream)
+- [Building](#️-building)
+- [License](#-license)
+
+## ❓ About
+
+This collection adds the small things the official patches ([MorpheApp/morphe-patches](https://github.com/MorpheApp/morphe-patches)) left unsatisfied, plus features I wanted myself.
 
 | App | Supported versions | Patches |
 |---|---|---|
 | YouTube | 21.30.216 / 20.26.46 | 2 |
 | Simeji | 20.7 | 11 |
 
+## ⚠️ Disclaimer
+
+This is a personal hobby project. The patches are tested in my own environment, but there is no guarantee they work everywhere. Check carefully before using them on an important device.
+
 ## How to use
 
-1. Use the button above to add this repository as a patch source in Morphe
-2. Select the patches you want and apply them (select the YouTube patches together with the official patches; the Simeji patches are fine on their own)
+Use the button above to add this repository as a patch source in Morphe, then select the patches you want and apply them (select the YouTube patches together with the official patches; the Simeji patches are fine on their own).
 
 ⚠️ **Match the target versions exactly** (each patch is verified per version, and cannot be applied to other versions).
 
@@ -32,7 +61,7 @@ The YouTube patches are meant to be used together with the official patches ([Mo
 
 ## Patch details
 
-### YouTube
+### 📺 YouTube
 
 #### Live latency keeper
 
@@ -44,7 +73,7 @@ The YouTube patches are meant to be used together with the official patches ([Mo
 
 Example use: an old Android 8.0 device (e.g. SOV34) left playing live streams all day, which ends up minutes behind without you noticing.
 
-#### Hide live chat clutter
+#### Hide live chat clutter ⭐
 
 | | |
 |---|---|
@@ -52,7 +81,7 @@ Example use: an old Android 8.0 device (e.g. SOV34) left playing live streams al
 | What it does | Hides visual clutter in live chat, such as the pinned message banner and poll cards, that gets in the way while reading chat. It also fixes the chat input field being covered by the on-screen keyboard (while the keyboard is open, the chat is lifted by the keyboard's height) |
 | Adjusting | Each item can be selected individually when applying the patch. After patching, a dedicated "Ayufa patch settings" screen appears in Morphe settings, where "Hide pinned message banner", "Hide live chat polls" and "Fix live chat keyboard overlap" can be toggled without re-patching (applied the next time you open chat) |
 
-### Simeji
+### ⌨️ Simeji
 
 All patches target Simeji **20.7**. Every patch can be toggled in the in-app "Ayufaパッチ設定" screen without re-patching. ⭐ marks the recommended patches (pre-selected in Morphe).
 
@@ -74,27 +103,68 @@ All patches target Simeji **20.7**. Every patch can be toggled in the in-app "Ay
 
 - **Where the settings are**: with 「アプリ内設定画面を追加」 applied, "Ayufaパッチ設定" appears at the very bottom of the **Settings** tab in the Simeji app. Defaults: everything on, except 「VIPを偽装」
 - **Google account sign-in does not work**: a re-signed app cannot pass Google Sign-In's signature check (package name + certificate), and this cannot be worked around with a patch. Signing in with a Baidu account ID/password is not affected
-- **Limits of Spoof VIP**: VIP perks managed on the server (cloud skins, backup, translation, AI quota, etc.) remain unavailable even with spoofing
+- **Limits of VIP spoofing**: VIP perks managed on the server (cloud skins, backup, translation, AI quota, etc.) remain unavailable even with spoofing
+
+## 🩹 Patches list
+
+See the patch list in the [Japanese README](README.md#-パッチ一覧) (auto-generated from the latest release).
+
+## Reporting bugs
+
+Please open an issue in this repository, with as much of the following as you can:
+
+- The app version
+- The patch source release you used (e.g. `stable v1.2.0` / `dev v1.3.0-dev.9`)
+- The APK source and format (e.g. a single APK from APKMirror, an XAPK)
+- Logs, if you can capture them
+
+Bugs in the official patches themselves cannot be fixed here.
+
+## FAQ
+
+### Why can't I log in with my Google account?
+
+A re-signed app cannot pass Google Sign-In's signature check (package name + certificate). This cannot be worked around with a patch. Signing in with a Baidu account ID/password is not affected.
+
+### Can I apply the patches to other app versions?
+
+No. Each patch is verified per version, so please use the exact target version's APK.
+
+### Does turning on the VIP spoofing patch unlock all VIP perks?
+
+No. Only features that complete entirely on the device (toolbar customization, VIP parts in custom skins, and the like). Perks managed on the server — cloud skins, backup, translation, AI quota — remain unavailable.
+
+### Where are the Simeji settings?
+
+With 「アプリ内設定画面を追加」 applied, "Ayufaパッチ設定" appears at the very bottom of the **Settings** tab in the Simeji app. That is where each patch is toggled on and off.
+
+### Do I use these together with the official patches?
+
+The YouTube patches are meant to be used together with the official patches. The Simeji patches work on their own (upstream has no Simeji patches).
 
 ## Relationship with upstream
 
 - No pull requests, issues or comments are ever sent to the upstream repository. It is used read-only
-- Bugs in the official patches themselves cannot be fixed here. Please keep issues in this repository to these custom patches only
 - Licensing and credits follow upstream (GPL-3.0)
 
-## How upstream updates are tracked
+### How upstream updates are tracked
 
 - Dependabot periodically reports dependency updates (such as the patcher) from upstream
 - When upstream changes its supported YouTube version, GitHub Actions (upstream-watch) detects it and opens an issue in this repository only. Nothing is ever written to upstream
 - See [How upstream is tracked](docs/UPSTREAM.md) for details
 - Releases are unsigned (no signing key is configured)
 
-## Building it yourself
+## 🛠️ Building
 
 - Run `./gradlew buildAndroid` and the `.mpp` file is produced under `patches/build/libs/`
 - The resulting file can be used with Morphe Desktop, like any other patch bundle
 - Development happens on the `dev` branch; merging into `main` creates a stable release
 
-## License
+## ❤️ Credits
 
-GPL-3.0 ([LICENSE](LICENSE)). Based on the official [Morphe Patches template](https://github.com/MorpheApp/morphe-patches-template). See also [NOTICE](NOTICE).
+- [Morphe](https://github.com/MorpheApp/)
+- Based on the official [Morphe Patches template](https://github.com/MorpheApp/morphe-patches-template)
+
+## 📜 License
+
+GPL-3.0 ([LICENSE](LICENSE)). See also [NOTICE](NOTICE).
