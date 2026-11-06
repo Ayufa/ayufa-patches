@@ -21,8 +21,6 @@
 > [!NOTE]
 >
 > A personal collection of custom patches for Morphe. These are not official Morphe patches.
->
-> The Simeji patches work on their own, as upstream has no Simeji patches.
 
 ## Contents
 
