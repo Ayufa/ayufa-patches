@@ -87,7 +87,7 @@ YouTube のパッチは 2026年11月に [Ayufa YouTube Patches](https://github.c
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.3.0-dev.11](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.11)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;13 patches total
+> **[v1.3.0-dev.12](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.12)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;11 patches total
 <details open>
 <summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;11 patches</summary>
 <br>
@@ -112,24 +112,6 @@ YouTube のパッチは 2026年11月に [Ayufa YouTube Patches](https://github.c
 | [広告を非表示](#) | Simeji の広告（候補欄の広告、ストア入口の全画面広告、Webキャンペーンのポップアップ）を非表示にします。リワード広告もブロックします。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
 | [解析レポートを無効化](#) | Simeji の利用状況イベント送信を止めます。AppsFlyer 向けの入口と、自社統計の送信処理が、アプリ内設定（Ayufaパッチ設定）のトグルがオンの間だけ無効になります。統計モジュールの初期化には触りません（キーボード表示時に設定オブジェクトを参照するため、潰すとキーボードが落ちます）。 |  |
 | [解約時の引き止め画面をスキップ](#) | VIPサブスクリプション解約時に表示される引き止め画面をスキップし、そのまま解約フローへ進みます。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
-
-</details>
-
-<details open>
-<summary>📦 YouTube&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
-<br>
-
-**Package name:** `com.google.android.youtube`
-
-**🎯 Supported versions:**
-
-| 21.30.216 |
-| :---: |
-
-| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
-|----------|----------------|-----------|
-| [Hide live chat clutter](#hide-live-chat-clutter) | Hides the pinned message banner and poll cards in live chat, and fixes the chat input field being covered by the on-screen keyboard. Each can be toggled in Morphe settings (Ayufa patch settings) without re-patching. For YouTube 21.30.216. | • Hide pinned message banner<br>• Hide live chat polls<br>• Fix live chat keyboard overlap |
-| [Live latency keeper](#live-latency-keeper) | At a fixed interval, momentarily pauses and resumes live stream playback so it snaps back to the live edge (the newest position), no matter how far behind it has fallen. The interval (any value from 0 to 120 minutes, typed in directly) and the on/off switch can be changed in Morphe settings (Ayufa patch settings) without re-patching. For YouTube 20.26.46 (Android 8.0) only. Requires the official Morphe patches to be applied as well. | • Default sync interval (minutes) |
 
 </details>
 
