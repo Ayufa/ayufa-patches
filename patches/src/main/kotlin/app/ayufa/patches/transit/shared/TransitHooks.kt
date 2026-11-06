@@ -33,7 +33,8 @@ internal fun MutableMethod.superInitIndex(): Int {
     val methodInstructions = implementation?.instructions
         ?: throw PatchException("constructor has no implementation: $this")
     val superIndex = methodInstructions.indexOfFirst { instruction ->
-        instruction.opcode == Opcode.INVOKE_DIRECT &&
+        (instruction.opcode == Opcode.INVOKE_DIRECT ||
+            instruction.opcode == Opcode.INVOKE_DIRECT_RANGE) &&
             ((instruction as? ReferenceInstruction)?.reference as? MethodReference)
                 ?.name == "<init>"
     }
