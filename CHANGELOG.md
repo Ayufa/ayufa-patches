@@ -1,3 +1,9 @@
+## [1.3.0-dev.15](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.14...v1.3.0-dev.15) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* Weathernews ads patch no longer gates isAdEnabled ([317fc12](https://github.com/Ayufa/ayufa-patches/commit/317fc127c51d0104e044478ed4c158bc1aab18a7))
+
 ## [1.3.0-dev.14](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.13...v1.3.0-dev.14) (2026-11-06)
 
 ### 🐛 Bug Fixes
