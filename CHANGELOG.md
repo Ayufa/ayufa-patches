@@ -1,3 +1,10 @@
+## [1.3.0-dev.16](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.15...v1.3.0-dev.16) (2026-11-06)
+
+### ✨ New Features
+
+* add Yahoo! Transit ad-hiding patch ([bdfd94d](https://github.com/Ayufa/ayufa-patches/commit/bdfd94da78298ebe1b125bd830be33af49e96023))
+* add Yahoo! Transit promotion-hiding patch ([78048a1](https://github.com/Ayufa/ayufa-patches/commit/78048a1d0f8d4e7b7bf035ebf42f31e18d96a00e))
+
 ## [1.3.0-dev.15](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.14...v1.3.0-dev.15) (2026-11-06)
 
 ### 🐛 Bug Fixes
