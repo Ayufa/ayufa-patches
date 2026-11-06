@@ -1,3 +1,13 @@
+## [1.2.0-dev.8](https://github.com/Ayufa/ayufa-patches/compare/v1.2.0-dev.7...v1.2.0-dev.8) (2026-11-06)
+
+### ✨ New Features
+
+* add Simeji 23.7 patches (hide ads, promotions, push popups, retention skip, analytics, point entry, review prompts) ([4b0088c](https://github.com/Ayufa/ayufa-patches/commit/4b0088c356ae4472cd4f177cc2f043678dc175d2))
+
+### 🐛 Bug Fixes
+
+* access method instructions via implementation in Simeji hooks ([becad12](https://github.com/Ayufa/ayufa-patches/commit/becad12e4d3087e8a00cfb5b3493dfada7cd404b))
+
 ## [1.2.0-dev.7](https://github.com/Ayufa/ayufa-patches/compare/v1.2.0-dev.6...v1.2.0-dev.7) (2026-11-06)
 
 ### ✨ New Features

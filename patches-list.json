@@ -1,7 +1,162 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.2.0-dev.7",
+  "version": "1.2.0-dev.8",
   "patches": [
+    {
+      "name": "Block VIP guide screen",
+      "description": "Prevents the VIP guide screen from opening. Note: this screen is also the in-app subscription purchase screen, so subscribing from inside the app becomes impossible.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.adamrocker.android.input.simeji",
+          "name": "Simeji",
+          "description": null,
+          "apkFileType": "APK_REQUIRED",
+          "appIconColor": "#FF0033",
+          "signatures": [
+            "4e5a78c0450316e38afab3ecb6bac9932c095f2b34360c40129857b78657e24f"
+          ],
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "23.7",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": 23,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable analytics reporting",
+      "description": "Stops Simeji's event reporting: every AppsFlyer event entry point and the in-house statistic reporter become no-ops, so usage events are no longer sent. Core keyboard, conversion and account features are not touched.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.adamrocker.android.input.simeji",
+          "name": "Simeji",
+          "description": null,
+          "apkFileType": "APK_REQUIRED",
+          "appIconColor": "#FF0033",
+          "signatures": [
+            "4e5a78c0450316e38afab3ecb6bac9932c095f2b34360c40129857b78657e24f"
+          ],
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "23.7",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": 23,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable push popups",
+      "description": "Prevents push campaign popup dialogs from appearing on screen. Normal notifications are not affected.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.adamrocker.android.input.simeji",
+          "name": "Simeji",
+          "description": null,
+          "apkFileType": "APK_REQUIRED",
+          "appIconColor": "#FF0033",
+          "signatures": [
+            "4e5a78c0450316e38afab3ecb6bac9932c095f2b34360c40129857b78657e24f"
+          ],
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "23.7",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": 23,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Disable review prompts",
+      "description": "Disables the Google Play rating prompts: both Simeji's own guide dialog and the Play in-app review flow.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.adamrocker.android.input.simeji",
+          "name": "Simeji",
+          "description": null,
+          "apkFileType": "APK_REQUIRED",
+          "appIconColor": "#FF0033",
+          "signatures": [
+            "4e5a78c0450316e38afab3ecb6bac9932c095f2b34360c40129857b78657e24f"
+          ],
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "23.7",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": 23,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Hide ads",
+      "description": "Hides ads in Simeji: suggestion bar ads, store entry interstitials and web campaign popups. The central ad gate is forced off, and ad candidates are never fetched or stored.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.adamrocker.android.input.simeji",
+          "name": "Simeji",
+          "description": null,
+          "apkFileType": "APK_REQUIRED",
+          "appIconColor": "#FF0033",
+          "signatures": [
+            "4e5a78c0450316e38afab3ecb6bac9932c095f2b34360c40129857b78657e24f"
+          ],
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "23.7",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": 23,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "blockRewardedAds",
+          "title": "Also block rewarded ads",
+          "description": "Also blocks rewarded ads. Some features that are unlocked by watching an ad (for example custom skin trials) stop working, so this is off by default.",
+          "required": false,
+          "type": "kotlin.Boolean",
+          "default": false,
+          "values": null
+        }
+      ]
+    },
     {
       "name": "Hide live chat clutter",
       "description": "Hides the pinned message banner and poll cards in live chat, and fixes the chat input field being covered by the on-screen keyboard. Each can be toggled in Morphe settings (Ayufa patch settings) without re-patching. For YouTube 21.30.216.",
@@ -61,6 +216,64 @@
       ]
     },
     {
+      "name": "Hide point entry",
+      "description": "Hides the Simeji Point entry point, which leads to the point store and its campaign recommendations.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.adamrocker.android.input.simeji",
+          "name": "Simeji",
+          "description": null,
+          "apkFileType": "APK_REQUIRED",
+          "appIconColor": "#FF0033",
+          "signatures": [
+            "4e5a78c0450316e38afab3ecb6bac9932c095f2b34360c40129857b78657e24f"
+          ],
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "23.7",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": 23,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Hide promotions",
+      "description": "Prevents the full-screen promotion activity from opening, so campaign and upsell pages never appear.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.adamrocker.android.input.simeji",
+          "name": "Simeji",
+          "description": null,
+          "apkFileType": "APK_REQUIRED",
+          "appIconColor": "#FF0033",
+          "signatures": [
+            "4e5a78c0450316e38afab3ecb6bac9932c095f2b34360c40129857b78657e24f"
+          ],
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "23.7",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": 23,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Live latency keeper",
       "description": "At a fixed interval, momentarily pauses and resumes live stream playback so it snaps back to the live edge (the newest position), no matter how far behind it has fallen. The interval (any value from 0 to 120 minutes, typed in directly) and the on/off switch can be changed in Morphe settings (Ayufa patch settings) without re-patching. For YouTube 20.26.46 (Android 8.0) only. Requires the official Morphe patches to be applied as well.",
       "default": false,
@@ -113,6 +326,35 @@
           }
         }
       ]
+    },
+    {
+      "name": "Skip subscription retention screen",
+      "description": "Skips the retention screen shown during VIP subscription cancellation, going straight to the cancellation flow.",
+      "default": false,
+      "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.adamrocker.android.input.simeji",
+          "name": "Simeji",
+          "description": null,
+          "apkFileType": "APK_REQUIRED",
+          "appIconColor": "#FF0033",
+          "signatures": [
+            "4e5a78c0450316e38afab3ecb6bac9932c095f2b34360c40129857b78657e24f"
+          ],
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "23.7",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": 23,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
     }
   ]
 }
