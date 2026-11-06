@@ -1,3 +1,9 @@
+## [1.3.0-dev.21](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.20...v1.3.0-dev.21) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* build the override body via addInstruction ([83f39b7](https://github.com/Ayufa/ayufa-patches/commit/83f39b7d09780233dd417e744c58341785cc5e41))
+
 ## [1.3.0-dev.20](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.19...v1.3.0-dev.20) (2026-11-06)
 
 ### 🐛 Bug Fixes
