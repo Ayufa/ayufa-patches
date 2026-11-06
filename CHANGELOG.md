@@ -1,3 +1,9 @@
+## [1.3.0-dev.2](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.1...v1.3.0-dev.2) (2026-11-06)
+
+### ✨ New Features
+
+* **simeji:** add Hide AI assistant icon patch ([85c9f5f](https://github.com/Ayufa/ayufa-patches/commit/85c9f5f6f337ff65f1d94f5dbc79d59d6e554726))
+
 ## [1.3.0-dev.1](https://github.com/Ayufa/ayufa-patches/compare/v1.2.0...v1.3.0-dev.1) (2026-11-06)
 
 ### ✨ New Features

@@ -79,9 +79,9 @@ Morphe 用に個人的に作っている、いろいろなアプリ向けの独�
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.3.0-dev.1](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;10 patches total
+> **[v1.3.0-dev.2](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.2)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;11 patches total
 <details open>
-<summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;8 patches</summary>
+<summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;9 patches</summary>
 <br>
 
 **Package name:** `com.adamrocker.android.input.simeji`
@@ -97,6 +97,7 @@ Morphe 用に個人的に作っている、いろいろなアプリ向けの独�
 | [Disable analytics reporting](#disable-analytics-reporting) | Stops Simeji's event reporting: every AppsFlyer event entry point and the in-house statistic event dispatch become no-ops, so usage events are no longer sent. The statistic module initialization is deliberately left intact (the keyboard reads its config when the window is shown), and core keyboard, conversion and account features are not touched. |  |
 | [Disable push popups](#disable-push-popups) | Prevents push campaign popup dialogs from appearing on screen. Normal notifications are not affected. |  |
 | [Disable review prompts](#disable-review-prompts) | Disables the Google Play rating prompts: both Simeji's own guide dialog and the Play in-app review flow. |  |
+| [Hide AI assistant icon](#hide-ai-assistant-icon) | Hides the AI assistant (robot) icon shown at the top right of the keyboard, together with its speech-bubble messages: the pet manager is frozen in its off state, so the icon is never attached to the keyboard. Typing and conversion are not affected. |  |
 | [Hide ads](#hide-ads) | Hides ads in Simeji: suggestion bar ads, store entry interstitials and web campaign popups. The central ad gate is forced off, and ad candidates are never fetched or stored. | • Also block rewarded ads |
 | [Hide point entry](#hide-point-entry) | Hides the Simeji Point entry point, which leads to the point store and its campaign recommendations. |  |
 | [Hide promotions](#hide-promotions) | Prevents the full-screen promotion activity from opening, so campaign and upsell pages never appear. |  |
