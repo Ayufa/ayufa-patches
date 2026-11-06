@@ -1,3 +1,23 @@
+## [1.2.0](https://github.com/Ayufa/ayufa-patches/compare/v1.1.0...v1.2.0) (2026-11-06)
+
+### ✨ New Features
+
+* add Simeji 23.7 patches (hide ads, promotions, push popups, retention skip, analytics, point entry, review prompts) ([4b0088c](https://github.com/Ayufa/ayufa-patches/commit/4b0088c356ae4472cd4f177cc2f043678dc175d2))
+* Fix live chat input being covered by the on-screen keyboard ([914d178](https://github.com/Ayufa/ayufa-patches/commit/914d17820cc2faff4fe1ada9cddbf887128b4aa7)), closes [#3453](https://github.com/Ayufa/ayufa-patches/issues/3453)
+* Limit the live latency keeper to Android 8 YouTube, free-form interval in minutes ([5dc1f43](https://github.com/Ayufa/ayufa-patches/commit/5dc1f43daee89e9efba3d06518d558a9e2581461))
+* Re-sync live playback with a momentary pause and resume ([d74cbb0](https://github.com/Ayufa/ayufa-patches/commit/d74cbb04459a09b6fdce36193dc925e6ca0d36e5))
+* Rename the bundle to Ayufa Patches, a multi-app custom patch collection ([2d88f9b](https://github.com/Ayufa/ayufa-patches/commit/2d88f9b20c27911a7b189e19945eab038f402c7c))
+* Sync live playback at a fixed interval, adjustable in settings ([2c38d75](https://github.com/Ayufa/ayufa-patches/commit/2c38d75ebf673a2567bfd007b857ae1bb8a4f186))
+
+### 🐛 Bug Fixes
+
+* access method instructions via implementation in Simeji hooks ([becad12](https://github.com/Ayufa/ayufa-patches/commit/becad12e4d3087e8a00cfb5b3493dfada7cd404b))
+* correct RewardedAdShowCallback type in Simeji Hide ads fingerprint ([90d754f](https://github.com/Ayufa/ayufa-patches/commit/90d754f057ffb34b2a567a3a5046d25dbaa9bb45))
+* Do fingerprint matching in the execute block (needs patch context) ([e67bc71](https://github.com/Ayufa/ayufa-patches/commit/e67bc717598da9bb4ee1122f98fb87cc55a33488))
+* keep Simeji statistic init intact in Disable analytics (killed initStatistic crashed the keyboard) ([f92044e](https://github.com/Ayufa/ayufa-patches/commit/f92044e10a2efc98d9a913231658a0094693f9d1))
+* Match the live chat view setup with plain literals ([f73b8eb](https://github.com/Ayufa/ayufa-patches/commit/f73b8eb47c16f0f1c97f159c8579bfb99ac76daa))
+* Ship the keyboard fix inside the clutter patch, and stop padding resets ([b532fcf](https://github.com/Ayufa/ayufa-patches/commit/b532fcfd151f89c3502a249dd315ec900ce18572))
+
 ## [1.2.0-dev.10](https://github.com/Ayufa/ayufa-patches/compare/v1.2.0-dev.9...v1.2.0-dev.10) (2026-11-06)
 
 ### 🐛 Bug Fixes
