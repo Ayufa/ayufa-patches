@@ -93,7 +93,7 @@
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START -->
-> **[v1.3.0-dev.12](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.12)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;11 patches total
+> **[v1.3.0-dev.13](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.3.0-dev.13)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;13 patches total
 <details>
 <summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;11 patches</summary>
 <br>
@@ -118,6 +118,24 @@
 | [広告を非表示](#) | Simeji の広告（候補欄の広告、ストア入口の全画面広告、Webキャンペーンのポップアップ）を非表示にします。リワード広告もブロックします。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
 | [解析レポートを無効化](#) | Simeji の利用状況イベント送信を止めます。AppsFlyer 向けの入口と、自社統計の送信処理が、アプリ内設定（Ayufaパッチ設定）のトグルがオンの間だけ無効になります。統計モジュールの初期化には触りません（キーボード表示時に設定オブジェクトを参照するため、潰すとキーボードが落ちます）。 |  |
 | [解約時の引き止め画面をスキップ](#) | VIPサブスクリプション解約時に表示される引き止め画面をスキップし、そのまま解約フローへ進みます。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます。 |  |
+
+</details>
+
+<details>
+<summary>📦 ウェザーニュース&nbsp;&nbsp;•&nbsp;&nbsp;2 patches</summary>
+<br>
+
+**Package name:** `wni.WeathernewsTouch.jp`
+
+**🎯 Supported versions:**
+
+| 7.5.1 |
+| :---: |
+
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [ポップアップを非表示](#) | ウェザーニュースのアプリ内メッセージ（キャンペーン等のポップアップ、ヘッズアップ表示）を非表示にします。 |  |
+| [広告を非表示](#) | ウェザーニュースの広告（バナー広告、起動時の全画面広告）を非表示にします。 |  |
 
 </details>
 

@@ -1,3 +1,10 @@
+## [1.3.0-dev.13](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.12...v1.3.0-dev.13) (2026-11-06)
+
+### ✨ New Features
+
+* add Weathernews ad-hiding patch ([ffcd350](https://github.com/Ayufa/ayufa-patches/commit/ffcd350be220a8888c23d404cf5b79f4f724dd2f))
+* add Weathernews popup-hiding patch ([f2e998b](https://github.com/Ayufa/ayufa-patches/commit/f2e998b217b08865036b1c929369d305d753497b))
+
 ## [1.3.0-dev.12](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0-dev.11...v1.3.0-dev.12) (2026-11-06)
 
 ### ✨ New Features
