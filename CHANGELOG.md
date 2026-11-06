@@ -1,3 +1,9 @@
+## [1.2.0-dev.6](https://github.com/Ayufa/youtube-custom-patches/compare/v1.2.0-dev.5...v1.2.0-dev.6) (2026-11-06)
+
+### ✨ New Features
+
+* Limit the live latency keeper to Android 8 YouTube, free-form interval in minutes ([5dc1f43](https://github.com/Ayufa/youtube-custom-patches/commit/5dc1f43daee89e9efba3d06518d558a9e2581461))
+
 ## [1.2.0-dev.5](https://github.com/Ayufa/youtube-custom-patches/compare/v1.2.0-dev.4...v1.2.0-dev.5) (2026-11-04)
 
 ### ✨ New Features
