@@ -35,7 +35,9 @@ internal fun MutableMethod.returnVoidImmediately() {
  * promotion activities that should never appear.
  */
 internal fun MutableMethod.finishImmediatelyAfterSuperOnCreate() {
-    val superIndex = instructions.indexOfFirst { instruction ->
+    val methodInstructions = implementation?.instructions
+        ?: throw PatchException("onCreate has no implementation: $this")
+    val superIndex = methodInstructions.indexOfFirst { instruction ->
         instruction.opcode == Opcode.INVOKE_SUPER &&
             ((instruction as? ReferenceInstruction)?.reference as? MethodReference)
                 ?.name == "onCreate"
