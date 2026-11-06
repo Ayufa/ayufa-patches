@@ -108,6 +108,7 @@ All of these target Weathernews **7.5.1**.
 
 - **Premium membership is not touched**: membership state is managed server-side, so it is out of scope for patching
 - The app is distributed as split APKs
+- **Maps (radar etc.) do not render in re-signed builds**: they use Google Maps with an API key bound to the official signing certificate. This is unrelated to the patches and cannot be worked around
 
 </details>
 
