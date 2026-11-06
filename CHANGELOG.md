@@ -1,3 +1,9 @@
+## [1.2.0-dev.10](https://github.com/Ayufa/ayufa-patches/compare/v1.2.0-dev.9...v1.2.0-dev.10) (2026-11-06)
+
+### 🐛 Bug Fixes
+
+* keep Simeji statistic init intact in Disable analytics (killed initStatistic crashed the keyboard) ([f92044e](https://github.com/Ayufa/ayufa-patches/commit/f92044e10a2efc98d9a913231658a0094693f9d1))
+
 ## [1.2.0-dev.9](https://github.com/Ayufa/ayufa-patches/compare/v1.2.0-dev.8...v1.2.0-dev.9) (2026-11-06)
 
 ### 🐛 Bug Fixes

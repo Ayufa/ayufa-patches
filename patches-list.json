@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.2.0-dev.9",
+  "version": "1.2.0-dev.10",
   "patches": [
     {
       "name": "Block VIP guide screen",
@@ -33,7 +33,7 @@
     },
     {
       "name": "Disable analytics reporting",
-      "description": "Stops Simeji's event reporting: every AppsFlyer event entry point and the in-house statistic reporter become no-ops, so usage events are no longer sent. Core keyboard, conversion and account features are not touched.",
+      "description": "Stops Simeji's event reporting: every AppsFlyer event entry point and the in-house statistic event dispatch become no-ops, so usage events are no longer sent. The statistic module initialization is deliberately left intact (the keyboard reads its config when the window is shown), and core keyboard, conversion and account features are not touched.",
       "default": false,
       "category": null,
       "compatiblePackages": [

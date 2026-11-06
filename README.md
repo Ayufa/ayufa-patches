@@ -78,7 +78,7 @@ Morphe 用に個人的に作っている、いろいろなアプリ向けの独�
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.2.0-dev.9](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.2.0-dev.9)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;10 patches total
+> **[v1.2.0-dev.10](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.2.0-dev.10)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;10 patches total
 <details open>
 <summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;8 patches</summary>
 <br>
@@ -93,7 +93,7 @@ Morphe 用に個人的に作っている、いろいろなアプリ向けの独�
 | 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
 |----------|----------------|-----------|
 | [Block VIP guide screen](#block-vip-guide-screen) | Prevents the VIP guide screen from opening. Note: this screen is also the in-app subscription purchase screen, so subscribing from inside the app becomes impossible. |  |
-| [Disable analytics reporting](#disable-analytics-reporting) | Stops Simeji's event reporting: every AppsFlyer event entry point and the in-house statistic reporter become no-ops, so usage events are no longer sent. Core keyboard, conversion and account features are not touched. |  |
+| [Disable analytics reporting](#disable-analytics-reporting) | Stops Simeji's event reporting: every AppsFlyer event entry point and the in-house statistic event dispatch become no-ops, so usage events are no longer sent. The statistic module initialization is deliberately left intact (the keyboard reads its config when the window is shown), and core keyboard, conversion and account features are not touched. |  |
 | [Disable push popups](#disable-push-popups) | Prevents push campaign popup dialogs from appearing on screen. Normal notifications are not affected. |  |
 | [Disable review prompts](#disable-review-prompts) | Disables the Google Play rating prompts: both Simeji's own guide dialog and the Play in-app review flow. |  |
 | [Hide ads](#hide-ads) | Hides ads in Simeji: suggestion bar ads, store entry interstitials and web campaign popups. The central ad gate is forced off, and ad candidates are never fetched or stored. | • Also block rewarded ads |
