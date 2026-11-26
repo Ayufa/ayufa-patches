@@ -1,3 +1,9 @@
+## [1.5.0-dev.2](https://github.com/Ayufa/ayufa-patches/compare/v1.5.0-dev.1...v1.5.0-dev.2) (2026-11-26)
+
+### 🐛 Bug Fixes
+
+* make the nav bar colour substitution branch-free ([cc48c69](https://github.com/Ayufa/ayufa-patches/commit/cc48c69364a33d16ffc2bb2ad3f15091a9d9ad46))
+
 ## [1.5.0-dev.1](https://github.com/Ayufa/ayufa-patches/compare/v1.4.0...v1.5.0-dev.1) (2026-11-26)
 
 ### ✨ New Features
