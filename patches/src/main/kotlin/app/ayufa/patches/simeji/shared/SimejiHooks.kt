@@ -176,16 +176,24 @@ internal fun MutableMethod.finishIfEnabledAfterSuperOnCreate(
 }
 
 /**
- * Substitutes a theme-derived colour for a null result of
- * `ITheme.getNavigationBarBackColor()` inside this method.
+ * Routes the result of `ITheme.getNavigationBarBackColor()` inside
+ * this method through the extension's NavBarColor resolver.
  *
  * Finds the method's single call to that getter, and right after its
- * move-result-object inserts: if the colour register is already
- * non-null, skip; otherwise run [contextSetup] (which must load a
- * Context — or null — into [tempRegister]) and replace the register
- * with `NavBarColor.resolveNavBarColor(...)`. The extension returns
- * null while the runtime setting is off, so the stock null handling
- * that follows runs unchanged in that case.
+ * move-result-object inserts a branch-free substitution: run
+ * [contextSetup] (which must load a Context — or null — into
+ * [tempRegister]), then replace the colour register with
+ * `NavBarColor.resolveNavBarColor(colour, context)`. The resolver
+ * returns a non-null colour unchanged, a sampled theme colour for
+ * a null colour while the runtime setting is on, and null while
+ * the setting is off, so the stock null handling that follows runs
+ * unchanged in that case.
+ *
+ * No label is used on purpose: labels in mid-method insertions are
+ * resolved against the start of the inserted block by the patcher's
+ * smali compiler, which produced wrong branch targets when this
+ * hook used an if-nez skip (found by inspecting the patched dex of
+ * v1.5.0-dev.1; superseded by the branch-free form).
  *
  * [colorRegister] and [tempRegister] must be registers the method
  * does not read between the getter call and the next stock
@@ -195,7 +203,6 @@ internal fun MutableMethod.finishIfEnabledAfterSuperOnCreate(
 internal fun MutableMethod.substituteNavBarColor(
     colorRegister: String,
     tempRegister: String,
-    label: String,
     contextSetup: String
 ) {
     val methodInstructions = implementation?.instructions
@@ -217,11 +224,9 @@ internal fun MutableMethod.substituteNavBarColor(
     addInstructions(
         callIndex + 2,
         """
-            if-nez $colorRegister, :$label
             $contextSetup
-            invoke-static { $tempRegister }, $NAV_BAR_COLOR_CLASS->resolveNavBarColor(Landroid/content/Context;)Ljava/lang/Integer;
+            invoke-static { $colorRegister, $tempRegister }, $NAV_BAR_COLOR_CLASS->resolveNavBarColor(Ljava/lang/Integer;Landroid/content/Context;)Ljava/lang/Integer;
             move-result-object $colorRegister
-            :$label
         """
     )
 }

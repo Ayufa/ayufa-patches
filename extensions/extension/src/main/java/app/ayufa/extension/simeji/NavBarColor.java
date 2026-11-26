@@ -45,12 +45,16 @@ public final class NavBarColor {
     }
 
     /**
-     * The colour the patched call sites should use in place of a
-     * null stock navigation-bar colour, or null to keep the stock
-     * behaviour (gate off, or any failure).
+     * The colour the patched call sites should use: [stockColor]
+     * itself when the theme defines one, a sampled theme colour
+     * when it does not, or null to keep the stock null handling
+     * (gate off, or any failure).
      */
-    public static Integer resolveNavBarColor(Context context) {
+    public static Integer resolveNavBarColor(Integer stockColor, Context context) {
         try {
+            if (stockColor != null) {
+                return stockColor;
+            }
             if (!SimejiSettings.navBarThemeColor()) {
                 return null;
             }

@@ -77,7 +77,6 @@ val navBarThemeColorPatch = bytecodePatch(
         KeyboardRootViewOnDrawFingerprint.method.substituteNavBarColor(
             colorRegister = "v0",
             tempRegister = "v1",
-            label = "ayufa_nav_root_done",
             contextSetup =
                 "invoke-virtual { p0 }, Landroid/view/View;->getContext()Landroid/content/Context;\n" +
                     "move-result-object v1"
@@ -85,14 +84,12 @@ val navBarThemeColorPatch = bytecodePatch(
         ThemeManagerUpdateNavBarColorFingerprint.method.substituteNavBarColor(
             colorRegister = "v7",
             tempRegister = "v0",
-            label = "ayufa_nav_tm_done",
             contextSetup = "const/4 v0, 0x0"
         )
         OpenWnnUpdateSoftInputWindowLayoutParametersFingerprint.method
             .substituteNavBarColor(
                 colorRegister = "v2",
                 tempRegister = "v5",
-                label = "ayufa_nav_wnn_done",
                 contextSetup = "const/4 v5, 0x0"
             )
     }
