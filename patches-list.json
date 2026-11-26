@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.5.0-dev.3",
+  "version": "1.5.0-dev.4",
   "patches": [
     {
       "name": "AIアシスタントのアイコンを非表示",
@@ -91,7 +91,7 @@
     },
     {
       "name": "アプリ内設定画面を追加",
-      "description": "Simeji の設定タブの一覧に「Ayufaパッチ設定」の入口を追加します。各 Simeji パッチの有効・無効や VIP偽装を、再パッチなしでアプリ内から切り替えられるようになります。他の Simeji パッチを切り替えるには、このパッチの適用が必要です（未適用の場合は各パッチの初期値どおりに動作します）。キーボード下の帯をテーマ色に合わせる処理もこのパッチに含まれます（Android 15以降で黒く塗られるナビゲーションバー領域を、テーマが専用の色を持たない場合はキーボードの背景色から拾った色で塗ります）。",
+      "description": "Simeji の設定タブの一覧に「Ayufaパッチ設定」の入口を追加します。各 Simeji パッチの有効・無効や VIP偽装を、再パッチなしでアプリ内から切り替えられるようになります。他の Simeji パッチを切り替えるには、このパッチの適用が必要です（未適用の場合は各パッチの初期値どおりに動作します）。",
       "default": true,
       "category": null,
       "compatiblePackages": [

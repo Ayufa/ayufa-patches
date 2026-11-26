@@ -1,3 +1,9 @@
+## [1.5.0-dev.4](https://github.com/Ayufa/ayufa-patches/compare/v1.5.0-dev.3...v1.5.0-dev.4) (2026-11-26)
+
+### ✨ New Features
+
+* make the nav bar theme colour matching always-on and built-in ([ba91958](https://github.com/Ayufa/ayufa-patches/commit/ba91958597d9a9e40fc3f4933af553d82867d5ef))
+
 ## [1.5.0-dev.3](https://github.com/Ayufa/ayufa-patches/compare/v1.5.0-dev.2...v1.5.0-dev.3) (2026-11-26)
 
 ### ✨ New Features
