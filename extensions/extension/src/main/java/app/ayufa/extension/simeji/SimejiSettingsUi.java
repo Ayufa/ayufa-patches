@@ -73,10 +73,6 @@ public final class SimejiSettingsUi {
             new Row(SimejiSettings.KEY_HIDE_AI_ASSISTANT,
                     "AIアシスタントを非表示",
                     "キーボード右上のロボットと、一番上の帯そのものを消します"),
-            new Row(SimejiSettings.KEY_NAV_BAR_THEME_COLOR,
-                    "キーボード下の帯をテーマ色に合わせる",
-                    "キーボード下のナビゲーションバー領域が黒になるテーマでも、"
-                            + "キーボードの背景色に合わせて塗ります"),
             new Row(SimejiSettings.KEY_SPOOF_VIP,
                     "VIPを偽装",
                     "端末内のVIP判定だけを有効にします。ツールバーのカスタマイズや"

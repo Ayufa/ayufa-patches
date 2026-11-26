@@ -83,10 +83,7 @@ val simejiSettingsPatch = bytecodePatch(
         "追加します。各 Simeji パッチの有効・無効や VIP偽装を、再パッチ" +
         "なしでアプリ内から切り替えられるようになります。他の Simeji " +
         "パッチを切り替えるには、このパッチの適用が必要です（未適用の" +
-        "場合は各パッチの初期値どおりに動作します）。キーボード下の帯を" +
-        "テーマ色に合わせる処理もこのパッチに含まれます（Android 15以降" +
-        "で黒く塗られるナビゲーションバー領域を、テーマが専用の色を持た" +
-        "ない場合はキーボードの背景色から拾った色で塗ります）。",
+        "場合は各パッチの初期値どおりに動作します）。",
     default = true
 ) {
     compatibleWith(COMPATIBILITY_SIMEJI)
@@ -101,10 +98,10 @@ val simejiSettingsPatch = bytecodePatch(
         )
 
         // Built-in navigation-bar strip colour matching: each site
-        // substitutes the extension-resolved colour only when the
-        // stock theme colour is null; the extension itself returns
-        // null while the setting is off, which leaves every stock
-        // fallback (black / saved default) untouched.
+        // passes its stock theme colour through the extension
+        // resolver, which returns a non-null colour unchanged and
+        // substitutes a sampled theme colour for a null one. There
+        // is no runtime setting for this; it is always on.
         KeyboardRootViewOnDrawFingerprint.method.substituteNavBarColor(
             colorRegister = "v0",
             tempRegister = "v1",

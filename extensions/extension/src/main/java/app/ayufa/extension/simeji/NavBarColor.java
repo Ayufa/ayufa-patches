@@ -19,15 +19,12 @@ import java.lang.reflect.Method;
  * {@code SimejiKeyboardRootView.onDraw}, the IME window colour logic
  * in {@code ThemeManager.updateThemeNavBarColor} and an Android 15
  * compatibility block in {@code OpenWnn}). The patched call sites
- * consult this helper whenever the stock colour is null:
- *
- * <ul>
- *   <li>gate off ({@link SimejiSettings#navBarThemeColor()}): returns
- *       null, so the stock black behaviour runs unchanged;</li>
- *   <li>gate on: samples the theme's keyboard background (falling
- *       back to the control-panel stuffer background, then the emoji
- *       background colour, then black) and returns that colour.</li>
- * </ul>
+ * always consult this helper: a non-null stock colour is returned
+ * unchanged, and for a null colour this helper samples the theme's
+ * keyboard background (falling back to the control-panel stuffer
+ * background, then the emoji background colour, then black) and
+ * returns that colour. There is no runtime setting for this; it is
+ * simply built into the settings patch.
  *
  * <p>All Simeji classes are reached reflectively, like the rest of
  * the extension, so nothing here depends on the host app at compile
@@ -48,15 +45,12 @@ public final class NavBarColor {
      * The colour the patched call sites should use: [stockColor]
      * itself when the theme defines one, a sampled theme colour
      * when it does not, or null to keep the stock null handling
-     * (gate off, or any failure).
+     * (any failure).
      */
     public static Integer resolveNavBarColor(Integer stockColor, Context context) {
         try {
             if (stockColor != null) {
                 return stockColor;
-            }
-            if (!SimejiSettings.navBarThemeColor()) {
-                return null;
             }
             Object theme = currentTheme();
             if (theme == null) {
@@ -207,8 +201,7 @@ public final class NavBarColor {
     }
 
     /**
-     * Resolves the application context the same way
-     * {@link SimejiSettings} does, for call sites that have no
+     * Resolves the application context for call sites that have no
      * context of their own to pass in.
      */
     private static Context appContext() {

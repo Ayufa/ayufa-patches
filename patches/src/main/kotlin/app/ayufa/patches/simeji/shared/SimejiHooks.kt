@@ -184,10 +184,9 @@ internal fun MutableMethod.finishIfEnabledAfterSuperOnCreate(
  * [contextSetup] (which must load a Context — or null — into
  * [tempRegister]), then replace the colour register with
  * `NavBarColor.resolveNavBarColor(colour, context)`. The resolver
- * returns a non-null colour unchanged, a sampled theme colour for
- * a null colour while the runtime setting is on, and null while
- * the setting is off, so the stock null handling that follows runs
- * unchanged in that case.
+ * returns a non-null colour unchanged and a sampled theme colour
+ * for a null colour; it returns null only on failure, so the stock
+ * null handling that follows runs unchanged in that case.
  *
  * No label is used on purpose: labels in mid-method insertions are
  * resolved against the start of the inserted block by the patcher's

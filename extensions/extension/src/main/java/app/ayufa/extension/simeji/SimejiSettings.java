@@ -38,7 +38,6 @@ public final class SimejiSettings {
     public static final String KEY_HIDE_POINT_ENTRY = "hide_point_entry";
     public static final String KEY_DISABLE_REVIEW_PROMPTS = "disable_review_prompts";
     public static final String KEY_HIDE_AI_ASSISTANT = "hide_ai_assistant";
-    public static final String KEY_NAV_BAR_THEME_COLOR = "nav_bar_theme_color";
     public static final String KEY_SPOOF_VIP = "spoof_vip";
 
     private static final String FILE_NAME = "ayufa_simeji_settings.txt";
@@ -56,7 +55,6 @@ public final class SimejiSettings {
         DEFAULTS.put(KEY_HIDE_POINT_ENTRY, true);
         DEFAULTS.put(KEY_DISABLE_REVIEW_PROMPTS, true);
         DEFAULTS.put(KEY_HIDE_AI_ASSISTANT, true);
-        DEFAULTS.put(KEY_NAV_BAR_THEME_COLOR, true);
         DEFAULTS.put(KEY_SPOOF_VIP, false);
     }
 
@@ -108,10 +106,6 @@ public final class SimejiSettings {
 
     public static boolean hideAiAssistant() {
         return isOn(KEY_HIDE_AI_ASSISTANT);
-    }
-
-    public static boolean navBarThemeColor() {
-        return isOn(KEY_NAV_BAR_THEME_COLOR);
     }
 
     public static boolean spoofVip() {
