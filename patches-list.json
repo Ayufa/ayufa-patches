@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "1.5.0-dev.2",
+  "version": "1.5.0-dev.3",
   "patches": [
     {
       "name": "AIアシスタントのアイコンを非表示",
@@ -91,36 +91,7 @@
     },
     {
       "name": "アプリ内設定画面を追加",
-      "description": "Simeji の設定タブの一覧に「Ayufaパッチ設定」の入口を追加します。各 Simeji パッチの有効・無効や VIP偽装を、再パッチなしでアプリ内から切り替えられるようになります。他の Simeji パッチを切り替えるには、このパッチの適用が必要です（未適用の場合は各パッチの初期値どおりに動作します）。",
-      "default": true,
-      "category": null,
-      "compatiblePackages": [
-        {
-          "packageName": "com.adamrocker.android.input.simeji",
-          "name": "Simeji",
-          "description": null,
-          "apkFileType": "APK_REQUIRED",
-          "appIconColor": "#FF0033",
-          "signatures": [
-            "4e5a78c0450316e38afab3ecb6bac9932c095f2b34360c40129857b78657e24f"
-          ],
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "22.5",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": 23,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "キーボード下の帯をテーマ色に合わせる",
-      "description": "Android 15以降でキーボード下のナビゲーションバー領域が黒く塗られるのを、現在のテーマに合わせた色に変えます。テーマが専用の色を持たない場合はキーボードの背景色から色を拾います。テーマが専用の色を持つ場合はその色がそのまま使われます。有効・無効はアプリ内設定（Ayufaパッチ設定）でいつでも切り替えられます（無効にすると純正の黒に戻ります）。",
+      "description": "Simeji の設定タブの一覧に「Ayufaパッチ設定」の入口を追加します。各 Simeji パッチの有効・無効や VIP偽装を、再パッチなしでアプリ内から切り替えられるようになります。他の Simeji パッチを切り替えるには、このパッチの適用が必要です（未適用の場合は各パッチの初期値どおりに動作します）。キーボード下の帯をテーマ色に合わせる処理もこのパッチに含まれます（Android 15以降で黒く塗られるナビゲーションバー領域を、テーマが専用の色を持たない場合はキーボードの背景色から拾った色で塗ります）。",
       "default": true,
       "category": null,
       "compatiblePackages": [
