@@ -1,3 +1,9 @@
+## [1.5.0-dev.1](https://github.com/Ayufa/ayufa-patches/compare/v1.4.0...v1.5.0-dev.1) (2026-11-26)
+
+### ✨ New Features
+
+* match the strip below the Simeji keyboard to the theme colour ([f8c104b](https://github.com/Ayufa/ayufa-patches/commit/f8c104b4df990a6504416f5eec871300f3491755))
+
 ## [1.4.0](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0...v1.4.0) (2026-11-25)
 
 ### ✨ New Features
