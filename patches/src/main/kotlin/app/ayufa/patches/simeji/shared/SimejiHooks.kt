@@ -95,6 +95,9 @@ internal const val SIMEJI_SETTINGS_CLASS =
 internal const val SIMEJI_SETTINGS_ENTRY_CLASS =
     "Lapp/ayufa/extension/simeji/SimejiSettingsEntry;"
 
+internal const val NAV_BAR_COLOR_CLASS =
+    "Lapp/ayufa/extension/simeji/NavBarColor;"
+
 /** Smali prefix: calls settings helper [helper] and jumps to [label] when disabled. */
 private fun settingsGate(helper: String, label: String): String =
     """
@@ -169,6 +172,57 @@ internal fun MutableMethod.finishIfEnabledAfterSuperOnCreate(
                 return-void
                 :$label
             """
+    )
+}
+
+/**
+ * Substitutes a theme-derived colour for a null result of
+ * `ITheme.getNavigationBarBackColor()` inside this method.
+ *
+ * Finds the method's single call to that getter, and right after its
+ * move-result-object inserts: if the colour register is already
+ * non-null, skip; otherwise run [contextSetup] (which must load a
+ * Context — or null — into [tempRegister]) and replace the register
+ * with `NavBarColor.resolveNavBarColor(...)`. The extension returns
+ * null while the runtime setting is off, so the stock null handling
+ * that follows runs unchanged in that case.
+ *
+ * [colorRegister] and [tempRegister] must be registers the method
+ * does not read between the getter call and the next stock
+ * instruction that overwrites them; this was verified per call site
+ * against the Simeji 22.5 dex.
+ */
+internal fun MutableMethod.substituteNavBarColor(
+    colorRegister: String,
+    tempRegister: String,
+    label: String,
+    contextSetup: String
+) {
+    val methodInstructions = implementation?.instructions
+        ?: throw PatchException("Method has no implementation: $this")
+    val callIndex = methodInstructions.indexOfFirst { instruction ->
+        (instruction.opcode == Opcode.INVOKE_INTERFACE ||
+            instruction.opcode == Opcode.INVOKE_VIRTUAL) &&
+            ((instruction as? ReferenceInstruction)?.reference as? MethodReference)
+                ?.name == "getNavigationBarBackColor"
+    }
+    if (callIndex < 0) {
+        throw PatchException("No getNavigationBarBackColor call found in $this")
+    }
+    if (methodInstructions[callIndex + 1].opcode != Opcode.MOVE_RESULT_OBJECT) {
+        throw PatchException(
+            "getNavigationBarBackColor is not followed by move-result-object in $this"
+        )
+    }
+    addInstructions(
+        callIndex + 2,
+        """
+            if-nez $colorRegister, :$label
+            $contextSetup
+            invoke-static { $tempRegister }, $NAV_BAR_COLOR_CLASS->resolveNavBarColor(Landroid/content/Context;)Ljava/lang/Integer;
+            move-result-object $colorRegister
+            :$label
+        """
     )
 }
 
