@@ -1,3 +1,27 @@
+## [1.5.0-dev.4](https://github.com/Ayufa/ayufa-patches/compare/v1.5.0-dev.3...v1.5.0-dev.4) (2026-11-26)
+
+### ✨ New Features
+
+* make the nav bar theme colour matching always-on and built-in ([ba91958](https://github.com/Ayufa/ayufa-patches/commit/ba91958597d9a9e40fc3f4933af553d82867d5ef))
+
+## [1.5.0-dev.3](https://github.com/Ayufa/ayufa-patches/compare/v1.5.0-dev.2...v1.5.0-dev.3) (2026-11-26)
+
+### ✨ New Features
+
+* build the nav bar theme colour matching into the settings patch ([2de0f34](https://github.com/Ayufa/ayufa-patches/commit/2de0f34833e67b6d1e1501fb45fd228b4c0fe493))
+
+## [1.5.0-dev.2](https://github.com/Ayufa/ayufa-patches/compare/v1.5.0-dev.1...v1.5.0-dev.2) (2026-11-26)
+
+### 🐛 Bug Fixes
+
+* make the nav bar colour substitution branch-free ([cc48c69](https://github.com/Ayufa/ayufa-patches/commit/cc48c69364a33d16ffc2bb2ad3f15091a9d9ad46))
+
+## [1.5.0-dev.1](https://github.com/Ayufa/ayufa-patches/compare/v1.4.0...v1.5.0-dev.1) (2026-11-26)
+
+### ✨ New Features
+
+* match the strip below the Simeji keyboard to the theme colour ([f8c104b](https://github.com/Ayufa/ayufa-patches/commit/f8c104b4df990a6504416f5eec871300f3491755))
+
 ## [1.4.0](https://github.com/Ayufa/ayufa-patches/compare/v1.3.0...v1.4.0) (2026-11-25)
 
 ### ✨ New Features
