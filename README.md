@@ -111,9 +111,9 @@
 ## 🩹 パッチ一覧
 
 <!-- PATCHES_START -->
-> **[v1.5.0](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.5.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;13 patches total
+> **[v1.6.0-dev.1](https://github.com/Ayufa/ayufa-patches/releases/tag/v1.6.0-dev.1)**&nbsp;&nbsp;•&nbsp;&nbsp;`dev`&nbsp;&nbsp;•&nbsp;&nbsp;14 patches total
 <details>
-<summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;11 patches</summary>
+<summary>📦 Simeji&nbsp;&nbsp;•&nbsp;&nbsp;12 patches</summary>
 <br>
 
 **Package name:** `com.adamrocker.android.input.simeji`

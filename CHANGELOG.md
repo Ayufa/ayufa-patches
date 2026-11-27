@@ -1,3 +1,9 @@
+## [1.6.0-dev.1](https://github.com/Ayufa/ayufa-patches/compare/v1.5.0...v1.6.0-dev.1) (2026-11-27)
+
+### ✨ New Features
+
+* add cursor-move pad patch for the Simeji control panel ([3058eaf](https://github.com/Ayufa/ayufa-patches/commit/3058eaf8477cc564d800a462f6786dc3eb9e49ff))
+
 ## [1.5.0](https://github.com/Ayufa/ayufa-patches/compare/v1.4.0...v1.5.0) (2026-11-27)
 
 ### ✨ New Features
