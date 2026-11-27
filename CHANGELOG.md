@@ -1,3 +1,9 @@
+## [1.6.0-dev.2](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.1...v1.6.0-dev.2) (2026-11-27)
+
+### ✨ New Features
+
+* integrate the cursor-move pad into the Simeji toolbar customization ([bdce929](https://github.com/Ayufa/ayufa-patches/commit/bdce929de59b2a43a95a7e4dbcce1f9ea513400b))
+
 ## [1.6.0-dev.1](https://github.com/Ayufa/ayufa-patches/compare/v1.5.0...v1.6.0-dev.1) (2026-11-27)
 
 ### ✨ New Features
