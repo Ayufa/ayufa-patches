@@ -98,6 +98,9 @@ internal const val SIMEJI_SETTINGS_ENTRY_CLASS =
 internal const val NAV_BAR_COLOR_CLASS =
     "Lapp/ayufa/extension/simeji/NavBarColor;"
 
+internal const val CURSOR_PAD_CLASS =
+    "Lapp/ayufa/extension/simeji/CursorPad;"
+
 /** Smali prefix: calls settings helper [helper] and jumps to [label] when disabled. */
 private fun settingsGate(helper: String, label: String): String =
     """
