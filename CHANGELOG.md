@@ -1,3 +1,18 @@
+## [1.6.0](https://github.com/Ayufa/ayufa-patches/compare/v1.5.0...v1.6.0) (2026-11-28)
+
+### ✨ New Features
+
+* add cursor-move pad patch for the Simeji control panel ([3058eaf](https://github.com/Ayufa/ayufa-patches/commit/3058eaf8477cc564d800a462f6786dc3eb9e49ff))
+* integrate the cursor-move pad into the Simeji toolbar customization ([bdce929](https://github.com/Ayufa/ayufa-patches/commit/bdce929de59b2a43a95a7e4dbcce1f9ea513400b))
+
+### 🐛 Bug Fixes
+
+* match the iOS cursor icon, show the settings icon and keep drags from dismissing the keyboard ([0206dc2](https://github.com/Ayufa/ayufa-patches/commit/0206dc2a5356b71953ee54bfca2c89a36d4fe82b))
+* match the stock icon size and stop arrow keys at the text edges ([c2e103d](https://github.com/Ayufa/ayufa-patches/commit/c2e103dc4dd6fd4adc6accaf5bc6f99754745be5))
+* shrink the cursor glyph to the exact stock ink extent ([d297f58](https://github.com/Ayufa/ayufa-patches/commit/d297f584919fe19f846e98d67b2861243f99850b))
+* **simeji:** retune the cursor move icon glyph and stroke width ([eae7983](https://github.com/Ayufa/ayufa-patches/commit/eae79837b89d0a674c0ac98739ff39ec36d987e2))
+* thin the cursor icon to stock weight, widen the chevrons and own the drag gesture ([ce4e54e](https://github.com/Ayufa/ayufa-patches/commit/ce4e54e8d75bd8696d685b9eacbea754f530afc4))
+
 ## [1.6.0-dev.7](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.6...v1.6.0-dev.7) (2026-11-28)
 
 ### 🐛 Bug Fixes
