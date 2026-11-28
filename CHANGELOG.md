@@ -1,3 +1,9 @@
+## [1.6.0-dev.4](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.3...v1.6.0-dev.4) (2026-11-28)
+
+### 🐛 Bug Fixes
+
+* thin the cursor icon to stock weight, widen the chevrons and own the drag gesture ([ce4e54e](https://github.com/Ayufa/ayufa-patches/commit/ce4e54e8d75bd8696d685b9eacbea754f530afc4))
+
 ## [1.6.0-dev.3](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.2...v1.6.0-dev.3) (2026-11-28)
 
 ### 🐛 Bug Fixes
