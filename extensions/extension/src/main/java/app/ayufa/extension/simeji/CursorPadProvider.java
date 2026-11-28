@@ -175,13 +175,13 @@ public final class CursorPadProvider {
         // two chevrons. Kept in sync with the PNG the patch adds
         // for the toolbar settings screens.
         private static final float[][] SEGMENTS = {
-                {12f, 3.6f, 12f, 20.4f},
-                {9.6f, 3.6f, 14.4f, 3.6f},
-                {9.6f, 20.4f, 14.4f, 20.4f},
-                {7.6f, 6.9f, 3.6f, 12f},
-                {3.6f, 12f, 7.6f, 17.1f},
-                {16.4f, 6.9f, 20.4f, 12f},
-                {20.4f, 12f, 16.4f, 17.1f},
+                {12f, 4.2f, 12f, 19.8f},
+                {9.8f, 4.2f, 14.2f, 4.2f},
+                {9.8f, 19.8f, 14.2f, 19.8f},
+                {7.9f, 7.3f, 4.2f, 12f},
+                {4.2f, 12f, 7.9f, 16.7f},
+                {16.1f, 7.3f, 19.8f, 12f},
+                {19.8f, 12f, 16.1f, 16.7f},
         };
         private static final float STROKE_WIDTH = 1.3f;
 
