@@ -1,3 +1,9 @@
+## [1.6.0-dev.7](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.6...v1.6.0-dev.7) (2026-11-28)
+
+### 🐛 Bug Fixes
+
+* **simeji:** retune the cursor move icon glyph and stroke width ([eae7983](https://github.com/Ayufa/ayufa-patches/commit/eae79837b89d0a674c0ac98739ff39ec36d987e2))
+
 ## [1.6.0-dev.6](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.5...v1.6.0-dev.6) (2026-11-28)
 
 ### 🐛 Bug Fixes
