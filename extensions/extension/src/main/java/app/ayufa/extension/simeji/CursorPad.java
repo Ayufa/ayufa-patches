@@ -113,6 +113,16 @@ public final class CursorPad {
                     downRawX = event.getRawX();
                     sentSteps = 0;
                     dragging = false;
+                    // Claim the gesture from the start: some
+                    // containers above the panel (seen with web
+                    // search fields) steal a drag as soon as it
+                    // tilts vertical and dismiss the keyboard
+                    // mid-slide if interception is only disallowed
+                    // once the drag is recognised.
+                    if (view.getParent() != null) {
+                        view.getParent()
+                                .requestDisallowInterceptTouchEvent(true);
+                    }
                     return false;
                 case MotionEvent.ACTION_MOVE:
                     float dx = event.getRawX() - downRawX;

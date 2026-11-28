@@ -30,12 +30,11 @@ import java.lang.reflect.Proxy;
  * Only the handful of methods the launcher actually uses carry
  * behaviour; the rest (mostly lifecycle callbacks) return defaults.
  *
- * <p>The icon mirrors Simeji for iPhone's cursor key: a text cursor
- * bar in the centre with a triangle pointing outward on each side.
- * It is drawn in solid black and reported as needing the theme
- * colour filter, so the stock icon view tints it with the current
- * theme's candidate icon colour, like the built-in items' fallback
- * icons.
+ * <p>The icon is Simeji for iPhone's cursor key: an I-beam text
+ * cursor flanked by two chevron strokes ("&lt;I&gt;"). It is drawn
+ * in solid black and reported as needing the theme colour filter,
+ * so the stock icon view tints it with the current theme's
+ * candidate icon colour, like the built-in items' fallback icons.
  */
 public final class CursorPadProvider {
 
@@ -161,18 +160,38 @@ public final class CursorPadProvider {
     }
 
     /**
-     * The iPhone-style cursor key glyph: a vertical cursor bar with
-     * an outward-pointing triangle on each side, drawn in solid
-     * black (the stock icon view applies the theme colour filter on
-     * top because the provider reports getIconNeedFilter()).
+     * The cursor key glyph of Simeji for iPhone, as seen on its
+     * control panel: an I-beam text cursor (a vertical stroke with
+     * a serif at each end) flanked by two chevron strokes, "&lt;I&gt;".
+     * Drawn as round-capped strokes in solid black; the stock icon
+     * view applies the theme colour filter on top because the
+     * provider reports getIconNeedFilter(). The geometry lives in a
+     * 24-unit box and matches the settings icon the resource patch
+     * generates, so both renderings of the item agree.
      */
     static final class CursorIconDrawable extends Drawable {
+
+        // Segments of the glyph in a 24-unit box: I-beam, then the
+        // two chevrons. Kept in sync with the PNG the patch adds
+        // for the toolbar settings screens.
+        private static final float[][] SEGMENTS = {
+                {12f, 4.5f, 12f, 19.5f},
+                {9.3f, 4.5f, 14.7f, 4.5f},
+                {9.3f, 19.5f, 14.7f, 19.5f},
+                {9.6f, 7.6f, 5.2f, 12f},
+                {5.2f, 12f, 9.6f, 16.4f},
+                {14.4f, 7.6f, 18.8f, 12f},
+                {18.8f, 12f, 14.4f, 16.4f},
+        };
+        private static final float STROKE_WIDTH = 1.7f;
 
         private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final Path path = new Path();
 
         CursorIconDrawable() {
-            paint.setStyle(Paint.Style.FILL);
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setStrokeCap(Paint.Cap.ROUND);
+            paint.setStrokeJoin(Paint.Join.ROUND);
             paint.setColor(0xFF000000);
         }
 
@@ -192,31 +211,19 @@ public final class CursorPadProvider {
             if (bounds.width() <= 0 || bounds.height() <= 0) {
                 return;
             }
-            float w = bounds.width();
-            float h = bounds.height();
-            float cx = bounds.left + w / 2.0f;
-            float cy = bounds.top + h / 2.0f;
-            // Centre cursor bar.
-            float barHalfWidth = w * 0.04f;
-            float barHalfHeight = h * 0.31f;
-            // Triangles: tips near the edges, bases facing the bar.
-            float tipInset = w * 0.06f;
-            float baseX = w * 0.145f;
-            float triHalfHeight = h * 0.185f;
-
+            float scaleX = bounds.width() / 24.0f;
+            float scaleY = bounds.height() / 24.0f;
+            paint.setStrokeWidth(STROKE_WIDTH * Math.min(scaleX, scaleY));
             path.reset();
-            path.moveTo(cx - baseX, cy - triHalfHeight);
-            path.lineTo(bounds.left + tipInset, cy);
-            path.lineTo(cx - baseX, cy + triHalfHeight);
-            path.close();
-            path.moveTo(cx + baseX, cy - triHalfHeight);
-            path.lineTo(bounds.right - tipInset, cy);
-            path.lineTo(cx + baseX, cy + triHalfHeight);
-            path.close();
+            for (float[] segment : SEGMENTS) {
+                path.moveTo(
+                        bounds.left + segment[0] * scaleX,
+                        bounds.top + segment[1] * scaleY);
+                path.lineTo(
+                        bounds.left + segment[2] * scaleX,
+                        bounds.top + segment[3] * scaleY);
+            }
             canvas.drawPath(path, paint);
-            canvas.drawRect(
-                    cx - barHalfWidth, cy - barHalfHeight,
-                    cx + barHalfWidth, cy + barHalfHeight, paint);
         }
 
         @Override

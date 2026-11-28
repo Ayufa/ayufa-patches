@@ -73,8 +73,14 @@ internal object ToolbarItemCompanionGetToolbarDatasFingerprint : Fingerprint(
  * the item's title string and icon drawable, both named
  * "toolbar_cursor_move". The extension looks their ids up by name
  * at runtime, because the ids only exist once the patched app is
- * built. The drawable is the iPhone-style cursor key glyph (a
- * cursor bar flanked by two outward triangles) as a vector.
+ * built. The icon is the cursor key glyph of Simeji for iPhone
+ * (an I-beam flanked by two chevrons, "<I>") and must be a PNG:
+ * the toolbar settings screens wrap item icons in the app's
+ * TintedBitmapDrawable, which loads them with
+ * BitmapFactory.decodeResource and draws nothing for non-bitmap
+ * resources such as vector drawables (verified against 22.5).
+ * The PNG is rasterised below from the same segment geometry the
+ * extension's bar icon draws.
  */
 @Suppress("unused")
 val cursorPadResourcePatch = resourcePatch(
@@ -105,21 +111,124 @@ val cursorPadResourcePatch = resourcePatch(
             }
         }
 
-        get("res/drawable/toolbar_cursor_move.xml").writeText(
-            """
-            <?xml version="1.0" encoding="utf-8"?>
-            <vector xmlns:android="http://schemas.android.com/apk/res/android"
-                android:width="24dp"
-                android:height="24dp"
-                android:viewportWidth="24"
-                android:viewportHeight="24">
-                <path
-                    android:fillColor="#FF000000"
-                    android:pathData="M11.05,4.5h1.9v15h-1.9zM8.6,7.6L2.8,12l5.8,4.4zM15.4,7.6L21.2,12l-5.8,4.4z" />
-            </vector>
-            """.trimIndent()
-        )
+        get("res/drawable/toolbar_cursor_move.png")
+            .writeBytes(cursorGlyphPng())
     }
+}
+
+/** Segments of the "<I>" glyph in a 24-unit box: I-beam, chevrons. */
+private val GLYPH_SEGMENTS = arrayOf(
+    floatArrayOf(12f, 4.5f, 12f, 19.5f),
+    floatArrayOf(9.3f, 4.5f, 14.7f, 4.5f),
+    floatArrayOf(9.3f, 19.5f, 14.7f, 19.5f),
+    floatArrayOf(9.6f, 7.6f, 5.2f, 12f),
+    floatArrayOf(5.2f, 12f, 9.6f, 16.4f),
+    floatArrayOf(14.4f, 7.6f, 18.8f, 12f),
+    floatArrayOf(18.8f, 12f, 14.4f, 16.4f)
+)
+
+private fun distanceToSegment(
+    px: Float,
+    py: Float,
+    segment: FloatArray
+): Float {
+    val dx = segment[2] - segment[0]
+    val dy = segment[3] - segment[1]
+    val lengthSquared = dx * dx + dy * dy
+    val t = if (lengthSquared == 0f) {
+        0f
+    } else {
+        (((px - segment[0]) * dx + (py - segment[1]) * dy) / lengthSquared)
+            .coerceIn(0f, 1f)
+    }
+    val cx = segment[0] + t * dx
+    val cy = segment[1] + t * dy
+    return kotlin.math.hypot(px - cx, py - cy)
+}
+
+/**
+ * Rasterises the glyph as a black-on-transparent PNG (the settings
+ * screens tint it through their own colour filter), encoded by
+ * hand so the patch needs no image library: coverage is sampled
+ * 4x4 per pixel against the segment distances, scanlines are
+ * zlib-compressed with the platform Deflater, and the three PNG
+ * chunks are assembled directly.
+ */
+private fun cursorGlyphPng(size: Int = 192): ByteArray {
+    val halfWidth = 0.85f
+    val samples = 4
+    val scale = size / 24f
+    val raw = ByteArray(size * (1 + size * 4))
+    var p = 0
+    for (y in 0 until size) {
+        raw[p++] = 0
+        for (x in 0 until size) {
+            var covered = 0
+            for (sy in 0 until samples) {
+                for (sx in 0 until samples) {
+                    val ux = (x + (sx + 0.5f) / samples) / scale
+                    val uy = (y + (sy + 0.5f) / samples) / scale
+                    var min = Float.MAX_VALUE
+                    for (segment in GLYPH_SEGMENTS) {
+                        val distance = distanceToSegment(ux, uy, segment)
+                        if (distance < min) {
+                            min = distance
+                        }
+                    }
+                    if (min <= halfWidth) {
+                        covered++
+                    }
+                }
+            }
+            raw[p++] = 0
+            raw[p++] = 0
+            raw[p++] = 0
+            raw[p++] = (255 * covered / (samples * samples)).toByte()
+        }
+    }
+
+    val deflater = java.util.zip.Deflater()
+    deflater.setInput(raw)
+    deflater.finish()
+    val compressedBuffer = ByteArray(raw.size + 1024)
+    val compressedLength = deflater.deflate(compressedBuffer)
+    deflater.end()
+    val compressed = compressedBuffer.copyOf(compressedLength)
+
+    val ihdr = java.io.ByteArrayOutputStream()
+    val ihdrWriter = java.io.DataOutputStream(ihdr)
+    ihdrWriter.writeInt(size)
+    ihdrWriter.writeInt(size)
+    ihdrWriter.writeByte(8)
+    ihdrWriter.writeByte(6)
+    ihdrWriter.writeByte(0)
+    ihdrWriter.writeByte(0)
+    ihdrWriter.writeByte(0)
+    ihdrWriter.flush()
+
+    val out = java.io.ByteArrayOutputStream()
+    out.write(byteArrayOf(-119, 80, 78, 71, 13, 10, 26, 10))
+    writePngChunk(out, "IHDR", ihdr.toByteArray())
+    writePngChunk(out, "IDAT", compressed)
+    writePngChunk(out, "IEND", ByteArray(0))
+    return out.toByteArray()
+}
+
+private fun writePngChunk(
+    out: java.io.ByteArrayOutputStream,
+    type: String,
+    data: ByteArray
+) {
+    val typeBytes = type.toByteArray(Charsets.US_ASCII)
+    val writer = java.io.DataOutputStream(out)
+    writer.writeInt(data.size)
+    writer.write(typeBytes)
+    writer.write(data)
+    val crc = java.util.zip.CRC32()
+    crc.update(typeBytes)
+    crc.update(data)
+    writer.writeInt(crc.value.toInt())
+    writer.flush()
 }
 
 @Suppress("unused")
