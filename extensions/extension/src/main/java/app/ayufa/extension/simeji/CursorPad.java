@@ -171,9 +171,45 @@ public final class CursorPad {
                 : KeyEvent.KEYCODE_DPAD_LEFT;
         int count = Math.abs(delta);
         for (int i = 0; i < count; i++) {
+            if (!canMove(service, keyCode)) {
+                // Already at the edge of the text: an extra arrow
+                // key would leave the field in some editors (web
+                // search boxes drop the keyboard when the caret is
+                // pushed past the start), so send nothing.
+                return;
+            }
             if (!sendDownUp(service, keyCode)) {
                 return;
             }
+        }
+    }
+
+    /**
+     * Whether one more arrow key in the given direction can still
+     * move the caret. A selection always counts as movable (the key
+     * collapses it), and any doubt — no connection, an editor that
+     * reports nothing, a composing state — also sends, matching the
+     * stock behaviour; only a positively empty side of the caret
+     * blocks the key.
+     */
+    private static boolean canMove(Object service, int keyCode) {
+        try {
+            Object connection = service.getClass()
+                    .getMethod("getCurrentInputConnection").invoke(service);
+            if (!(connection instanceof InputConnection)) {
+                return true;
+            }
+            InputConnection inputConnection = (InputConnection) connection;
+            CharSequence selected = inputConnection.getSelectedText(0);
+            if (selected != null && selected.length() > 0) {
+                return true;
+            }
+            CharSequence side = keyCode == KeyEvent.KEYCODE_DPAD_LEFT
+                    ? inputConnection.getTextBeforeCursor(1, 0)
+                    : inputConnection.getTextAfterCursor(1, 0);
+            return side == null || side.length() > 0;
+        } catch (Throwable ignored) {
+            return true;
         }
     }
 
