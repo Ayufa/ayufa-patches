@@ -1,3 +1,9 @@
+## [1.6.0-dev.5](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.4...v1.6.0-dev.5) (2026-11-28)
+
+### 🐛 Bug Fixes
+
+* match the stock icon size and stop arrow keys at the text edges ([c2e103d](https://github.com/Ayufa/ayufa-patches/commit/c2e103dc4dd6fd4adc6accaf5bc6f99754745be5))
+
 ## [1.6.0-dev.4](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.3...v1.6.0-dev.4) (2026-11-28)
 
 ### 🐛 Bug Fixes
