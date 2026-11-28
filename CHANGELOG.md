@@ -1,3 +1,9 @@
+## [1.6.0-dev.3](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.2...v1.6.0-dev.3) (2026-11-28)
+
+### 🐛 Bug Fixes
+
+* match the iOS cursor icon, show the settings icon and keep drags from dismissing the keyboard ([0206dc2](https://github.com/Ayufa/ayufa-patches/commit/0206dc2a5356b71953ee54bfca2c89a36d4fe82b))
+
 ## [1.6.0-dev.2](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.1...v1.6.0-dev.2) (2026-11-27)
 
 ### ✨ New Features
