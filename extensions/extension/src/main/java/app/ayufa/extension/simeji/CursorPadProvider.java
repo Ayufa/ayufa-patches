@@ -175,15 +175,15 @@ public final class CursorPadProvider {
         // two chevrons. Kept in sync with the PNG the patch adds
         // for the toolbar settings screens.
         private static final float[][] SEGMENTS = {
-                {12f, 4.2f, 12f, 19.8f},
-                {9.8f, 4.2f, 14.2f, 4.2f},
-                {9.8f, 19.8f, 14.2f, 19.8f},
-                {7.9f, 7.3f, 4.2f, 12f},
-                {4.2f, 12f, 7.9f, 16.7f},
-                {16.1f, 7.3f, 19.8f, 12f},
-                {19.8f, 12f, 16.1f, 16.7f},
+                {12f, 4.7f, 12f, 19.3f},
+                {9.9f, 4.7f, 14.1f, 4.7f},
+                {9.9f, 19.3f, 14.1f, 19.3f},
+                {7.5f, 7.6f, 4.0f, 12f},
+                {4.0f, 12f, 7.5f, 16.4f},
+                {16.5f, 7.6f, 20.0f, 12f},
+                {20.0f, 12f, 16.5f, 16.4f},
         };
-        private static final float STROKE_WIDTH = 1.3f;
+        private static final float STROKE_WIDTH = 0.9f;
 
         private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         private final Path path = new Path();

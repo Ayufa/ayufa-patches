@@ -118,13 +118,13 @@ val cursorPadResourcePatch = resourcePatch(
 
 /** Segments of the "<I>" glyph in a 24-unit box: I-beam, chevrons. */
 private val GLYPH_SEGMENTS = arrayOf(
-    floatArrayOf(12f, 4.2f, 12f, 19.8f),
-    floatArrayOf(9.8f, 4.2f, 14.2f, 4.2f),
-    floatArrayOf(9.8f, 19.8f, 14.2f, 19.8f),
-    floatArrayOf(7.9f, 7.3f, 4.2f, 12f),
-    floatArrayOf(4.2f, 12f, 7.9f, 16.7f),
-    floatArrayOf(16.1f, 7.3f, 19.8f, 12f),
-    floatArrayOf(19.8f, 12f, 16.1f, 16.7f)
+    floatArrayOf(12f, 4.7f, 12f, 19.3f),
+    floatArrayOf(9.9f, 4.7f, 14.1f, 4.7f),
+    floatArrayOf(9.9f, 19.3f, 14.1f, 19.3f),
+    floatArrayOf(7.5f, 7.6f, 4.0f, 12f),
+    floatArrayOf(4.0f, 12f, 7.5f, 16.4f),
+    floatArrayOf(16.5f, 7.6f, 20.0f, 12f),
+    floatArrayOf(20.0f, 12f, 16.5f, 16.4f)
 )
 
 private fun distanceToSegment(
@@ -155,7 +155,7 @@ private fun distanceToSegment(
  * chunks are assembled directly.
  */
 private fun cursorGlyphPng(size: Int = 192): ByteArray {
-    val halfWidth = 0.65f
+    val halfWidth = 0.52f
     val samples = 4
     val scale = size / 24f
     val raw = ByteArray(size * (1 + size * 4))
