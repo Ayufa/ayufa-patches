@@ -1,3 +1,9 @@
+## [1.6.0-dev.6](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.5...v1.6.0-dev.6) (2026-11-28)
+
+### 🐛 Bug Fixes
+
+* shrink the cursor glyph to the exact stock ink extent ([d297f58](https://github.com/Ayufa/ayufa-patches/commit/d297f584919fe19f846e98d67b2861243f99850b))
+
 ## [1.6.0-dev.5](https://github.com/Ayufa/ayufa-patches/compare/v1.6.0-dev.4...v1.6.0-dev.5) (2026-11-28)
 
 ### 🐛 Bug Fixes
