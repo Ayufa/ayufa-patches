@@ -94,11 +94,13 @@ public final class CursorPad {
     }
 
     /**
-     * Drag handling for one icon view. Touches are passed through
-     * until the finger has clearly started sliding, so a tap still
-     * reaches the stock click handling; once a drag is recognised
-     * the listener consumes the rest of the gesture (and un-presses
-     * the view) so no click fires at the end of a slide.
+     * Drag handling for one icon view. The listener consumes the
+     * gesture from ACTION_DOWN on: with web search fields the stock
+     * pass-through handling lost vertical-tilting drags to the
+     * surrounding containers, which dismissed the keyboard
+     * mid-slide. A plain tap is replayed as a click on release, so
+     * the stock click behaviour (the provider's onLaunch) is kept;
+     * a recognised drag never produces a click.
      */
     private static final class DragListener implements View.OnTouchListener {
 
@@ -113,30 +115,19 @@ public final class CursorPad {
                     downRawX = event.getRawX();
                     sentSteps = 0;
                     dragging = false;
-                    // Claim the gesture from the start: some
-                    // containers above the panel (seen with web
-                    // search fields) steal a drag as soon as it
-                    // tilts vertical and dismiss the keyboard
-                    // mid-slide if interception is only disallowed
-                    // once the drag is recognised.
-                    if (view.getParent() != null) {
-                        view.getParent()
-                                .requestDisallowInterceptTouchEvent(true);
-                    }
-                    return false;
+                    disallowIntercept(view);
+                    return true;
                 case MotionEvent.ACTION_MOVE:
+                    disallowIntercept(view);
                     float dx = event.getRawX() - downRawX;
                     if (!dragging) {
                         int slop = ViewConfiguration.get(view.getContext())
                                 .getScaledTouchSlop();
                         if (Math.abs(dx) <= slop) {
-                            return false;
+                            return true;
                         }
                         dragging = true;
                         view.setPressed(false);
-                        if (view.getParent() != null) {
-                            view.getParent().requestDisallowInterceptTouchEvent(true);
-                        }
                     }
                     float stepPx = STEP_DP
                             * view.getResources().getDisplayMetrics().density;
@@ -148,12 +139,24 @@ public final class CursorPad {
                     }
                     return true;
                 case MotionEvent.ACTION_UP:
-                case MotionEvent.ACTION_CANCEL:
                     boolean wasDragging = dragging;
                     dragging = false;
-                    return wasDragging;
+                    if (!wasDragging) {
+                        view.performClick();
+                    }
+                    return true;
+                case MotionEvent.ACTION_CANCEL:
+                    dragging = false;
+                    return true;
                 default:
-                    return false;
+                    return true;
+            }
+        }
+
+        private static void disallowIntercept(View view) {
+            if (view.getParent() != null) {
+                view.getParent()
+                        .requestDisallowInterceptTouchEvent(true);
             }
         }
     }
